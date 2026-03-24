@@ -91,6 +91,8 @@ jobs:
           fi
 
       - name: Build JARs
+        env:
+          BARYX_ATLAS_URI: ${{ secrets.BARYX_ATLAS_URI }}
         run: mvn clean package -DskipTests -q
 
       - name: Upload JARs for other jobs
