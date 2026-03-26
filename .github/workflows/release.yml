@@ -28,6 +28,7 @@ jobs:
 
     outputs:
       app_version: ${{ steps.get_version.outputs.version }}
+      trial_key: ${{ steps.trial_key.outputs.key }}
 
     steps:
       - name: Checkout
@@ -163,39 +164,17 @@ jobs:
           mv baryx-servidor-*.jar baryx-servidor/target/ 2>/dev/null || true
 
       - name: Inject trial key into license.properties
-        env:
-          BARYX_API_URL: ${{ secrets.BARYX_API_URL }}
-          BARYX_ADMIN_KEY: ${{ secrets.BARYX_ADMIN_KEY }}
         shell: bash
         run: |
           mkdir -p baryx-cliente/src/main/resources
-          if [ -z "$BARYX_API_URL" ] || [ -z "$BARYX_ADMIN_KEY" ]; then
-            echo "::warning::Secrets no configurados. Se omite licencia trial."
-            printf 'license.key=\nlicense.type=trial\n' \
-              > baryx-cliente/src/main/resources/license.properties
-            exit 0
+          PROPS="baryx-cliente/src/main/resources/license.properties"
+          KEY="${{ needs.build-linux.outputs.trial_key }}"
+          if [ -n "$KEY" ]; then
+            printf 'license.key=%s\nlicense.type=trial\n' "$KEY" > "$PROPS"
+          else
+            echo "::notice::Sin licencia trial desde Linux job — se genera properties vacío"
+            printf 'license.key=\nlicense.type=trial\n' > "$PROPS"
           fi
-          curl -so /dev/null --max-time 90 "${BARYX_API_URL}/v1/releases/latest" || true
-          RESPONSE=""
-          for i in 1 2; do
-            RESPONSE=$(curl -sf --max-time 60 \
-              -X POST "${BARYX_API_URL}/v1/admin/licenses/trial" \
-              -H "Authorization: Bearer ${BARYX_ADMIN_KEY}" \
-              -H "Content-Type: application/json" \
-              -d '{"trialDays": 14}') && break
-            echo "::notice::Intento $i fallido (curl exit $?), reintentando en 10s..."
-            sleep 10
-            RESPONSE=""
-          done
-          if [ -z "$RESPONSE" ]; then
-            echo "::warning::No se pudo obtener licencia trial tras 2 intentos."
-            printf 'license.key=\nlicense.type=trial\n' \
-              > baryx-cliente/src/main/resources/license.properties
-            exit 0
-          fi
-          LICENSE_KEY=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['licenseKey'])")
-          printf "license.key=%s\nlicense.type=trial\n" "$LICENSE_KEY" \
-            > baryx-cliente/src/main/resources/license.properties
 
       - name: Install Inno Setup
         run: choco install innosetup --yes
@@ -264,39 +243,16 @@ jobs:
           mv baryx-servidor-*.jar baryx-servidor/target/ 2>/dev/null || true
 
       - name: Inject trial key into license.properties
-        env:
-          BARYX_API_URL: ${{ secrets.BARYX_API_URL }}
-          BARYX_ADMIN_KEY: ${{ secrets.BARYX_ADMIN_KEY }}
         run: |
           mkdir -p baryx-cliente/src/main/resources
-          if [ -z "$BARYX_API_URL" ] || [ -z "$BARYX_ADMIN_KEY" ]; then
-            echo "::warning::Secrets no configurados. Se omite licencia trial."
-            printf 'license.key=\nlicense.type=trial\n' \
-              > baryx-cliente/src/main/resources/license.properties
-            exit 0
+          PROPS="baryx-cliente/src/main/resources/license.properties"
+          KEY="${{ needs.build-linux.outputs.trial_key }}"
+          if [ -n "$KEY" ]; then
+            printf 'license.key=%s\nlicense.type=trial\n' "$KEY" > "$PROPS"
+          else
+            echo "::notice::Sin licencia trial desde Linux job — se genera properties vacío"
+            printf 'license.key=\nlicense.type=trial\n' > "$PROPS"
           fi
-          curl -so /dev/null --max-time 90 "${BARYX_API_URL}/v1/releases/latest" || true
-          RESPONSE=""
-          for i in 1 2; do
-            RESPONSE=$(curl -sf --max-time 60 \
-              -X POST "${BARYX_API_URL}/v1/admin/licenses/trial" \
-              -H "Authorization: Bearer ${BARYX_ADMIN_KEY}" \
-              -H "Content-Type: application/json" \
-              -d '{"trialDays": 14}') && break
-            echo "::notice::Intento $i fallido (curl exit $?), reintentando en 10s..."
-            sleep 10
-            RESPONSE=""
-          done
-          if [ -z "$RESPONSE" ]; then
-            echo "::warning::No se pudo obtener licencia trial tras 2 intentos."
-            printf 'license.key=\nlicense.type=trial\n' \
-              > baryx-cliente/src/main/resources/license.properties
-            exit 0
-          fi
-          LICENSE_KEY=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.load(sys.stdin)['licenseKey'])")
-          echo "::add-mask::$LICENSE_KEY"
-          printf "license.key=%s\nlicense.type=trial\n" "$LICENSE_KEY" \
-            > baryx-cliente/src/main/resources/license.properties
 
       - name: Package macOS (.dmg)
         env:

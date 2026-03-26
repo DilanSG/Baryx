@@ -321,7 +321,8 @@ public class LicenseServicio {
             throws IOException, InterruptedException {
 
         String body = MAPPER.writeValueAsString(java.util.Map.of(
-                "deviceHash", deviceHash
+                "deviceHash", deviceHash,
+                "deviceLabel", obtenerDeviceLabel()
         ));
 
         HttpRequest request = HttpRequest.newBuilder()

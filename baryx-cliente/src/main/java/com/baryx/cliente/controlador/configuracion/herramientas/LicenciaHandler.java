@@ -10,10 +10,13 @@ import com.baryx.cliente.controlador.configuracion.GestorModales;
 import com.baryx.cliente.controlador.configuracion.ModalHerramienta;
 import com.baryx.cliente.servicio.LicenseServicio;
 import com.baryx.cliente.utilidad.IdiomaUtil;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,6 +126,9 @@ public class LicenciaHandler implements ModalHerramienta {
 
         cardLicencia.getChildren().addAll(tEstado, gridLic, notaLic);
 
+        // ─── Sección: Ingresar / Cambiar clave ───
+        VBox seccionActivar = crearSeccionActivarKey(servicio, modal);
+
         // ─── Texto de la licencia ───
         Label tTexto = new Label(IdiomaUtil.obtener("ctrl.licencia.texto"));
         tTexto.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #999;");
@@ -136,8 +142,101 @@ public class LicenciaHandler implements ModalHerramienta {
         VBox.setVgrow(areaLicencia, Priority.ALWAYS);
 
         modal.getChildren().addAll(
-            header, gestor.crearSeparador(), cardLicencia, tTexto, areaLicencia);
+            header, gestor.crearSeparador(), cardLicencia, seccionActivar, tTexto, areaLicencia);
         gestor.mostrarModal(modal);
+    }
+
+    // ==================== SECCIÓN ACTIVAR KEY ====================
+
+    private VBox crearSeccionActivarKey(LicenseServicio servicio, VBox modal) {
+        VBox seccion = new VBox(8);
+        seccion.setPadding(new Insets(8, 0, 0, 0));
+
+        Label titulo = new Label(IdiomaUtil.obtener("ctrl.licencia.activar.titulo"));
+        titulo.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+
+        HBox fila = new HBox(8);
+        fila.setAlignment(Pos.CENTER_LEFT);
+
+        TextField campoKey = new TextField();
+        campoKey.setPromptText(IdiomaUtil.obtener("ctrl.licencia.activar.placeholder"));
+        campoKey.setStyle("-fx-background-color: #1a1a1a; -fx-text-fill: #f5f5f5; " +
+            "-fx-border-color: #404040; -fx-border-radius: 6; -fx-background-radius: 6; " +
+            "-fx-font-size: 12px; -fx-prompt-text-fill: #666;");
+        campoKey.setPrefWidth(380);
+        campoKey.setMaxWidth(380);
+        HBox.setHgrow(campoKey, Priority.ALWAYS);
+
+        Button btnActivar = new Button(IdiomaUtil.obtener("ctrl.licencia.activar.boton"));
+        btnActivar.setStyle("-fx-background-color: linear-gradient(to bottom, #d4af37, #b8984e); " +
+            "-fx-text-fill: #0a0a0a; -fx-font-weight: 700; -fx-font-size: 12px; " +
+            "-fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 16;");
+        btnActivar.setMinWidth(90);
+
+        Label lblError = new Label();
+        lblError.setStyle("-fx-text-fill: #ff6b6b; -fx-font-size: 11px;");
+        lblError.setWrapText(true);
+        lblError.setVisible(false);
+        lblError.setManaged(false);
+
+        Label lblExito = new Label();
+        lblExito.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 11px;");
+        lblExito.setWrapText(true);
+        lblExito.setVisible(false);
+        lblExito.setManaged(false);
+
+        btnActivar.setOnAction(e -> {
+            String key = campoKey.getText().trim();
+            if (key.isBlank()) {
+                mostrarMensaje(lblError, lblExito, IdiomaUtil.obtener("ctrl.licencia.dialog.error_vacia"));
+                return;
+            }
+            if (!key.startsWith("BRX-")) {
+                mostrarMensaje(lblError, lblExito, IdiomaUtil.obtener("ctrl.licencia.dialog.error_formato"));
+                return;
+            }
+
+            btnActivar.setDisable(true);
+            btnActivar.setText(IdiomaUtil.obtener("ctrl.licencia.dialog.validando"));
+            lblError.setVisible(false);
+            lblError.setManaged(false);
+            lblExito.setVisible(false);
+            lblExito.setManaged(false);
+
+            new Thread(() -> {
+                var resultado = servicio.activarLicencia(key);
+                Platform.runLater(() -> {
+                    btnActivar.setDisable(false);
+                    btnActivar.setText(IdiomaUtil.obtener("ctrl.licencia.activar.boton"));
+
+                    if (resultado.estado() == LicenseServicio.EstadoLicencia.VALID
+                            || resultado.estado() == LicenseServicio.EstadoLicencia.TRIAL) {
+                        lblExito.setText(IdiomaUtil.obtener("ctrl.licencia.activar.exito"));
+                        lblExito.setVisible(true);
+                        lblExito.setManaged(true);
+                        lblError.setVisible(false);
+                        lblError.setManaged(false);
+                        // Reabrir el modal para refrescar datos
+                        gestor.cerrarModalActual();
+                        abrir();
+                    } else {
+                        mostrarMensaje(lblError, lblExito, resultado.mensaje());
+                    }
+                });
+            }).start();
+        });
+
+        fila.getChildren().addAll(campoKey, btnActivar);
+        seccion.getChildren().addAll(titulo, fila, lblError, lblExito);
+        return seccion;
+    }
+
+    private void mostrarMensaje(Label lblError, Label lblExito, String mensaje) {
+        lblError.setText(mensaje);
+        lblError.setVisible(true);
+        lblError.setManaged(true);
+        lblExito.setVisible(false);
+        lblExito.setManaged(false);
     }
 
     // ==================== HELPERS PARA PRESENTACIÓN ====================
