@@ -36,12 +36,12 @@ import java.util.Properties;
  *   <li>Retorna estado con días restantes para avisos de renovación.</li>
  * </ol>
  */
-public class LicenseServicio {
+public class LicenciaServicio {
 
-    private static final Logger logger = LoggerFactory.getLogger(LicenseServicio.class);
+    private static final Logger logger = LoggerFactory.getLogger(LicenciaServicio.class);
 
-    private static final String API_URL = System.getProperty("baryx.api.url", "https://api.baryx.app");
-    private static final String WEB_URL = "https://www.baryx.org";
+    private static final String API_URL = System.getProperty("baryx.api.url", "https://baryxweb.onrender.com");
+    private static final String WEB_URL = System.getProperty("baryx.web.url", "https://www.baryx.org");
 
     private static final int DIAS_TRIAL = 14;
     public static final int DIAS_AVISO_RENOVACION = 5;
@@ -120,10 +120,11 @@ public class LicenseServicio {
             return new ResultadoValidacion(EstadoLicencia.ERROR, licenseKey, null, null,
                     "Activación interrumpida. Verifica tu conexión a Internet.");
         } catch (IOException e) {
-            logger.warn("[License] Error de conexión al activar: {}", e.getMessage());
+            String detalle = obtenerMensajeError(e);
+            logger.warn("[License] Error de conexión al activar: {}", detalle, e);
             return new ResultadoValidacion(EstadoLicencia.ERROR, licenseKey, null, null,
-                    "Se necesita conexión a Internet para activar la licencia. "
-                    + "Conéctate a Internet e intenta de nuevo.");
+                    "No se pudo conectar al servidor de licencias (" + detalle + "). "
+                    + "Verifica tu conexión a Internet e intenta de nuevo.");
         }
     }
 
@@ -246,7 +247,8 @@ public class LicenseServicio {
             Thread.currentThread().interrupt();
             return usarCache(licenseKey, "Validación interrumpida");
         } catch (IOException e) {
-            logger.debug("[License] Sin conexión con servidor de licencias: {}", e.getMessage());
+            String detalle = obtenerMensajeError(e);
+            logger.debug("[License] Sin conexión con servidor de licencias: {}", detalle);
             return usarCache(licenseKey, "Sin conexión — usando validación guardada");
         }
     }
@@ -551,5 +553,23 @@ public class LicenseServicio {
 
     private String encodeKey(String key) {
         return java.net.URLEncoder.encode(key, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Extrae un mensaje descriptivo de una excepción, recorriendo la cadena de causas
+     * si el mensaje principal es null (común en IOException de HttpClient).
+     */
+    private String obtenerMensajeError(Exception e) {
+        if (e.getMessage() != null && !e.getMessage().isBlank()) {
+            return e.getMessage();
+        }
+        Throwable causa = e.getCause();
+        while (causa != null) {
+            if (causa.getMessage() != null && !causa.getMessage().isBlank()) {
+                return causa.getMessage();
+            }
+            causa = causa.getCause();
+        }
+        return e.getClass().getSimpleName();
     }
 }

@@ -424,7 +424,7 @@ function Build-ClienteConWix {
         "jdk.accessibility"
     ) -join ","
 
-    $baryxApiUrl = if ($env:BARYX_API_URL) { $env:BARYX_API_URL } else { "https://api.baryx.app" }
+    $baryxApiUrl = if ($env:BARYX_API_URL) { $env:BARYX_API_URL } else { "https://baryxweb.onrender.com" }
 
     $jpackageArgs = @(
         "--type", "msi",
@@ -469,7 +469,7 @@ function Build-ClienteConInnoSetup {
     $clienteAppImageDir = "$TEMP_DIR\cliente-appimage"
     New-Item -ItemType Directory -Force -Path $clienteAppImageDir | Out-Null
 
-    $baryxApiUrl = if ($env:BARYX_API_URL) { $env:BARYX_API_URL } else { "https://api.baryx.app" }
+    $baryxApiUrl = if ($env:BARYX_API_URL) { $env:BARYX_API_URL } else { "https://baryxweb.onrender.com" }
 
     $jpackageArgs = @(
         "--type", "app-image",

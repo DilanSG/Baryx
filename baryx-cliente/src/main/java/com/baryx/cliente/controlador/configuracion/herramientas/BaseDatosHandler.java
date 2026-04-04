@@ -103,7 +103,8 @@ public class BaseDatosHandler implements ModalHerramienta {
         // ─── Card: Servidor API ───
         Circle indHealth = new Circle(4, Color.web("#666"));
         Label estadoHealth = new Label(IdiomaUtil.obtener("ctrl.bd.verificando_estado"));
-        estadoHealth.setStyle("-fx-text-fill: #888; -fx-font-size: 12px;");
+        estadoHealth.getStyleClass().add("texto-secundario-sm");
+        estadoHealth.setStyle("-fx-text-fill: #888;");
         Label valLatencia = gestor.crearInfoValor("—");
         VBox cardServidor = construirCardServidor(indHealth, estadoHealth, valLatencia);
 
@@ -158,7 +159,8 @@ public class BaseDatosHandler implements ModalHerramienta {
             "-fx-border-color: #2a2a2a; -fx-border-radius: 8;");
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.bd.titulo_conexion"));
-        titulo.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("texto-secundario-sm");
+        titulo.setStyle("-fx-font-weight: 700; -fx-text-fill: #d4af37;");
 
         // Datos de BD desde variables de entorno
         String dbHost = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
@@ -184,16 +186,17 @@ public class BaseDatosHandler implements ModalHerramienta {
         String passReal = dbPass;
         String passMascara = "●".repeat(Math.min(passReal.length(), 12));
         Label lblPassword = gestor.crearInfoValor(passMascara);
-        lblPassword.setStyle("-fx-text-fill: #888; -fx-font-size: 12px; -fx-font-weight: 600; " +
+        lblPassword.getStyleClass().add("texto-secundario-sm");
+        lblPassword.setStyle("-fx-text-fill: #888; -fx-font-weight: 600; " +
             "-fx-cursor: hand;");
         lblPassword.setOnMouseEntered(e -> {
             lblPassword.setText(passReal);
-            lblPassword.setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 12px; -fx-font-weight: 600; " +
+            lblPassword.setStyle("-fx-text-fill: #e8e8e8; -fx-font-weight: 600; " +
                 "-fx-cursor: hand;");
         });
         lblPassword.setOnMouseExited(e -> {
             lblPassword.setText(passMascara);
-            lblPassword.setStyle("-fx-text-fill: #888; -fx-font-size: 12px; -fx-font-weight: 600; " +
+            lblPassword.setStyle("-fx-text-fill: #888; -fx-font-weight: 600; " +
                 "-fx-cursor: hand;");
         });
         grid.addRow(4, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.bd.label.contrasena")), lblPassword);
@@ -231,7 +234,8 @@ public class BaseDatosHandler implements ModalHerramienta {
             "-fx-border-color: #2a2a2a; -fx-border-radius: 8;");
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.bd.titulo_servidor"));
-        titulo.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("texto-secundario-sm");
+        titulo.setStyle("-fx-font-weight: 700; -fx-text-fill: #d4af37;");
 
         HBox filaHealth = new HBox(6, indHealth, estadoHealth);
         filaHealth.setAlignment(Pos.CENTER_LEFT);
@@ -261,19 +265,20 @@ public class BaseDatosHandler implements ModalHerramienta {
             ? tokenActual.substring(0, Math.min(8, tokenActual.length())) + "\u25cf\u25cf\u25cf\u25cf\u25cf\u25cf\u25cf\u25cf"
             : IdiomaUtil.obtener("ctrl.bd.sin_sesion");
         Label lblToken = gestor.crearInfoValor(tokenDisplay);
-        lblToken.setStyle("-fx-text-fill: #888; -fx-font-size: 12px; -fx-font-weight: 600; " +
+        lblToken.getStyleClass().add("texto-secundario-sm");
+        lblToken.setStyle("-fx-text-fill: #888; -fx-font-weight: 600; " +
             "-fx-cursor: hand;");
         if (tokenActual != null && !tokenActual.isEmpty()) {
             String tokenCorto = tokenActual.length() > 40
                 ? tokenActual.substring(0, 40) + "..." : tokenActual;
             lblToken.setOnMouseEntered(e -> {
                 lblToken.setText(tokenCorto);
-                lblToken.setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 12px; -fx-font-weight: 600; " +
+                lblToken.setStyle("-fx-text-fill: #e8e8e8; -fx-font-weight: 600; " +
                     "-fx-cursor: hand;");
             });
             lblToken.setOnMouseExited(e -> {
                 lblToken.setText(tokenDisplay);
-                lblToken.setStyle("-fx-text-fill: #888; -fx-font-size: 12px; -fx-font-weight: 600; " +
+                lblToken.setStyle("-fx-text-fill: #888; -fx-font-weight: 600; " +
                     "-fx-cursor: hand;");
             });
         }
@@ -296,12 +301,14 @@ public class BaseDatosHandler implements ModalHerramienta {
             "-fx-border-color: #2a2a2a; -fx-border-radius: 8;");
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.bd.titulo_nube"));
-        titulo.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("texto-secundario-sm");
+        titulo.setStyle("-fx-font-weight: 700; -fx-text-fill: #d4af37;");
 
         Circle indNubeLocal = new Circle(4, Color.web("#666"));
         this.indNube = indNubeLocal;
         Label estadoNubeLocal = new Label(IdiomaUtil.obtener("ctrl.bd.verificando_estado"));
-        estadoNubeLocal.setStyle("-fx-text-fill: #888; -fx-font-size: 12px;");
+        estadoNubeLocal.getStyleClass().add("texto-secundario-sm");
+        estadoNubeLocal.setStyle("-fx-text-fill: #888;");
         this.estadoNube = estadoNubeLocal;
         HBox filaNubeEstado = new HBox(6, indNubeLocal, estadoNubeLocal);
         filaNubeEstado.setAlignment(Pos.CENTER_LEFT);
@@ -312,6 +319,7 @@ public class BaseDatosHandler implements ModalHerramienta {
 
         this.valHabilitado = gestor.crearInfoValor("—");
         this.valConexion = gestor.crearInfoValor("—");
+        this.valConexion.getStyleClass().add("texto-secundario-sm");
         this.valCluster = gestor.crearInfoValor("—");
         this.valBaseDatos = gestor.crearInfoValor("—");
         this.valBusinessId = gestor.crearInfoValor("—");
@@ -383,7 +391,7 @@ public class BaseDatosHandler implements ModalHerramienta {
             if (estado == null || estado.isEmpty()) {
                 indNube.setFill(Color.web("#666"));
                 estadoNube.setText(IdiomaUtil.obtener("ctrl.bd.nube.no_disponible"));
-                estadoNube.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #666;");
                 valHabilitado.setText("—");
                 return;
             }
@@ -413,24 +421,24 @@ public class BaseDatosHandler implements ModalHerramienta {
             if (habilitado && conectado) {
                 indNube.setFill(Color.web("#a8b991"));
                 estadoNube.setText(IdiomaUtil.obtener("ctrl.bd.nube.conectada"));
-                estadoNube.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #a8b991;");
                 valConexion.setText(IdiomaUtil.obtener("ctrl.bd.nube.activa"));
-                valConexion.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px;");
+                valConexion.setStyle("-fx-text-fill: #a8b991;");
             } else if (habilitado) {
                 indNube.setFill(Color.web("#daa520"));
                 String msg = ultimoError != null
                     ? IdiomaUtil.obtener("ctrl.bd.nube.error_conexion")
                     : IdiomaUtil.obtener("ctrl.bd.nube.sin_conexion");
                 estadoNube.setText(msg);
-                estadoNube.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #daa520;");
                 valConexion.setText(IdiomaUtil.obtener("ctrl.bd.nube.inactiva"));
-                valConexion.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+                valConexion.setStyle("-fx-text-fill: #daa520;");
             } else {
                 indNube.setFill(Color.web("#555"));
                 estadoNube.setText(IdiomaUtil.obtener("ctrl.bd.nube.deshabilitada"));
-                estadoNube.setStyle("-fx-text-fill: #555; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #555;");
                 valConexion.setText(IdiomaUtil.obtener("ctrl.bd.nube.no"));
-                valConexion.setStyle("-fx-text-fill: #555; -fx-font-size: 12px;");
+                valConexion.setStyle("-fx-text-fill: #555;");
             }
         }));
     }
@@ -487,7 +495,7 @@ public class BaseDatosHandler implements ModalHerramienta {
             indHealth.setFill(Color.web(color));
             estadoHealth.setText(ok ? java.text.MessageFormat.format(IdiomaUtil.obtener("ctrl.bd.activo"), r[0])
                 : IdiomaUtil.obtener("ctrl.bd.no_responde"));
-            estadoHealth.setStyle("-fx-text-fill: " + color + "; -fx-font-size: 12px;");
+            estadoHealth.setStyle("-fx-text-fill: " + color + ";");
             valLatencia.setText(ok ? r[1] + " ms" : "—");
 
             btnVerificar.setDisable(false);
@@ -507,9 +515,9 @@ public class BaseDatosHandler implements ModalHerramienta {
         Platform.runLater(() -> {
             indNube.setFill(Color.web("#daa520"));
             estadoNube.setText("Verificando conexión a Atlas...");
-            estadoNube.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+            estadoNube.setStyle("-fx-text-fill: #daa520;");
             valConexion.setText("verificando...");
-            valConexion.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+            valConexion.setStyle("-fx-text-fill: #daa520;");
         });
 
         CompletableFuture.supplyAsync(() -> {
@@ -574,9 +582,9 @@ public class BaseDatosHandler implements ModalHerramienta {
             if (resultado == null) {
                 indNube.setFill(Color.web("#cc4444"));
                 estadoNube.setText("Error al contactar el servidor");
-                estadoNube.setStyle("-fx-text-fill: #cc4444; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #cc4444;");
                 valConexion.setText("error");
-                valConexion.setStyle("-fx-text-fill: #cc4444; -fx-font-size: 12px;");
+                valConexion.setStyle("-fx-text-fill: #cc4444;");
                 logger.error("[NUBE-VERIFY] No se obtuvo respuesta del servidor");
                 return;
             }
@@ -599,16 +607,16 @@ public class BaseDatosHandler implements ModalHerramienta {
             if (exito) {
                 indNube.setFill(Color.web("#a8b991"));
                 estadoNube.setText("Conectada a Atlas (" + pingObj + " ms)");
-                estadoNube.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #a8b991;");
                 valConexion.setText("ACTIVA — ping " + pingObj + " ms");
-                valConexion.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px;");
+                valConexion.setStyle("-fx-text-fill: #a8b991;");
             } else {
                 indNube.setFill(Color.web("#cc4444"));
                 String msgError = error.length() > 80 ? error.substring(0, 80) + "..." : error;
                 estadoNube.setText("Fallo: " + etapa);
-                estadoNube.setStyle("-fx-text-fill: #cc4444; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #cc4444;");
                 valConexion.setText(msgError.isEmpty() ? "SIN CONEXIÓN" : msgError);
-                valConexion.setStyle("-fx-text-fill: #cc4444; -fx-font-size: 12px;");
+                valConexion.setStyle("-fx-text-fill: #cc4444;");
             }
 
             // Refrescar estado completo de nube tras verificación

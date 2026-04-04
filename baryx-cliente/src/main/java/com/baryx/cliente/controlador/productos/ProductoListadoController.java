@@ -122,16 +122,19 @@ public class ProductoListadoController implements com.baryx.cliente.controlador.
         
         // Icono de expansión
         Label iconoExpansion = new Label("▶");
-        iconoExpansion.setStyle("-fx-font-size: 14px; -fx-text-fill: #d4af37;");
+        iconoExpansion.getStyleClass().add("panel-seccion-titulo");
+        iconoExpansion.setStyle("-fx-text-fill: #d4af37;");
         
         // Nombre de categoría
         Label nombreLabel = new Label(categoria.getNombre());
-        nombreLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #f5f5f5;");
+        nombreLabel.getStyleClass().add("icono-texto-md");
+        nombreLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #f5f5f5;");
         HBox.setHgrow(nombreLabel, Priority.ALWAYS);
         
         // Contador de productos
         Label contadorLabel = new Label("...");
-        contadorLabel.setStyle("-fx-font-size: 13px; -fx-text-fill: #b0b0b0;");
+        contadorLabel.getStyleClass().add("texto-info");
+        contadorLabel.setStyle("-fx-text-fill: #b0b0b0;");
         
         header.getChildren().addAll(iconoExpansion, nombreLabel, contadorLabel);
         
@@ -203,14 +206,17 @@ public class ProductoListadoController implements com.baryx.cliente.controlador.
         
         VBox infoBox = new VBox(4);
         Label nombre = new Label(producto.getNombre());
-        nombre.setStyle("-fx-font-size: 15px; -fx-font-weight: 600; -fx-text-fill: #f5f5f5;");
+        nombre.getStyleClass().add("tutorial-titulo");
+        nombre.setStyle("-fx-text-fill: #f5f5f5;");
         
         HBox detalles = new HBox(16);
         Label precio = new Label(String.format("$%.0f", producto.getPrecio().doubleValue()));
-        precio.setStyle("-fx-font-size: 14px; -fx-text-fill: #d4af37; -fx-font-weight: 600;");
+        precio.getStyleClass().add("panel-seccion-titulo");
+        precio.setStyle("-fx-text-fill: #d4af37;");
         
         Label stock = new Label(java.text.MessageFormat.format(IdiomaUtil.obtener("ctrl.productos.stock"), producto.getStockActual()));
-        stock.setStyle("-fx-font-size: 13px; -fx-text-fill: #b0b0b0;");
+        stock.getStyleClass().add("texto-info");
+        stock.setStyle("-fx-text-fill: #b0b0b0;");
         
         detalles.getChildren().addAll(precio, stock);
         infoBox.getChildren().addAll(nombre, detalles);
@@ -247,7 +253,8 @@ public class ProductoListadoController implements com.baryx.cliente.controlador.
         contenido.setAlignment(Pos.TOP_CENTER);
         
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.editar.producto"));
-        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("modal-titulo-lg");
+        titulo.setStyle("-fx-text-fill: #d4af37;");
         
         TextField txtNombre = new TextField(producto.getNombre());
         txtNombre.setPromptText(IdiomaUtil.obtener("ctrl.editar.producto.prompt.nombre"));
@@ -318,11 +325,12 @@ public class ProductoListadoController implements com.baryx.cliente.controlador.
         contenido.setAlignment(Pos.CENTER);
         
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.confirmar.eliminacion"));
-        titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ffaa00;");
+        titulo.getStyleClass().add("icono-texto-md");
+        titulo.setStyle("-fx-font-weight: bold; -fx-text-fill: #ffaa00;");
         
         Label mensaje = new Label(java.text.MessageFormat.format(IdiomaUtil.obtener("ctrl.confirmar.eliminar_producto"), producto.getNombre()));
         mensaje.setWrapText(true);
-        mensaje.setStyle("-fx-font-size: 14px; -fx-text-fill: #f5f5f5; -fx-text-alignment: center;");
+        mensaje.getStyleClass().add("modal-mensaje");
         
         HBox botones = new HBox(12);
         botones.setAlignment(Pos.CENTER);

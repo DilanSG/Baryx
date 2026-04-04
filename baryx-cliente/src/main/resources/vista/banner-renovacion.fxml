@@ -6,7 +6,7 @@
 
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.baryx.cliente.controlador.RenewalBannerController"
+      fx:controller="com.baryx.cliente.controlador.BannerRenovacionController"
       styleClass="renewal-banner"
       alignment="CENTER"
       spacing="12">

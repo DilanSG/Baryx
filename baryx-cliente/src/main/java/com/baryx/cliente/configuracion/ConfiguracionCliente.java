@@ -58,6 +58,8 @@ public class ConfiguracionCliente {
     private static boolean tutorialConexionCompletado = false;
     private static boolean setupPostgresCompletado = false;
     private static String businessId = "";
+    private static String perfilPantalla = "AUTO";
+    private static double escalaManual = 1.0;
 
     /**
      * Obtiene la IP LAN del equipo, detectada desde las interfaces de red.
@@ -244,16 +246,40 @@ public class ConfiguracionCliente {
         guardarPropiedades();
     }
 
+    /** Perfil de resolución/pantalla: "AUTO" o nombre del enum ResolucionPerfil */
+    public static String getPerfilPantalla() {
+        return perfilPantalla;
+    }
+
+    public static void setPerfilPantalla(String perfil) {
+        perfilPantalla = (perfil != null && !perfil.isEmpty()) ? perfil.trim() : "AUTO";
+        guardarPropiedades();
+    }
+
+    /** Factor de escala manual de la interfaz (0.5 – 2.0, por defecto 1.0) */
+    public static double getEscalaManual() {
+        return escalaManual;
+    }
+
+    public static void setEscalaManual(double escala) {
+        escalaManual = Math.max(0.5, Math.min(2.0, escala));
+        guardarPropiedades();
+    }
+
     /**
      * Verifica si el host necesita el asistente de configuración inicial.
-     * Retorna true si está en host mode y no se ha completado el setup de PostgreSQL
-     * o no existe el archivo .env con las credenciales de BD.
+     * Retorna true solo si está en host mode, no hay .env Y no hay ninguna BD guardada.
+     * Si ya existen BDs configuradas o el .env existe, el setup no es necesario.
      */
     public static boolean necesitaSetupInicial() {
         if (!hostMode) return false;
-        if (!setupPostgresCompletado) return true;
         Path envFile = java.nio.file.Paths.get(System.getProperty("user.home"), ".baryx", ".env");
-        return !java.nio.file.Files.exists(envFile);
+        if (java.nio.file.Files.exists(envFile)) return false;
+        // Si hay BDs PostgreSQL guardadas, el setup ya se hizo antes
+        boolean hayBdsGuardadas = ConfiguracionBd.cargarTodas().stream()
+                .anyMatch(c -> c.getTipo() != ConfiguracionBd.TipoBd.NUBE);
+        if (hayBdsGuardadas) return false;
+        return true;
     }
 
     // Cache de la URI de Atlas descifrada (se lee una sola vez)
@@ -366,6 +392,15 @@ public class ConfiguracionCliente {
             // Business ID para sincronización cloud
             businessId = props.getProperty("business.id", "");
 
+            // Resolución y escalado de pantalla
+            perfilPantalla = props.getProperty("pantalla.perfil", "AUTO");
+            try {
+                escalaManual = Double.parseDouble(props.getProperty("pantalla.escala.manual", "1.0"));
+                escalaManual = Math.max(0.5, Math.min(2.0, escalaManual));
+            } catch (NumberFormatException e) {
+                escalaManual = 1.0;
+            }
+
             // Si hay IP configurada y NO es host mode, usarla
             String ipConfigurada = props.getProperty("servidor.ip", "");
             if (!ipConfigurada.isEmpty() && !hostMode) {
@@ -449,6 +484,10 @@ public class ConfiguracionCliente {
         if (businessId != null && !businessId.isEmpty()) {
             props.setProperty("business.id", businessId);
         }
+
+        // Resolución y escalado de pantalla
+        props.setProperty("pantalla.perfil", perfilPantalla != null ? perfilPantalla : "AUTO");
+        props.setProperty("pantalla.escala.manual", String.valueOf(escalaManual));
 
         // Extraer IP de la URL actual (sin http:// y sin :puerto)
         String ip = urlServidor.replace("http://", "").replaceAll(":\\d+$", "");

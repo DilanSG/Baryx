@@ -72,7 +72,8 @@ public class GraficosHandler implements ModalHerramienta {
         // ─── Descripción general ───
         Label descripcion = new Label(
             IdiomaUtil.obtener("ctrl.config.graficos.descripcion"));
-        descripcion.setStyle("-fx-text-fill: #888; -fx-font-size: 11px;");
+        descripcion.getStyleClass().add("texto-hint-sm");
+        descripcion.setStyle("-fx-text-fill: #888;");
         descripcion.setWrapText(true);
 
         // ─── Card: Animaciones ───
@@ -84,7 +85,8 @@ public class GraficosHandler implements ModalHerramienta {
         // ─── Nota de rendimiento ───
         Label nota = new Label(
             IdiomaUtil.obtener("ctrl.config.graficos.nota"));
-        nota.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-padding: 4 0 0 0;");
+        nota.getStyleClass().add("texto-hint");
+        nota.setStyle("-fx-padding: 4 0 0 0;");
         nota.setWrapText(true);
 
         modal.getChildren().addAll(
@@ -109,11 +111,12 @@ public class GraficosHandler implements ModalHerramienta {
 
         // Título de sección
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.config.animaciones.titulo"));
-        titulo.setStyle("-fx-font-size: 13px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("panel-seccion-titulo-sm");
 
         // Fila: label + toggle
         Label labelToggle = new Label(IdiomaUtil.obtener("ctrl.config.animaciones.desc"));
-        labelToggle.setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 12px;");
+        labelToggle.getStyleClass().add("texto-secundario-sm");
+        labelToggle.setStyle("-fx-text-fill: #e8e8e8;");
 
         ToggleSwitch toggleAnimaciones = new ToggleSwitch();
         toggleAnimaciones.setSelected(ConfiguracionCliente.isAnimacionesActivas());
@@ -127,15 +130,17 @@ public class GraficosHandler implements ModalHerramienta {
         // Descripción
         Label desc = new Label(
             IdiomaUtil.obtener("ctrl.config.animaciones.info"));
-        desc.setStyle("-fx-text-fill: #666; -fx-font-size: 10px;");
+        desc.getStyleClass().add("texto-hint");
+        desc.setStyle("-fx-text-fill: #666;");
         desc.setWrapText(true);
 
         // Estado actual
         Label estadoActual = new Label(
             ConfiguracionCliente.isAnimacionesActivas() ? IdiomaUtil.obtener("ctrl.config.animaciones.activas") : IdiomaUtil.obtener("ctrl.config.animaciones.desactivas"));
+        estadoActual.getStyleClass().add("texto-hint-sm");
         estadoActual.setStyle(ConfiguracionCliente.isAnimacionesActivas()
-            ? "-fx-text-fill: #a8b991; -fx-font-size: 11px; -fx-font-weight: 600;"
-            : "-fx-text-fill: #888; -fx-font-size: 11px; -fx-font-weight: 600;");
+            ? "-fx-text-fill: #a8b991; -fx-font-weight: 600;"
+            : "-fx-text-fill: #888; -fx-font-weight: 600;");
 
         // Listener del toggle
         toggleAnimaciones.selectedProperty().addListener((obs, oldVal, newVal) -> {
@@ -151,8 +156,8 @@ public class GraficosHandler implements ModalHerramienta {
             // Actualizar label de estado
             estadoActual.setText(activas ? IdiomaUtil.obtener("ctrl.config.animaciones.activas") : IdiomaUtil.obtener("ctrl.config.animaciones.desactivas"));
             estadoActual.setStyle(activas
-                ? "-fx-text-fill: #a8b991; -fx-font-size: 11px; -fx-font-weight: 600;"
-                : "-fx-text-fill: #888; -fx-font-size: 11px; -fx-font-weight: 600;");
+                ? "-fx-text-fill: #a8b991; -fx-font-weight: 600;"
+                : "-fx-text-fill: #888; -fx-font-weight: 600;");
 
             // Notificar al usuario que el cambio requiere cambiar de vista para verse
             Stage stage = gestor.obtenerStage();
@@ -179,11 +184,12 @@ public class GraficosHandler implements ModalHerramienta {
 
         // Título de sección
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.config.pantalla.titulo"));
-        titulo.setStyle("-fx-font-size: 13px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("panel-seccion-titulo-sm");
 
         // Fila: label + toggle
         Label labelToggle = new Label(IdiomaUtil.obtener("ctrl.config.pantalla.completa"));
-        labelToggle.setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 12px;");
+        labelToggle.getStyleClass().add("texto-secundario-sm");
+        labelToggle.setStyle("-fx-text-fill: #e8e8e8;");
 
         ToggleSwitch togglePantalla = new ToggleSwitch();
         togglePantalla.setSelected(ConfiguracionCliente.isPantallaCompleta());
@@ -197,15 +203,17 @@ public class GraficosHandler implements ModalHerramienta {
         // Descripción
         Label desc = new Label(
             IdiomaUtil.obtener("ctrl.config.pantalla.desc"));
-        desc.setStyle("-fx-text-fill: #666; -fx-font-size: 10px;");
+        desc.getStyleClass().add("texto-hint");
+        desc.setStyle("-fx-text-fill: #666;");
         desc.setWrapText(true);
 
         // Estado actual
         Label estadoActual = new Label(
             ConfiguracionCliente.isPantallaCompleta() ? IdiomaUtil.obtener("ctrl.config.pantalla.estado_completa") : IdiomaUtil.obtener("ctrl.config.pantalla.estado_ventana"));
+        estadoActual.getStyleClass().add("texto-hint-sm");
         estadoActual.setStyle(ConfiguracionCliente.isPantallaCompleta()
-            ? "-fx-text-fill: #a8b991; -fx-font-size: 11px; -fx-font-weight: 600;"
-            : "-fx-text-fill: #888; -fx-font-size: 11px; -fx-font-weight: 600;");
+            ? "-fx-text-fill: #a8b991; -fx-font-weight: 600;"
+            : "-fx-text-fill: #888; -fx-font-weight: 600;");
 
         // Listener del toggle
         togglePantalla.selectedProperty().addListener((obs, oldVal, newVal) -> {
@@ -229,8 +237,8 @@ public class GraficosHandler implements ModalHerramienta {
             // Actualizar label de estado
             estadoActual.setText(completa ? IdiomaUtil.obtener("ctrl.config.pantalla.estado_completa") : IdiomaUtil.obtener("ctrl.config.pantalla.estado_ventana"));
             estadoActual.setStyle(completa
-                ? "-fx-text-fill: #a8b991; -fx-font-size: 11px; -fx-font-weight: 600;"
-                : "-fx-text-fill: #888; -fx-font-size: 11px; -fx-font-weight: 600;");
+                ? "-fx-text-fill: #a8b991; -fx-font-weight: 600;"
+                : "-fx-text-fill: #888; -fx-font-weight: 600;");
         });
 
         card.getChildren().addAll(titulo, filaToggle, desc, estadoActual);

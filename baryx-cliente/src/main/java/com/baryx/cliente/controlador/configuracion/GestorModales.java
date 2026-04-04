@@ -37,9 +37,9 @@ public class GestorModales {
 
     private static final Logger logger = LoggerFactory.getLogger(GestorModales.class);
 
-    /** Estilo inline base para modales luxury (fondo oscuro, borde dorado). */
+    /** Estilo inline base para modales luxury (fondo oscuro semi-transparente, borde dorado). */
     public static final String ESTILO_MODAL_LUXURY =
-        "-fx-background-color: #141414; -fx-border-color: rgba(212,175,55,0.4); " +
+        "-fx-background-color: rgba(18, 18, 18, 0.92); -fx-border-color: rgba(212,175,55,0.4); " +
         "-fx-border-width: 1; -fx-border-radius: 12; -fx-background-radius: 12;";
 
     // ==================== ESTADO ====================
@@ -157,18 +157,15 @@ public class GestorModales {
         icono.setMaxSize(18, 18);
 
         Label label = new Label(titulo);
-        label.setStyle("-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        label.getStyleClass().add("modal-titulo-dorado");
 
         Region espacio = new Region();
         HBox.setHgrow(espacio, Priority.ALWAYS);
 
         Label cerrar = new Label("✕");
-        cerrar.setStyle("-fx-font-size: 16px; -fx-text-fill: #555; -fx-cursor: hand; -fx-padding: 0 4;");
+        cerrar.getStyleClass().add("panel-cerrar");
+        cerrar.setStyle("-fx-padding: 0 4;");
         cerrar.setOnMouseClicked(e -> cerrarModalActual());
-        cerrar.setOnMouseEntered(e ->
-            cerrar.setStyle("-fx-font-size: 16px; -fx-text-fill: #f5f5f5; -fx-cursor: hand; -fx-padding: 0 4;"));
-        cerrar.setOnMouseExited(e ->
-            cerrar.setStyle("-fx-font-size: 16px; -fx-text-fill: #555; -fx-cursor: hand; -fx-padding: 0 4;"));
 
         HBox header = new HBox(10, icono, label, espacio, cerrar);
         header.setAlignment(Pos.CENTER_LEFT);
@@ -187,7 +184,8 @@ public class GestorModales {
     /** Crea un label de clave (gris) para grillas de información. */
     public Label crearInfoLabel(String texto) {
         Label l = new Label(texto);
-        l.setStyle("-fx-text-fill: #888; -fx-font-size: 12px;");
+        l.getStyleClass().add("dato-label");
+        l.setStyle("-fx-text-fill: #888;");
         l.setMinWidth(120);
         return l;
     }
@@ -195,7 +193,8 @@ public class GestorModales {
     /** Crea un label de valor (blanco, bold) para grillas de información. */
     public Label crearInfoValor(String texto) {
         Label l = new Label(texto);
-        l.setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 12px; -fx-font-weight: 600;");
+        l.getStyleClass().add("dato-valor");
+        l.setStyle("-fx-text-fill: #e8e8e8;");
         return l;
     }
 

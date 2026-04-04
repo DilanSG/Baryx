@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/*Componente para el fondo animado de la aplicación, utiliza el MotorAnimaciones para renderizar partículas de polvo dorado que se mueven suavemente y reaccionan a la posición del mouse, creando un efecto visual atractivo y dinámico.
+/*Componente para el fondo animado de la aplicación, utiliza el MotorAnimaciones para renderizar partículas de polvo dorado que se mueven y reaccionan a la posición del mouse.
 - El fondo se compone de un gradiente radial que puede ser personalizado a través de propiedades de color (centro, intermedio, borde) para permitir ajustes desde la configuración o temas.*/
 public class FondoAnimado extends Region implements Animable {
     private final Canvas canvas = new Canvas();
@@ -38,7 +38,7 @@ public class FondoAnimado extends Region implements Animable {
     private double mouseX = -1000;
     private double mouseY = -1000;
 
-    // Handler para capturar movimiento del mouse en toda la escena (incluso sobre otros nodos)
+    // Handler para capturar movimiento del mouse en toda la escena
     private final javafx.event.EventHandler<javafx.scene.input.MouseEvent> mouseSceneHandler = event -> {
         javafx.geometry.Point2D localPoint = this.sceneToLocal(event.getSceneX(), event.getSceneY());
         if (localPoint != null) {
@@ -109,8 +109,7 @@ public class FondoAnimado extends Region implements Animable {
                 cacheH = h;
                 actualizarFondo();
                 
-                if (Math.abs(w - lastDistW) > 50 || Math.abs(h - lastDistH) > 50) { // Si el cambio en tamaño es mayor a 50px en cualquier dimensión, redistribuir partículas para evitar clustering o problemas visuales. Esto es especialmente útil al cambiar de vista, hacer Alt-Tab o redimensionar la ventana.
-                    redistribuirParticulas(w, h);
+                if (Math.abs(w - lastDistW) > 50 || Math.abs(h - lastDistH) > 50) { // Si el cambio en tamaño es mayor a 50px en cualquier dimensión, redistribuir partículas para evitar clustering o problemas visuales.
                     lastDistW = w;
                     lastDistH = h;
                 }
@@ -242,7 +241,6 @@ public class FondoAnimado extends Region implements Animable {
         if (!detenido) canvas.setVisible(true);
     }
 
-    // Clase interna para representar cada partícula de polvo dorado.
     private class Particula {
         double x, y;
         double vx, vy;

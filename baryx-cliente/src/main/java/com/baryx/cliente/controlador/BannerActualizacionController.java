@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import com.baryx.cliente.utilidad.IdiomaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,15 +18,17 @@ import org.slf4j.LoggerFactory;
  * <p>Se muestra en la parte superior del shell como overlay no-intrusivo.
  * El usuario puede ir directamente a la página de descargas o cerrarlo.
  */
-public class UpdateBannerController {
+public class BannerActualizacionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(UpdateBannerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(BannerActualizacionController.class);
+
+    private static final String PAGINA_DESCARGAS = System.getProperty(
+            "baryx.api.url", "https://baryx.org") + "/downloads";
 
     @FXML private HBox bannerRaiz;
     @FXML private Label lblMensaje;
     @FXML private Button btnDescargar;
 
-    private String urlDescarga;
     private HostServices hostServices;
 
     // ------------------------------------------------------------------
@@ -41,14 +44,13 @@ public class UpdateBannerController {
      * @param hostServices   Para abrir el navegador
      */
     public void inicializar(String versionRemota, String versionLocal,
-                            String urlDescarga, HostServices hostServices) {
-        this.urlDescarga = urlDescarga;
+                            HostServices hostServices) {
         this.hostServices = hostServices;
 
-        lblMensaje.setText(
-            String.format("Nueva versión disponible: v%s  (instalada: v%s)", versionRemota, versionLocal)
-        );
-        btnDescargar.setText("Descargar v" + versionRemota);
+        lblMensaje.setText(String.format(
+                IdiomaUtil.obtener("ctrl.banner.nueva_version"), versionRemota, versionLocal));
+        btnDescargar.setText(String.format(
+                IdiomaUtil.obtener("ctrl.banner.descargar"), versionRemota));
     }
 
     // ------------------------------------------------------------------
@@ -57,10 +59,10 @@ public class UpdateBannerController {
 
     @FXML
     private void abrirDescarga() {
-        if (urlDescarga != null && hostServices != null) {
+        if (hostServices != null) {
             try {
-                hostServices.showDocument(urlDescarga);
-                logger.info("[Update] Abriendo pagina de descargas: {}", urlDescarga);
+                hostServices.showDocument(PAGINA_DESCARGAS);
+                logger.info("[Update] Abriendo página de descargas: {}", PAGINA_DESCARGAS);
             } catch (Exception e) {
                 logger.warn("[Update] No se pudo abrir el navegador: {}", e.getMessage());
             }

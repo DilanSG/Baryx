@@ -33,7 +33,7 @@
 #
 # Variables de entorno opcionales:
 #   BARYX_ATLAS_URI  — URI del cluster MongoDB Atlas (se embebe en el JAR, NUNCA en disco)
-#   BARYX_API_URL    — URL del backend web (default: https://api.baryx.app)
+#   BARYX_API_URL    — URL del backend web (default: https://baryxweb.onrender.com)
 #   BARYX_VERSION    — Versión del paquete (default: lee de pom.xml)
 # =========================================================
 
@@ -347,7 +347,7 @@ _generar_app_image_cliente() {
 
     local MODULOS_CLIENTE="java.base,java.desktop,java.logging,java.naming,java.sql,java.xml,java.xml.crypto,java.management,java.net.http,java.prefs,java.scripting,java.security.jgss,java.security.sasl,jdk.unsupported,jdk.crypto.ec,jdk.accessibility"
 
-    local BARYX_API_URL_VAL="${BARYX_API_URL:-https://api.baryx.app}"
+    local BARYX_API_URL_VAL="${BARYX_API_URL:-https://baryxweb.onrender.com}"
     # Atlas URI cifrada dentro del JAR via cloud.dat (ver CifradoNube.java)
     # Ya no se pasa como --java-options porque Maven la cifra en process-resources
 
@@ -610,7 +610,7 @@ case "$MODO" in
         echo ""
         echo "Variables de entorno:"
         echo "  BARYX_ATLAS_URI  - URI MongoDB Atlas (embebida en JVM, nunca en disco)"
-        echo "  BARYX_API_URL    - URL backend web (default: https://api.baryx.app)"
+        echo "  BARYX_API_URL    - URL backend web (default: https://baryxweb.onrender.com)"
         echo "  BARYX_VERSION    - Version del paquete"
         exit 1
         ;;

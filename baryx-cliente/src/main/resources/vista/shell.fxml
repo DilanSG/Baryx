@@ -24,7 +24,7 @@
                 <Image url="@../imagenes/LOGOPNG.png"/>
             </image>
         </ImageView>
-        <Label text="%shell.cargando" style="-fx-text-fill: #b0b0b0; -fx-font-size: 15px;"/>
+        <Label text="%shell.cargando" styleClass="splash-cargando"/>
     </VBox>
 
 </StackPane>

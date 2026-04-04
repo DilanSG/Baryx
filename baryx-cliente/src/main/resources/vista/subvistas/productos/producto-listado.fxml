@@ -36,9 +36,8 @@
             <Insets bottom="20" left="40"/>
         </padding>
         <VBox alignment="BOTTOM_LEFT" spacing="2">
-            <Label text="%productos.info" style="-fx-text-fill: #ffefbb7b; -fx-font-weight: bold; -fx-font-size: 11px;"/>
-            <Label text="%productos.listado.info"
-                   style="-fx-text-fill: #ffefbb; -fx-font-size: 13px; -fx-font-style: italic;"/>
+            <Label text="%productos.info" styleClass="info-hint-titulo"/>
+            <Label text="%productos.listado.info" styleClass="info-hint-descripcion"/>
         </VBox>
     </HBox>
 

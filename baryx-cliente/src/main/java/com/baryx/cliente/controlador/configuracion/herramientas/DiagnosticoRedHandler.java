@@ -22,7 +22,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -64,8 +63,11 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
     /** Referencia al contenedor de topología para reinicio del diagnóstico */
     private VBox contenedorTopologia;
 
-    /** Referencia al grid de info de red para reinicio */
+    /** Referencia al grid de info de red para reinicio (hidden, solo para compat) */
     private GridPane gridInfoRed;
+
+    /** Referencia al panel dual para reconstrucción */
+    private HBox panelInfoDual;
 
     /** Indicador visual de estado de conexión (círculo coloreado) */
     private Circle indicadorConexion;
@@ -75,6 +77,13 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
 
     /** Componente de topología activo (gestiona sus propias animaciones) */
     private TopologiaRed topologiaActual;
+
+    // ── Labels async de latencia y nube ──
+    private Label valLatencia;
+    private Label valNubeEstado;
+    private Label valNubeCluster;
+    private Label valNubeDb;
+    private Label valNubeBusinessId;
 
     // ==================== CONSTRUCTOR ====================
 
@@ -104,18 +113,20 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
         modal.setPadding(new Insets(20));
         modal.setStyle(GestorModales.ESTILO_MODAL_LUXURY);
 
-        // ─── Header ───
+        // ─── Header (título centrado) ───
         HBox header = gestor.crearHeaderModal(IdiomaUtil.obtener("ctrl.red.titulo"), "icono-cfg-red");
+        header.setAlignment(Pos.CENTER);
 
         // ─── Estado de conexión ───
         indicadorConexion = new Circle(5, Color.web("#666"));
         labelEstadoConexion = new Label(IdiomaUtil.obtener("ctrl.red.verificando"));
-        labelEstadoConexion.setStyle("-fx-text-fill: #888; -fx-font-size: 13px;");
+        labelEstadoConexion.getStyleClass().add("texto-info");
+        labelEstadoConexion.setStyle("-fx-text-fill: #888;");
         HBox filaEstado = new HBox(8, indicadorConexion, labelEstadoConexion);
         filaEstado.setAlignment(Pos.CENTER_LEFT);
 
-        // ─── Grid de información de red completa ───
-        gridInfoRed = construirGridInfoRed();
+        // ─── Info de red en dos columnas: Local (izq) + Nube (der) ───
+        HBox panelInfoDual = construirPanelInfoDual();
 
         // ─── Topología de red (componente reutilizable) ───
         contenedorTopologia = new VBox();
@@ -134,7 +145,7 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
 
         // ─── ScrollPane para contenido ───
         VBox contenido = new VBox(10,
-            gestor.crearSeparador(), filaEstado, gridInfoRed,
+            gestor.crearSeparador(), filaEstado, panelInfoDual,
             gestor.crearSeparador(), contenedorTopologia,
             gestor.crearSeparador(), filaBtnReiniciar);
         contenido.setPadding(new Insets(0));
@@ -150,31 +161,58 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
         gestor.mostrarModal(modal);
 
         // Verificar conexión en hilo aparte
-        verificarConexionAsync(indicadorConexion, labelEstadoConexion,
-            (Label) gridInfoRed.lookup("#valLatencia"));
+        verificarConexionAsync(indicadorConexion, labelEstadoConexion, valLatencia);
 
         // Cargar info de nube async
-        cargarInfoNubeAsync(gridInfoRed);
+        cargarInfoNubeAsync();
     }
 
-    // ==================== GRID DE INFORMACIÓN ====================
+    // ==================== PANEL DUAL DE INFORMACIÓN ====================
 
     /**
-     * Construye el grid completo con toda la información de red del equipo.
-     * Incluye: IP servidor, IP local, gateway, máscara, interfaz, MAC, latencia,
-     * modo host, nombre de equipo, puerto servidor y sistema operativo.
+     * Construye un panel con dos columnas: servidor local (izq) y nube (der).
+     * Los títulos de sección son un 20% más grandes que los labels normales.
      *
-     * @return GridPane con toda la información de red
+     * @return HBox con las dos columnas de información
      */
-    private GridPane construirGridInfoRed() {
-        GridPane info = new GridPane();
-        info.setHgap(16);
-        info.setVgap(4);
+    private HBox construirPanelInfoDual() {
+        // ── Columna izquierda: Servidor Local ──
+        VBox colLocal = construirColumnaLocal();
+        HBox.setHgrow(colLocal, Priority.ALWAYS);
 
-        Label valLatencia = gestor.crearInfoValor(IdiomaUtil.obtener("ctrl.red.midiendo"));
-        valLatencia.setId("valLatencia");
+        // ── Separador vertical ──
+        Region separadorVertical = new Region();
+        separadorVertical.setMinWidth(1);
+        separadorVertical.setMaxWidth(1);
+        separadorVertical.setStyle("-fx-background-color: rgba(212, 175, 55, 0.15);");
 
-        // Obtener datos de red enriquecidos
+        // ── Columna derecha: Nube ──
+        VBox colNube = construirColumnaNube();
+        HBox.setHgrow(colNube, Priority.ALWAYS);
+
+        // Wrap ambas en un GridPane interno para lookups
+        gridInfoRed = new GridPane();
+        gridInfoRed.setManaged(false);
+        gridInfoRed.setVisible(false);
+
+        HBox panel = new HBox(16, colLocal, separadorVertical, colNube);
+        panel.setPadding(new Insets(4, 0, 4, 0));
+        return panel;
+    }
+
+    /**
+     * Construye la columna izquierda con info del servidor local.
+     */
+    private VBox construirColumnaLocal() {
+        VBox col = new VBox(4);
+
+        // Título de sección
+        Label tituloLocal = new Label(IdiomaUtil.obtener("ctrl.red.seccion.local"));
+        tituloLocal.setStyle("-fx-text-fill: #d4af37; -fx-font-weight: 700; -fx-font-size: 13px;");
+        col.getChildren().add(tituloLocal);
+        col.getChildren().add(crearEspaciador(4));
+
+        // Datos de red
         String ipLocal = obtenerIPLocal();
         String[] datosRed = obtenerDatosRedDetallados();
         String interfazNombre = datosRed[0];
@@ -183,58 +221,93 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
         String gateway = obtenerGateway();
         String nombreEquipo = obtenerNombreEquipo();
 
-        int fila = 0;
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.servidor")),
-            gestor.crearInfoValor(ConfiguracionCliente.getUrlServidor()));
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.ip_local")),
-            gestor.crearInfoValor(ipLocal));
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.gateway")),
-            gestor.crearInfoValor(gateway));
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.mascara")),
-            gestor.crearInfoValor(mascara));
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.interfaz")),
-            gestor.crearInfoValor(interfazNombre));
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.mac")),
-            gestor.crearInfoValor(mac));
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.latencia")), valLatencia);
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.puerto")),
-            gestor.crearInfoValor(String.valueOf(ConfiguracionCliente.getPuertoServidor())));
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.modo_host")),
-            gestor.crearInfoValor(ConfiguracionCliente.isHostMode()
-                ? IdiomaUtil.obtener("ctrl.red.host.si") : IdiomaUtil.obtener("ctrl.red.host.no")));
-        info.addRow(fila++, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.equipo")),
-            gestor.crearInfoValor(nombreEquipo));
-        info.addRow(fila, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.sistema")),
-            gestor.crearInfoValor(System.getProperty("os.name") + " " +
-                System.getProperty("os.arch")));
+        Label valLatenciaLocal = gestor.crearInfoValor(IdiomaUtil.obtener("ctrl.red.midiendo"));
+        valLatenciaLocal.setId("valLatencia");
+        this.valLatencia = valLatenciaLocal;
 
-        // ── Sección nube (se llena async) ──
-        fila++;
-        Label separadorNube = new Label("── " + IdiomaUtil.obtener("ctrl.red.label.nube") + " ──");
-        separadorNube.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 10px; -fx-font-weight: 600;");
-        info.add(separadorNube, 0, fila, 2, 1);
+        col.getChildren().addAll(
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.servidor"), ConfiguracionCliente.getUrlServidor()),
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.ip_local"), ipLocal),
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.gateway"), gateway),
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.mascara"), mascara),
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.interfaz"), interfazNombre),
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.mac"), mac),
+            crearFilaInfoConLabel(IdiomaUtil.obtener("ctrl.red.label.latencia"), valLatenciaLocal),
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.puerto"),
+                String.valueOf(ConfiguracionCliente.getPuertoServidor())),
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.modo_host"),
+                ConfiguracionCliente.isHostMode()
+                    ? IdiomaUtil.obtener("ctrl.red.host.si") : IdiomaUtil.obtener("ctrl.red.host.no")),
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.equipo"), nombreEquipo),
+            crearFilaInfo(IdiomaUtil.obtener("ctrl.red.label.sistema"),
+                System.getProperty("os.name") + " " + System.getProperty("os.arch"))
+        );
 
-        fila++;
-        Label valNubeEstado = gestor.crearInfoValor(IdiomaUtil.obtener("ctrl.red.midiendo"));
+        return col;
+    }
+
+    /**
+     * Construye la columna derecha con info de la nube (se llena async).
+     */
+    private VBox construirColumnaNube() {
+        VBox col = new VBox(4);
+
+        // Título de sección
+        Label tituloNube = new Label(IdiomaUtil.obtener("ctrl.red.seccion.nube"));
+        tituloNube.setStyle("-fx-text-fill: #d4af37; -fx-font-weight: 700; -fx-font-size: 13px;");
+        col.getChildren().add(tituloNube);
+        col.getChildren().add(crearEspaciador(4));
+
+        // Labels async (se llenan en cargarInfoNubeAsync)
+        valNubeEstado = gestor.crearInfoValor(IdiomaUtil.obtener("ctrl.red.midiendo"));
         valNubeEstado.setId("valNubeEstado");
-        info.addRow(fila, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.nube_estado")), valNubeEstado);
+        valNubeEstado.getStyleClass().add("texto-secundario-sm");
 
-        fila++;
-        Label valNubeCluster = gestor.crearInfoValor("—");
+        valNubeCluster = gestor.crearInfoValor("—");
         valNubeCluster.setId("valNubeCluster");
-        info.addRow(fila, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.nube_cluster")), valNubeCluster);
 
-        fila++;
-        Label valNubeDb = gestor.crearInfoValor("—");
+        valNubeDb = gestor.crearInfoValor("—");
         valNubeDb.setId("valNubeDb");
-        info.addRow(fila, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.nube_db")), valNubeDb);
 
-        fila++;
-        Label valNubeBusinessId = gestor.crearInfoValor("—");
+        valNubeBusinessId = gestor.crearInfoValor("—");
         valNubeBusinessId.setId("valNubeBusinessId");
-        info.addRow(fila, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.red.label.nube_business_id")), valNubeBusinessId);
 
-        return info;
+        col.getChildren().addAll(
+            crearFilaInfoConLabel(IdiomaUtil.obtener("ctrl.red.label.nube_estado"), valNubeEstado),
+            crearFilaInfoConLabel(IdiomaUtil.obtener("ctrl.red.label.nube_cluster"), valNubeCluster),
+            crearFilaInfoConLabel(IdiomaUtil.obtener("ctrl.red.label.nube_db"), valNubeDb),
+            crearFilaInfoConLabel(IdiomaUtil.obtener("ctrl.red.label.nube_business_id"), valNubeBusinessId)
+        );
+
+        return col;
+    }
+
+    /**
+     * Crea una fila de información con label de título (20% más grande) y valor.
+     */
+    private HBox crearFilaInfo(String titulo, String valor) {
+        return crearFilaInfoConLabel(titulo, gestor.crearInfoValor(valor));
+    }
+
+    /**
+     * Crea una fila de información con label de título y un Label pre-construido como valor.
+     */
+    private HBox crearFilaInfoConLabel(String titulo, Label valorLabel) {
+        Label labelTitulo = gestor.crearInfoLabel(titulo);
+        labelTitulo.setStyle("-fx-text-fill: #888; -fx-font-size: 12px;");
+        labelTitulo.setMinWidth(100);
+        HBox fila = new HBox(8, labelTitulo, valorLabel);
+        fila.setAlignment(Pos.CENTER_LEFT);
+        return fila;
+    }
+
+    /** Crea un espaciador vertical de la altura indicada. */
+    private Region crearEspaciador(double alto) {
+        Region r = new Region();
+        r.setMinHeight(alto);
+        r.setPrefHeight(alto);
+        r.setMaxHeight(alto);
+        return r;
     }
 
     // ==================== REINICIO DEL DIAGNÓSTICO ====================
@@ -260,15 +333,14 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
         // Resetear indicadores
         indicadorConexion.setFill(Color.web("#666"));
         labelEstadoConexion.setText(IdiomaUtil.obtener("ctrl.red.verificando"));
-        labelEstadoConexion.setStyle("-fx-text-fill: #888; -fx-font-size: 13px;");
+        labelEstadoConexion.setStyle("-fx-text-fill: #888;");
 
         // Re-verificar conexión
-        Label valLatencia = (Label) gridInfoRed.lookup("#valLatencia");
         if (valLatencia != null) valLatencia.setText(IdiomaUtil.obtener("ctrl.red.midiendo"));
         verificarConexionAsync(indicadorConexion, labelEstadoConexion, valLatencia);
 
         // Re-cargar info de nube
-        cargarInfoNubeAsync(gridInfoRed);
+        cargarInfoNubeAsync();
     }
 
     // ==================== VERIFICACIÓN DE CONEXIÓN ====================
@@ -303,12 +375,12 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
             if (r[0] >= 200 && r[0] < 400) {
                 indicador.setFill(Color.web("#a8b991"));
                 labelEstado.setText(IdiomaUtil.obtener("ctrl.red.conectado"));
-                labelEstado.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 13px;");
+                labelEstado.setStyle("-fx-text-fill: #a8b991;");
                 valLatencia.setText(r[1] + " ms");
             } else {
                 indicador.setFill(Color.web("#cc4444"));
                 labelEstado.setText(IdiomaUtil.obtener("ctrl.red.sin_conexion"));
-                labelEstado.setStyle("-fx-text-fill: #cc4444; -fx-font-size: 13px;");
+                labelEstado.setStyle("-fx-text-fill: #cc4444;");
                 valLatencia.setText("—");
             }
         }));
@@ -317,9 +389,9 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
     // ==================== ESTADO NUBE ====================
 
     /**
-     * Consulta /api/sync/estado y llena los labels de nube en el grid de info.
+     * Consulta /api/sync/estado y llena los labels de nube.
      */
-    private void cargarInfoNubeAsync(GridPane grid) {
+    private void cargarInfoNubeAsync() {
         CompletableFuture.supplyAsync(() -> {
             try {
                 URL url = URI.create(
@@ -355,15 +427,10 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
             }
             return null;
         }).thenAccept(estado -> Platform.runLater(() -> {
-            Label valEstado = (Label) grid.lookup("#valNubeEstado");
-            Label valCluster = (Label) grid.lookup("#valNubeCluster");
-            Label valDb = (Label) grid.lookup("#valNubeDb");
-            Label valBusinessId = (Label) grid.lookup("#valNubeBusinessId");
-
             if (estado == null) {
-                if (valEstado != null) {
-                    valEstado.setText(IdiomaUtil.obtener("ctrl.red.no_disponible"));
-                    valEstado.setStyle("-fx-text-fill: #555; -fx-font-size: 12px;");
+                if (valNubeEstado != null) {
+                    valNubeEstado.setText(IdiomaUtil.obtener("ctrl.red.no_disponible"));
+                    valNubeEstado.setStyle("-fx-text-fill: #555;");
                 }
                 return;
             }
@@ -385,20 +452,20 @@ public class DiagnosticoRedHandler implements ModalHerramienta {
                 }
             }
 
-            if (valCluster != null) valCluster.setText(cluster.isEmpty() ? "—" : cluster);
-            if (valDb != null) valDb.setText(baseDatos);
-            if (valBusinessId != null) valBusinessId.setText(businessId);
+            if (valNubeCluster != null) valNubeCluster.setText(cluster.isEmpty() ? "—" : cluster);
+            if (valNubeDb != null) valNubeDb.setText(baseDatos);
+            if (valNubeBusinessId != null) valNubeBusinessId.setText(businessId);
 
-            if (valEstado != null) {
+            if (valNubeEstado != null) {
                 if (habilitado && conectado) {
-                    valEstado.setText(IdiomaUtil.obtener("ctrl.red.nube.conectada"));
-                    valEstado.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px;");
+                    valNubeEstado.setText(IdiomaUtil.obtener("ctrl.red.nube.conectada"));
+                    valNubeEstado.setStyle("-fx-text-fill: #a8b991;");
                 } else if (habilitado) {
-                    valEstado.setText(IdiomaUtil.obtener("ctrl.red.nube.sin_conexion"));
-                    valEstado.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+                    valNubeEstado.setText(IdiomaUtil.obtener("ctrl.red.nube.sin_conexion"));
+                    valNubeEstado.setStyle("-fx-text-fill: #daa520;");
                 } else {
-                    valEstado.setText(IdiomaUtil.obtener("ctrl.red.nube.deshabilitada"));
-                    valEstado.setStyle("-fx-text-fill: #555; -fx-font-size: 12px;");
+                    valNubeEstado.setText(IdiomaUtil.obtener("ctrl.red.nube.deshabilitada"));
+                    valNubeEstado.setStyle("-fx-text-fill: #555;");
                 }
             }
         }));

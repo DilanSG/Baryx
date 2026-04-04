@@ -51,31 +51,37 @@ public class AcercaDeHandler implements ModalHerramienta {
             logger.warn("No se pudo cargar el logo: {}", e.getMessage());
         }
 
-        Label version = new Label("v1.0.0");
-        version.setStyle("-fx-font-size: 13px; -fx-text-fill: #d4af37; -fx-font-weight: 600; " +
-            "-fx-alignment: center;");
+        String vLocal = new com.baryx.cliente.servicio.VerificacionActualizacionServicio().obtenerVersionLocal();
+        if (vLocal == null || vLocal.contains("${")) vLocal = "0.0.0";
+        Label version = new Label("v" + vLocal);
+        version.getStyleClass().add("panel-seccion-titulo-sm");
+        version.setStyle("-fx-alignment: center;");
         version.setTextAlignment(TextAlignment.CENTER);
         version.setMaxWidth(Double.MAX_VALUE);
 
         Label subtitulo = new Label(
             IdiomaUtil.obtener("ctrl.acerca.descripcion"));
-        subtitulo.setStyle("-fx-font-size: 12px; -fx-text-fill: #999; -fx-alignment: center;");
+        subtitulo.getStyleClass().add("texto-secundario-sm");
+        subtitulo.setStyle("-fx-text-fill: #999; -fx-alignment: center;");
         subtitulo.setWrapText(true);
         subtitulo.setTextAlignment(TextAlignment.CENTER);
         subtitulo.setMaxWidth(Double.MAX_VALUE);
 
         Label operacion = new Label(IdiomaUtil.obtener("ctrl.acerca.operacion"));
-        operacion.setStyle("-fx-font-size: 11px; -fx-text-fill: #777; -fx-alignment: center;");
+        operacion.getStyleClass().add("texto-hint-sm");
+        operacion.setStyle("-fx-text-fill: #777; -fx-alignment: center;");
         operacion.setTextAlignment(TextAlignment.CENTER);
         operacion.setMaxWidth(Double.MAX_VALUE);
 
         Label arquitectura = new Label(IdiomaUtil.obtener("ctrl.acerca.arquitectura"));
-        arquitectura.setStyle("-fx-font-size: 11px; -fx-text-fill: #777; -fx-alignment: center;");
+        arquitectura.getStyleClass().add("texto-hint-sm");
+        arquitectura.setStyle("-fx-text-fill: #777; -fx-alignment: center;");
         arquitectura.setTextAlignment(TextAlignment.CENTER);
         arquitectura.setMaxWidth(Double.MAX_VALUE);
 
         Label tTec = new Label(IdiomaUtil.obtener("ctrl.acerca.tecnologias"));
-        tTec.setStyle("-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #888; " +
+        tTec.getStyleClass().add("texto-hint-sm");
+        tTec.setStyle("-fx-font-weight: 700; -fx-text-fill: #888; " +
             "-fx-alignment: center;");
         tTec.setTextAlignment(TextAlignment.CENTER);
         tTec.setMaxWidth(Double.MAX_VALUE);
@@ -83,26 +89,29 @@ public class AcercaDeHandler implements ModalHerramienta {
         Label tecnologias = new Label(
             "Java 21  ·  JavaFX 21  ·  Spring Boot 3.2\n" +
             "PostgreSQL 15+  ·  Flyway  ·  MapStruct  ·  Lombok");
-        tecnologias.setStyle("-fx-font-size: 11px; -fx-text-fill: #666; -fx-alignment: center;");
+        tecnologias.getStyleClass().add("texto-hint-sm");
+        tecnologias.setStyle("-fx-text-fill: #666; -fx-alignment: center;");
         tecnologias.setTextAlignment(TextAlignment.CENTER);
         tecnologias.setWrapText(true);
         tecnologias.setMaxWidth(Double.MAX_VALUE);
 
         Label tCred = new Label(IdiomaUtil.obtener("ctrl.acerca.desarrollado_por"));
-        tCred.setStyle("-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #888; " +
+        tCred.getStyleClass().add("texto-hint-sm");
+        tCred.setStyle("-fx-font-weight: 700; -fx-text-fill: #888; " +
             "-fx-alignment: center;");
         tCred.setTextAlignment(TextAlignment.CENTER);
         tCred.setMaxWidth(Double.MAX_VALUE);
 
         Label autor = new Label("Dilan Acuña");
-        autor.setStyle("-fx-font-size: 13px; -fx-text-fill: #e8e8e8; -fx-font-weight: 600; " +
-            "-fx-alignment: center;");
+        autor.getStyleClass().add("panel-seccion-titulo-sm");
+        autor.setStyle("-fx-text-fill: #e8e8e8; -fx-alignment: center;");
         autor.setTextAlignment(TextAlignment.CENTER);
         autor.setMaxWidth(Double.MAX_VALUE);
 
         Label legal = new Label(
             IdiomaUtil.obtener("ctrl.acerca.derechos"));
-        legal.setStyle("-fx-font-size: 10px; -fx-text-fill: #555; -fx-alignment: center;");
+        legal.getStyleClass().add("texto-hint");
+        legal.setStyle("-fx-alignment: center;");
         legal.setTextAlignment(TextAlignment.CENTER);
         legal.setWrapText(true);
         legal.setMaxWidth(Double.MAX_VALUE);

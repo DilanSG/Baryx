@@ -59,6 +59,12 @@
     -fx-max-width: 520px;
 }
 
+/* Contenedor interno del formulario de login */
+.login-form-inner {
+    -fx-min-width: 420px;
+    -fx-max-width: 420px;
+}
+
 /* Subtítulo bajo el logo (dorado suave) */
 
 /* Título de bienvenida (dorado principal) */
@@ -4407,73 +4413,58 @@
 }
 
 /* ===========================================================================
-   OVERRIDES RESPONSIVOS (res-*)
+   OVERRIDES RESPONSIVOS — Sistema de Resolución Adaptativa
+   =========================================================================
    Las clases res-* y ratio-* se agregan dinámicamente al contenedor raíz
-   según la resolución real de la pantalla.
-   REGLA: los estilos base NO se modifican. Solo se añaden overrides aquí.
+   según la resolución real de la pantalla (DetectorPantalla.java).
+
+   REGLA: los estilos base (arriba) NO se modifican. Solo overrides aquí.
+
+   NOTA: res-fhd (1920×1080) es el DISEÑO BASE. No necesita overrides porque
+   todos los estilos base del CSS están diseñados para esa resolución.
+   Los perfiles FHD_16_9 y FHD_16_10 aplican res-fhd sin reglas adicionales.
+
+   Breakpoints:
+     res-small  — <1024px (CRT, cajas registradoras)
+     res-tablet — 1024-1365px (laptops viejos, SXGA 5:4)
+     res-hd     — 1366-1919px (laptops 14" gama baja) ← MÁS COMÚN
+     res-fhd    — 1920-2559px (diseño base, sin overrides)
+     res-qhd    — 2560-3839px (monitores 2K/retina)
+     res-4k     — ≥3840px (monitores 4K/UHD)
+
+   Ratios:
+     ratio-classic   — <1.5 (4:3, 5:4)
+     ratio-standard  — 1.5-1.7 (16:10)
+     ratio-wide      — 1.7-1.9 (16:9, diseño base)
+     ratio-ultrawide — 1.9-2.2 (21:9)
+     ratio-superwide — ≥2.2 (32:9)
+     ratio-tall      — <1.2 (portrait/tablet vertical)
    =========================================================================== */
 
-/* -------------------------------------------
-   res-tablet (1024 – 1365px) — Laptops viejos
-   ------------------------------------------- */
+/* ===================================================================
+   res-small (<1024px) — Pantallas pequeñas / CRT / cajas registradoras
+   =================================================================== */
 
-.res-tablet .login-card {
-    -fx-min-width: 440px;
-    -fx-max-width: 440px;
-}
-
-.res-tablet .menu-titulo {
-    -fx-font-size: 26px;
-}
-
-.res-tablet .menu-subtitulo {
-    -fx-font-size: 15px;
-}
-
-.res-tablet .menu-opcion-card {
-    -fx-min-width: 220px;
-    -fx-pref-width: 240px;
-    -fx-max-width: 240px;
-    -fx-min-height: 150px;
-    -fx-pref-height: 170px;
-    -fx-max-height: 170px;
-}
-
-.res-tablet .menu-opcion-titulo {
-    -fx-font-size: 22px;
-    -fx-padding: 0 0 12 0;
-}
-
-.res-tablet .menu-opcion-descripcion {
-    -fx-font-size: 12px;
-    -fx-padding: 12 0 0 0;
-}
-
-.res-tablet .menu-usuario-nombre {
-    -fx-font-size: 14px;
-}
-
-.res-tablet .productos-titulo {
-    -fx-font-size: 24px;
-}
-
-.res-tablet .boton-opcion-producto {
-    -fx-padding: 0 16 0 16;
-}
-
-/* -------------------------------------------
-   res-small (<1024px) — Pantallas pequeñas
-   ------------------------------------------- */
-
+/* Login */
 .res-small .login-card {
     -fx-min-width: 380px;
     -fx-max-width: 380px;
+}
+
+.res-small .login-form-inner {
+    -fx-min-width: 300px;
+    -fx-max-width: 300px;
 }
 
 .res-small .login-title {
     -fx-font-size: 22px;
 }
 
+.res-small .login-description {
+    -fx-font-size: 11px;
+}
+
+/* Menú principal */
 .res-small .menu-titulo {
     -fx-font-size: 22px;
 }
@@ -4509,31 +4500,767 @@
     -fx-font-size: 11px;
 }
 
+.res-small .menu-footer-text {
+    -fx-font-size: 10px;
+}
+
+/* Productos */
 .res-small .productos-titulo {
     -fx-font-size: 20px;
+}
+
+.res-small .opcion-titulo {
+    -fx-font-size: 15px;
+}
+
+.res-small .opcion-subtitulo {
+    -fx-font-size: 11px;
 }
 
 .res-small .boton-opcion-producto {
     -fx-padding: 0 12 0 12;
 }
 
-.res-small .menu-footer-text {
+/* Teclado virtual */
+.res-small .tecla-letra,
+.res-small .tecla-numero,
+.res-small .tecla-simbolo,
+.res-small .tecla-especial,
+.res-small .tecla-espacio,
+.res-small .tecla-aceptar,
+.res-small .tecla-cerrar {
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-pref-width: 40px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 13px;
+}
+
+.res-small .tecla-espacio {
+    -fx-min-width: 220px;
+}
+
+.res-small .tecla-especial {
+    -fx-font-size: 15px;
+}
+
+.res-small .tecla-aceptar,
+.res-small .tecla-cerrar {
+    -fx-font-size: 16px;
+}
+
+.res-small .teclado-virtual-root {
+    -fx-padding: 6px;
+}
+
+/* Facturación / POS */
+.res-small .tab-button {
+    -fx-font-size: 11px;
+    -fx-padding: 6 14 6 14;
+    -fx-min-height: 32;
+}
+
+.res-small .search-input {
+    -fx-font-size: 20px;
+    -fx-padding: 8 14 8 14;
+    -fx-pref-height: 44;
+}
+
+.res-small .search-label {
+    -fx-font-size: 13px;
+}
+
+/* Usuarios */
+.res-small .titulo-seccion {
+    -fx-font-size: 20px;
+}
+
+.res-small .titulo-seccion-lg {
+    -fx-font-size: 22px;
+}
+
+.res-small .subtitulo-seccion {
+    -fx-font-size: 11px;
+}
+
+.res-small .boton-principal {
+    -fx-font-size: 12px;
+}
+
+.res-small .campo-busqueda {
+    -fx-font-size: 12px;
+}
+
+/* Meseros */
+.res-small .meseros-titulo {
+    -fx-font-size: 20px;
+}
+
+.res-small .meseros-contador {
+    -fx-font-size: 12px;
+}
+
+.res-small .campo-busqueda-meseros {
+    -fx-font-size: 12px;
+}
+
+/* Mesa detalle */
+.res-small .table-header-text {
+    -fx-font-size: 9px;
+}
+
+.res-small .btn-accion {
+    -fx-font-size: 10px;
+    -fx-min-height: 30;
+}
+
+/* Formularios */
+.res-small .label-formulario {
+    -fx-font-size: 12px;
+}
+
+.res-small .campo-texto-formulario {
+    -fx-font-size: 12px;
+    -fx-padding: 8px 10px;
+}
+
+.res-small .combo-formulario {
+    -fx-font-size: 12px;
+}
+
+/* Config panel */
+.res-small .config-tile {
+    -fx-pref-width: 150;
+    -fx-min-width: 150;
+    -fx-max-width: 150;
+    -fx-pref-height: 130;
+    -fx-min-height: 130;
+    -fx-max-height: 130;
+}
+
+.res-small .config-columna {
+    -fx-min-width: 150;
+}
+
+.res-small .config-seccion-titulo {
+    -fx-font-size: 9px;
+    -fx-min-width: 150;
+}
+
+.res-small .config-tile-titulo {
+    -fx-font-size: 9px;
+}
+
+.res-small .config-tile-descripcion {
+    -fx-font-size: 8px;
+}
+
+.res-small .config-tile-badge {
+    -fx-font-size: 7px;
+}
+
+.res-small .footer-text {
+    -fx-font-size: 9px;
+}
+
+/* Notificaciones */
+.res-small .notificacion {
+    -fx-min-width: 240px;
+    -fx-max-width: 420px;
+}
+
+.res-small .notificacion-icono {
+    -fx-font-size: 18px;
+}
+
+.res-small .notificacion-mensaje {
+    -fx-font-size: 12px;
+}
+
+/* Clases nuevas — inline styles migrados (F3) */
+.res-small .pin-display {
+    -fx-font-size: 32px;
+}
+
+.res-small .mesa-nueva-label {
+    -fx-font-size: 18px;
+}
+
+.res-small .flecha-nav {
+    -fx-font-size: 22px;
+}
+
+.res-small .icono-vacio-lg {
+    -fx-font-size: 22px;
+}
+
+.res-small .info-titulo-dorado {
+    -fx-font-size: 11px;
+}
+
+.res-small .info-descripcion {
+    -fx-font-size: 11px;
+}
+
+.res-small .config-header-titulo {
+    -fx-font-size: 14px;
+}
+
+/* ===================================================================
+   res-tablet (1024 – 1365px) — Laptops viejos / SXGA
+   =================================================================== */
+
+/* Login */
+.res-tablet .login-card {
+    -fx-min-width: 440px;
+    -fx-max-width: 440px;
+}
+
+.res-tablet .login-form-inner {
+    -fx-min-width: 350px;
+    -fx-max-width: 350px;
+}
+
+.res-tablet .login-title {
+    -fx-font-size: 24px;
+}
+
+.res-tablet .login-description {
+    -fx-font-size: 12px;
+}
+
+/* Menú principal */
+.res-tablet .menu-titulo {
+    -fx-font-size: 26px;
+}
+
+.res-tablet .menu-subtitulo {
+    -fx-font-size: 15px;
+}
+
+.res-tablet .menu-opcion-card {
+    -fx-min-width: 220px;
+    -fx-pref-width: 240px;
+    -fx-max-width: 240px;
+    -fx-min-height: 150px;
+    -fx-pref-height: 170px;
+    -fx-max-height: 170px;
+}
+
+.res-tablet .menu-opcion-titulo {
+    -fx-font-size: 22px;
+    -fx-padding: 0 0 12 0;
+}
+
+.res-tablet .menu-opcion-descripcion {
+    -fx-font-size: 12px;
+    -fx-padding: 12 0 0 0;
+}
+
+.res-tablet .menu-usuario-nombre {
+    -fx-font-size: 14px;
+}
+
+.res-tablet .menu-usuario-rol {
+    -fx-font-size: 12px;
+}
+
+.res-tablet .menu-footer-text {
+    -fx-font-size: 11px;
+}
+
+/* Productos */
+.res-tablet .productos-titulo {
+    -fx-font-size: 24px;
+}
+
+.res-tablet .opcion-titulo {
+    -fx-font-size: 17px;
+}
+
+.res-tablet .opcion-subtitulo {
+    -fx-font-size: 12px;
+}
+
+.res-tablet .boton-opcion-producto {
+    -fx-padding: 0 16 0 16;
+}
+
+/* Teclado virtual */
+.res-tablet .tecla-letra,
+.res-tablet .tecla-numero,
+.res-tablet .tecla-simbolo,
+.res-tablet .tecla-especial,
+.res-tablet .tecla-espacio,
+.res-tablet .tecla-aceptar,
+.res-tablet .tecla-cerrar {
+    -fx-min-width: 46px;
+    -fx-min-height: 46px;
+    -fx-pref-width: 46px;
+    -fx-pref-height: 46px;
+    -fx-font-size: 14px;
+}
+
+.res-tablet .tecla-espacio {
+    -fx-min-width: 260px;
+}
+
+.res-tablet .tecla-especial {
+    -fx-font-size: 16px;
+}
+
+.res-tablet .tecla-aceptar,
+.res-tablet .tecla-cerrar {
+    -fx-font-size: 18px;
+}
+
+.res-tablet .teclado-virtual-root {
+    -fx-padding: 8px;
+}
+
+/* Facturación / POS */
+.res-tablet .tab-button {
+    -fx-font-size: 12px;
+    -fx-padding: 7 18 7 18;
+    -fx-min-height: 34;
+}
+
+.res-tablet .search-input {
+    -fx-font-size: 22px;
+    -fx-padding: 10 16 10 16;
+    -fx-pref-height: 48;
+}
+
+.res-tablet .search-label {
+    -fx-font-size: 14px;
+}
+
+/* Usuarios */
+.res-tablet .titulo-seccion {
+    -fx-font-size: 22px;
+}
+
+.res-tablet .titulo-seccion-lg {
+    -fx-font-size: 24px;
+}
+
+.res-tablet .subtitulo-seccion {
+    -fx-font-size: 12px;
+}
+
+.res-tablet .boton-principal {
+    -fx-font-size: 13px;
+}
+
+.res-tablet .campo-busqueda {
+    -fx-font-size: 13px;
+}
+
+/* Meseros */
+.res-tablet .meseros-titulo {
+    -fx-font-size: 24px;
+}
+
+.res-tablet .meseros-contador {
+    -fx-font-size: 14px;
+}
+
+.res-tablet .campo-busqueda-meseros {
+    -fx-font-size: 13px;
+}
+
+/* Mesa detalle */
+.res-tablet .table-header-text {
     -fx-font-size: 10px;
 }
 
-/* -------------------------------------------
-   res-qhd (≥2560px) — Pantallas QHD / 2K
-   ------------------------------------------- */
+.res-tablet .btn-accion {
+    -fx-font-size: 11px;
+    -fx-min-height: 34;
+}
 
+/* Formularios */
+.res-tablet .label-formulario {
+    -fx-font-size: 13px;
+}
+
+.res-tablet .campo-texto-formulario {
+    -fx-font-size: 13px;
+    -fx-padding: 8px 12px;
+}
+
+.res-tablet .combo-formulario {
+    -fx-font-size: 13px;
+}
+
+/* Config panel */
+.res-tablet .config-tile {
+    -fx-pref-width: 165;
+    -fx-min-width: 165;
+    -fx-max-width: 165;
+    -fx-pref-height: 140;
+    -fx-min-height: 140;
+    -fx-max-height: 140;
+}
+
+.res-tablet .config-columna {
+    -fx-min-width: 165;
+}
+
+.res-tablet .config-seccion-titulo {
+    -fx-font-size: 10px;
+    -fx-min-width: 165;
+}
+
+.res-tablet .config-tile-titulo {
+    -fx-font-size: 10px;
+}
+
+.res-tablet .config-tile-descripcion {
+    -fx-font-size: 9px;
+}
+
+.res-tablet .config-tile-badge {
+    -fx-font-size: 8px;
+}
+
+.res-tablet .footer-text {
+    -fx-font-size: 10px;
+}
+
+/* Notificaciones */
+.res-tablet .notificacion {
+    -fx-min-width: 260px;
+    -fx-max-width: 480px;
+}
+
+.res-tablet .notificacion-icono {
+    -fx-font-size: 20px;
+}
+
+.res-tablet .notificacion-mensaje {
+    -fx-font-size: 13px;
+}
+
+/* Clases nuevas — inline styles migrados (F3) */
+.res-tablet .pin-display {
+    -fx-font-size: 38px;
+}
+
+.res-tablet .mesa-nueva-label {
+    -fx-font-size: 20px;
+}
+
+.res-tablet .flecha-nav {
+    -fx-font-size: 24px;
+}
+
+.res-tablet .icono-vacio-lg {
+    -fx-font-size: 26px;
+}
+
+.res-tablet .info-titulo-dorado {
+    -fx-font-size: 12px;
+}
+
+.res-tablet .info-descripcion {
+    -fx-font-size: 12px;
+}
+
+.res-tablet .config-header-titulo {
+    -fx-font-size: 16px;
+}
+
+/* ===================================================================
+   res-hd (1366 – 1919px) — Laptops 14" gama baja (MÁS COMÚN)
+   Reducción proporcional ~25% respecto al diseño base FHD.
+   =================================================================== */
+
+/* Login */
+.res-hd .login-card {
+    -fx-min-width: 460px;
+    -fx-max-width: 460px;
+}
+
+.res-hd .login-form-inner {
+    -fx-min-width: 370px;
+    -fx-max-width: 370px;
+}
+
+.res-hd .login-title {
+    -fx-font-size: 24px;
+}
+
+.res-hd .login-description {
+    -fx-font-size: 13px;
+}
+
+/* Menú principal */
+.res-hd .menu-titulo {
+    -fx-font-size: 30px;
+}
+
+.res-hd .menu-subtitulo {
+    -fx-font-size: 16px;
+}
+
+.res-hd .menu-opcion-card {
+    -fx-min-width: 240px;
+    -fx-pref-width: 260px;
+    -fx-max-width: 260px;
+    -fx-min-height: 165px;
+    -fx-pref-height: 185px;
+    -fx-max-height: 185px;
+}
+
+.res-hd .menu-opcion-titulo {
+    -fx-font-size: 24px;
+    -fx-padding: 0 0 14 0;
+}
+
+.res-hd .menu-opcion-descripcion {
+    -fx-font-size: 13px;
+    -fx-padding: 14 0 0 0;
+}
+
+.res-hd .menu-usuario-nombre {
+    -fx-font-size: 15px;
+}
+
+.res-hd .menu-usuario-rol {
+    -fx-font-size: 12px;
+}
+
+.res-hd .menu-footer-text {
+    -fx-font-size: 12px;
+}
+
+/* Productos */
+.res-hd .productos-titulo {
+    -fx-font-size: 26px;
+}
+
+.res-hd .opcion-titulo {
+    -fx-font-size: 18px;
+}
+
+.res-hd .opcion-subtitulo {
+    -fx-font-size: 13px;
+}
+
+.res-hd .boton-opcion-producto {
+    -fx-padding: 0 16 0 16;
+}
+
+/* Teclado virtual */
+.res-hd .tecla-letra,
+.res-hd .tecla-numero,
+.res-hd .tecla-simbolo,
+.res-hd .tecla-especial,
+.res-hd .tecla-espacio,
+.res-hd .tecla-aceptar,
+.res-hd .tecla-cerrar {
+    -fx-min-width: 52px;
+    -fx-min-height: 52px;
+    -fx-pref-width: 52px;
+    -fx-pref-height: 52px;
+    -fx-font-size: 16px;
+}
+
+.res-hd .tecla-espacio {
+    -fx-min-width: 300px;
+}
+
+.res-hd .tecla-especial {
+    -fx-font-size: 18px;
+}
+
+.res-hd .tecla-aceptar,
+.res-hd .tecla-cerrar {
+    -fx-font-size: 20px;
+}
+
+.res-hd .teclado-virtual-root {
+    -fx-padding: 10px;
+}
+
+/* Facturación / POS */
+.res-hd .tab-button {
+    -fx-font-size: 13px;
+    -fx-padding: 8 24 8 24;
+    -fx-min-height: 36;
+}
+
+.res-hd .search-input {
+    -fx-font-size: 24px;
+    -fx-padding: 12 20 12 20;
+    -fx-pref-height: 52;
+}
+
+.res-hd .search-label {
+    -fx-font-size: 16px;
+}
+
+.res-hd .footer-text {
+    -fx-font-size: 11px;
+}
+
+/* Usuarios */
+.res-hd .titulo-seccion {
+    -fx-font-size: 24px;
+}
+
+.res-hd .titulo-seccion-lg {
+    -fx-font-size: 28px;
+}
+
+.res-hd .subtitulo-seccion {
+    -fx-font-size: 13px;
+}
+
+.res-hd .boton-principal {
+    -fx-font-size: 14px;
+}
+
+.res-hd .campo-busqueda {
+    -fx-font-size: 14px;
+}
+
+/* Meseros */
+.res-hd .meseros-titulo {
+    -fx-font-size: 28px;
+}
+
+.res-hd .meseros-contador {
+    -fx-font-size: 14px;
+}
+
+.res-hd .campo-busqueda-meseros {
+    -fx-font-size: 14px;
+}
+
+/* Mesa detalle */
+.res-hd .table-header-text {
+    -fx-font-size: 10px;
+}
+
+.res-hd .btn-accion {
+    -fx-font-size: 12px;
+    -fx-min-height: 36;
+}
+
+/* Formularios */
+.res-hd .label-formulario {
+    -fx-font-size: 14px;
+}
+
+.res-hd .campo-texto-formulario {
+    -fx-font-size: 14px;
+    -fx-padding: 10px 14px;
+}
+
+.res-hd .combo-formulario {
+    -fx-font-size: 14px;
+}
+
+/* Config panel */
+.res-hd .config-tile {
+    -fx-pref-width: 175;
+    -fx-min-width: 175;
+    -fx-max-width: 175;
+    -fx-pref-height: 150;
+    -fx-min-height: 150;
+    -fx-max-height: 150;
+}
+
+.res-hd .config-columna {
+    -fx-min-width: 175;
+}
+
+.res-hd .config-seccion-titulo {
+    -fx-font-size: 11px;
+    -fx-min-width: 175;
+}
+
+.res-hd .config-tile-titulo {
+    -fx-font-size: 11px;
+}
+
+.res-hd .config-tile-descripcion {
+    -fx-font-size: 9px;
+}
+
+.res-hd .config-tile-badge {
+    -fx-font-size: 9px;
+}
+
+/* Notificaciones */
+.res-hd .notificacion {
+    -fx-min-width: 280px;
+    -fx-max-width: 540px;
+}
+
+.res-hd .notificacion-icono {
+    -fx-font-size: 22px;
+}
+
+.res-hd .notificacion-mensaje {
+    -fx-font-size: 14px;
+}
+
+/* Clases nuevas — inline styles migrados (F3) */
+.res-hd .pin-display {
+    -fx-font-size: 42px;
+}
+
+.res-hd .mesa-nueva-label {
+    -fx-font-size: 22px;
+}
+
+.res-hd .flecha-nav {
+    -fx-font-size: 26px;
+}
+
+.res-hd .icono-vacio-lg {
+    -fx-font-size: 28px;
+}
+
+.res-hd .info-titulo-dorado {
+    -fx-font-size: 13px;
+}
+
+.res-hd .info-descripcion {
+    -fx-font-size: 12px;
+}
+
+.res-hd .config-header-titulo {
+    -fx-font-size: 16px;
+}
+
+/* ===================================================================
+   res-qhd (≥2560px) — Pantallas QHD / 2K / Retina
+   =================================================================== */
+
+/* Login */
 .res-qhd .login-card {
     -fx-min-width: 600px;
     -fx-max-width: 600px;
+}
+
+.res-qhd .login-form-inner {
+    -fx-min-width: 500px;
+    -fx-max-width: 500px;
 }
 
 .res-qhd .login-title {
     -fx-font-size: 34px;
 }
 
+.res-qhd .login-description {
+    -fx-font-size: 16px;
+}
+
+/* Menú principal */
 .res-qhd .menu-titulo {
     -fx-font-size: 42px;
 }
@@ -4569,27 +5296,236 @@
     -fx-font-size: 14px;
 }
 
-.res-qhd .productos-titulo {
-    -fx-font-size: 38px;
-}
-
 .res-qhd .menu-footer-text {
     -fx-font-size: 14px;
 }
 
-/* -------------------------------------------
-   res-4k (≥3840px) — Pantallas 4K / UHD
-   ------------------------------------------- */
+/* Productos */
+.res-qhd .productos-titulo {
+    -fx-font-size: 38px;
+}
 
+.res-qhd .opcion-titulo {
+    -fx-font-size: 24px;
+}
+
+.res-qhd .opcion-subtitulo {
+    -fx-font-size: 17px;
+}
+
+.res-qhd .boton-opcion-producto {
+    -fx-padding: 0 24 0 24;
+}
+
+/* Teclado virtual */
+.res-qhd .tecla-letra,
+.res-qhd .tecla-numero,
+.res-qhd .tecla-simbolo,
+.res-qhd .tecla-especial,
+.res-qhd .tecla-espacio,
+.res-qhd .tecla-aceptar,
+.res-qhd .tecla-cerrar {
+    -fx-min-width: 70px;
+    -fx-min-height: 70px;
+    -fx-pref-width: 70px;
+    -fx-pref-height: 70px;
+    -fx-font-size: 20px;
+}
+
+.res-qhd .tecla-espacio {
+    -fx-min-width: 420px;
+}
+
+.res-qhd .tecla-especial {
+    -fx-font-size: 22px;
+}
+
+.res-qhd .tecla-aceptar,
+.res-qhd .tecla-cerrar {
+    -fx-font-size: 26px;
+}
+
+.res-qhd .teclado-virtual-root {
+    -fx-padding: 14px;
+}
+
+/* Facturación / POS */
+.res-qhd .tab-button {
+    -fx-font-size: 16px;
+    -fx-padding: 12 36 12 36;
+    -fx-min-height: 44;
+}
+
+.res-qhd .search-input {
+    -fx-font-size: 32px;
+    -fx-padding: 18 28 18 28;
+    -fx-pref-height: 68;
+}
+
+.res-qhd .search-label {
+    -fx-font-size: 20px;
+}
+
+.res-qhd .footer-text {
+    -fx-font-size: 13px;
+}
+
+/* Usuarios */
+.res-qhd .titulo-seccion {
+    -fx-font-size: 32px;
+}
+
+.res-qhd .titulo-seccion-lg {
+    -fx-font-size: 36px;
+}
+
+.res-qhd .subtitulo-seccion {
+    -fx-font-size: 16px;
+}
+
+.res-qhd .boton-principal {
+    -fx-font-size: 17px;
+}
+
+.res-qhd .campo-busqueda {
+    -fx-font-size: 16px;
+}
+
+/* Meseros */
+.res-qhd .meseros-titulo {
+    -fx-font-size: 36px;
+}
+
+.res-qhd .meseros-contador {
+    -fx-font-size: 18px;
+}
+
+.res-qhd .campo-busqueda-meseros {
+    -fx-font-size: 16px;
+}
+
+/* Mesa detalle */
+.res-qhd .table-header-text {
+    -fx-font-size: 12px;
+}
+
+.res-qhd .btn-accion {
+    -fx-font-size: 15px;
+    -fx-min-height: 44;
+}
+
+/* Formularios */
+.res-qhd .label-formulario {
+    -fx-font-size: 18px;
+}
+
+.res-qhd .campo-texto-formulario {
+    -fx-font-size: 18px;
+    -fx-padding: 14px 18px;
+}
+
+.res-qhd .combo-formulario {
+    -fx-font-size: 18px;
+}
+
+/* Config panel */
+.res-qhd .config-tile {
+    -fx-pref-width: 210;
+    -fx-min-width: 210;
+    -fx-max-width: 210;
+    -fx-pref-height: 175;
+    -fx-min-height: 175;
+    -fx-max-height: 175;
+}
+
+.res-qhd .config-columna {
+    -fx-min-width: 210;
+}
+
+.res-qhd .config-seccion-titulo {
+    -fx-font-size: 14px;
+    -fx-min-width: 210;
+}
+
+.res-qhd .config-tile-titulo {
+    -fx-font-size: 13px;
+}
+
+.res-qhd .config-tile-descripcion {
+    -fx-font-size: 11px;
+}
+
+.res-qhd .config-tile-badge {
+    -fx-font-size: 10px;
+}
+
+/* Notificaciones */
+.res-qhd .notificacion {
+    -fx-min-width: 340px;
+    -fx-max-width: 680px;
+}
+
+.res-qhd .notificacion-icono {
+    -fx-font-size: 28px;
+}
+
+.res-qhd .notificacion-mensaje {
+    -fx-font-size: 18px;
+}
+
+/* Clases nuevas — inline styles migrados (F3) */
+.res-qhd .pin-display {
+    -fx-font-size: 56px;
+}
+
+.res-qhd .mesa-nueva-label {
+    -fx-font-size: 28px;
+}
+
+.res-qhd .flecha-nav {
+    -fx-font-size: 32px;
+}
+
+.res-qhd .icono-vacio-lg {
+    -fx-font-size: 38px;
+}
+
+.res-qhd .info-titulo-dorado {
+    -fx-font-size: 17px;
+}
+
+.res-qhd .info-descripcion {
+    -fx-font-size: 16px;
+}
+
+.res-qhd .config-header-titulo {
+    -fx-font-size: 22px;
+}
+
+/* ===================================================================
+   res-4k (≥3840px) — Pantallas 4K / UHD
+   =================================================================== */
+
+/* Login */
 .res-4k .login-card {
     -fx-min-width: 700px;
     -fx-max-width: 700px;
+}
+
+.res-4k .login-form-inner {
+    -fx-min-width: 580px;
+    -fx-max-width: 580px;
 }
 
 .res-4k .login-title {
     -fx-font-size: 38px;
 }
 
+.res-4k .login-description {
+    -fx-font-size: 18px;
+}
+
+/* Menú principal */
 .res-4k .menu-titulo {
     -fx-font-size: 48px;
 }
@@ -4625,29 +5561,1365 @@
     -fx-font-size: 16px;
 }
 
-.res-4k .productos-titulo {
-    -fx-font-size: 44px;
-}
-
 .res-4k .menu-footer-text {
     -fx-font-size: 16px;
 }
 
+/* Productos */
+.res-4k .productos-titulo {
+    -fx-font-size: 44px;
+}
+
+.res-4k .opcion-titulo {
+    -fx-font-size: 28px;
+}
+
+.res-4k .opcion-subtitulo {
+    -fx-font-size: 19px;
+}
+
+.res-4k .boton-opcion-producto {
+    -fx-padding: 0 28 0 28;
+}
+
+/* Teclado virtual */
+.res-4k .tecla-letra,
+.res-4k .tecla-numero,
+.res-4k .tecla-simbolo,
+.res-4k .tecla-especial,
+.res-4k .tecla-espacio,
+.res-4k .tecla-aceptar,
+.res-4k .tecla-cerrar {
+    -fx-min-width: 80px;
+    -fx-min-height: 80px;
+    -fx-pref-width: 80px;
+    -fx-pref-height: 80px;
+    -fx-font-size: 24px;
+}
+
+.res-4k .tecla-espacio {
+    -fx-min-width: 500px;
+}
+
+.res-4k .tecla-especial {
+    -fx-font-size: 26px;
+}
+
+.res-4k .tecla-aceptar,
+.res-4k .tecla-cerrar {
+    -fx-font-size: 30px;
+}
+
+.res-4k .teclado-virtual-root {
+    -fx-padding: 16px;
+}
+
+/* Facturación / POS */
+.res-4k .tab-button {
+    -fx-font-size: 18px;
+    -fx-padding: 14 42 14 42;
+    -fx-min-height: 48;
+}
+
+.res-4k .search-input {
+    -fx-font-size: 36px;
+    -fx-padding: 20 32 20 32;
+    -fx-pref-height: 76;
+}
+
+.res-4k .search-label {
+    -fx-font-size: 22px;
+}
+
+.res-4k .footer-text {
+    -fx-font-size: 14px;
+}
+
+/* Usuarios */
+.res-4k .titulo-seccion {
+    -fx-font-size: 36px;
+}
+
+.res-4k .titulo-seccion-lg {
+    -fx-font-size: 42px;
+}
+
+.res-4k .subtitulo-seccion {
+    -fx-font-size: 18px;
+}
+
+.res-4k .boton-principal {
+    -fx-font-size: 18px;
+}
+
+.res-4k .campo-busqueda {
+    -fx-font-size: 18px;
+}
+
+/* Meseros */
+.res-4k .meseros-titulo {
+    -fx-font-size: 42px;
+}
+
+.res-4k .meseros-contador {
+    -fx-font-size: 20px;
+}
+
+.res-4k .campo-busqueda-meseros {
+    -fx-font-size: 18px;
+}
+
+/* Mesa detalle */
+.res-4k .table-header-text {
+    -fx-font-size: 14px;
+}
+
+.res-4k .btn-accion {
+    -fx-font-size: 16px;
+    -fx-min-height: 48;
+}
+
+/* Formularios */
+.res-4k .label-formulario {
+    -fx-font-size: 20px;
+}
+
+.res-4k .campo-texto-formulario {
+    -fx-font-size: 20px;
+    -fx-padding: 16px 20px;
+}
+
+.res-4k .combo-formulario {
+    -fx-font-size: 20px;
+}
+
+/* Config panel */
+.res-4k .config-tile {
+    -fx-pref-width: 240;
+    -fx-min-width: 240;
+    -fx-max-width: 240;
+    -fx-pref-height: 190;
+    -fx-min-height: 190;
+    -fx-max-height: 190;
+}
+
+.res-4k .config-columna {
+    -fx-min-width: 240;
+}
+
+.res-4k .config-seccion-titulo {
+    -fx-font-size: 15px;
+    -fx-min-width: 240;
+}
+
+.res-4k .config-tile-titulo {
+    -fx-font-size: 14px;
+}
+
+.res-4k .config-tile-descripcion {
+    -fx-font-size: 12px;
+}
+
+.res-4k .config-tile-badge {
+    -fx-font-size: 11px;
+}
+
+/* Notificaciones */
+.res-4k .notificacion {
+    -fx-min-width: 400px;
+    -fx-max-width: 780px;
+}
+
+.res-4k .notificacion-icono {
+    -fx-font-size: 32px;
+}
+
+.res-4k .notificacion-mensaje {
+    -fx-font-size: 20px;
+}
+
+/* Clases nuevas — inline styles migrados (F3) */
+.res-4k .pin-display {
+    -fx-font-size: 64px;
+}
+
+.res-4k .mesa-nueva-label {
+    -fx-font-size: 32px;
+}
+
+.res-4k .flecha-nav {
+    -fx-font-size: 36px;
+}
+
+.res-4k .icono-vacio-lg {
+    -fx-font-size: 44px;
+}
+
+.res-4k .info-titulo-dorado {
+    -fx-font-size: 19px;
+}
+
+.res-4k .info-descripcion {
+    -fx-font-size: 18px;
+}
+
+.res-4k .config-header-titulo {
+    -fx-font-size: 26px;
+}
+
+/* ===========================================================================
+   OVERRIDES DE RATIO — Ajustes por proporción de pantalla
+   Se combinan CON las clases res-* (el nodo tiene ambas simultáneamente).
+   =========================================================================== */
+
 /* -------------------------------------------
-   ratio-classic (<1.5 — 4:3, 5:4)
-   Monitores antiguos: contenido más compacto
+   ratio-classic — 4:3, 5:4 (ratio < 1.5)
+   Monitores cuadrados: más altura vertical,
+   menos ancho horizontal. Compactar horizontalmente.
    ------------------------------------------- */
 
+/* Login */
+.ratio-classic .login-card {
+    -fx-min-width: 450px;
+    -fx-max-width: 450px;
+}
+
+.ratio-classic .login-form-inner {
+    -fx-min-width: 360px;
+    -fx-max-width: 360px;
+}
+
+/* Menú */
 .ratio-classic .menu-opcion-card {
     -fx-min-width: 230px;
     -fx-pref-width: 250px;
     -fx-max-width: 250px;
 }
 
-.ratio-classic .boton-opcion-producto {
-    -fx-padding: 0 14 0 14;
+.ratio-classic .menu-opcion-linea {
+    -fx-pref-width: 50px;
+    -fx-max-width: 50px;
 }
 
 .ratio-classic .menu-opcion-titulo {
     -fx-font-size: 22px;
+}
+
+.ratio-classic .menu-opcion-descripcion {
+    -fx-font-size: 12px;
+}
+
+.ratio-classic .boton-opcion-producto {
+    -fx-padding: 0 14 0 14;
+}
+
+/* Facturación — menos espacio horizontal */
+.ratio-classic .tab-button {
+    -fx-padding: 8 20 8 20;
+}
+
+.ratio-classic .search-input {
+    -fx-padding: 12 16 12 16;
+}
+
+/* Teclado — reducir espacio horizontal */
+.ratio-classic .tecla-espacio {
+    -fx-min-width: 250px;
+}
+
+/* Tablas — columnas más compactas */
+.ratio-classic .campo-texto-formulario {
+    -fx-padding: 8px 10px;
+}
+
+/* Config tiles más compactas */
+.ratio-classic .config-tile {
+    -fx-pref-width: 170;
+    -fx-min-width: 170;
+    -fx-max-width: 170;
+}
+
+.ratio-classic .config-columna {
+    -fx-min-width: 170;
+}
+
+/* Notificaciones más estrechas */
+.ratio-classic .notificacion {
+    -fx-max-width: 500px;
+}
+
+/* -------------------------------------------
+   ratio-standard — 16:10 (ratio 1.5 – 1.7)
+   MacBook, monitores profesionales.
+   Ligera expansión vertical respecto a 16:9.
+   ------------------------------------------- */
+
+.ratio-standard .menu-opcion-card {
+    -fx-min-height: 190px;
+    -fx-pref-height: 210px;
+    -fx-max-height: 210px;
+}
+
+.ratio-standard .menu-opcion-descripcion {
+    -fx-padding: 18 0 0 0;
+}
+
+/* Formularios — aprovechar altura extra */
+.ratio-standard .campo-texto-formulario {
+    -fx-padding: 12px 16px;
+}
+
+/* Meseros — más espacio vertical */
+.ratio-standard .btn-accion {
+    -fx-padding: 8 16 8 16;
+}
+
+/* -------------------------------------------
+   ratio-ultrawide — 21:9 (ratio 1.9 – 2.2)
+   Ultrawides: aprovechar espacio horizontal extra.
+   Centrar contenido con max-width para no dispersar.
+   ------------------------------------------- */
+
+/* Login */
+.ratio-ultrawide .login-card {
+    -fx-min-width: 560px;
+    -fx-max-width: 560px;
+}
+
+.ratio-ultrawide .login-form-inner {
+    -fx-min-width: 450px;
+    -fx-max-width: 450px;
+}
+
+/* Menú */
+.ratio-ultrawide .menu-opcion-card {
+    -fx-min-width: 280px;
+    -fx-pref-width: 300px;
+    -fx-max-width: 300px;
+    -fx-min-height: 170px;
+    -fx-pref-height: 190px;
+    -fx-max-height: 190px;
+}
+
+.ratio-ultrawide .menu-opcion-titulo {
+    -fx-font-size: 24px;
+}
+
+/* Facturación — tabs más amplias */
+.ratio-ultrawide .tab-button {
+    -fx-padding: 10 36 10 36;
+}
+
+.ratio-ultrawide .search-input {
+    -fx-padding: 14 28 14 28;
+}
+
+/* Teclado — aprovechar espacio horizontal */
+.ratio-ultrawide .tecla-espacio {
+    -fx-min-width: 380px;
+}
+
+.ratio-ultrawide .teclado-virtual-root {
+    -fx-padding: 14px;
+}
+
+/* Formularios — más anchos */
+.ratio-ultrawide .campo-texto-formulario {
+    -fx-padding: 12px 20px;
+}
+
+/* Tablas — más espacio */
+.ratio-ultrawide .btn-accion {
+    -fx-padding: 8 20 8 20;
+}
+
+/* Config panel — tiles con más espacio */
+.ratio-ultrawide .config-tile {
+    -fx-pref-width: 200;
+    -fx-min-width: 200;
+    -fx-max-width: 200;
+}
+
+.ratio-ultrawide .config-columna {
+    -fx-min-width: 200;
+}
+
+/* Notificaciones más amplias */
+.ratio-ultrawide .notificacion {
+    -fx-max-width: 700px;
+}
+
+/* -------------------------------------------
+   ratio-superwide — 32:9 (ratio >= 2.2)
+   Samsung Odyssey etc. Contenido centrado,
+   paneles laterales aprovechan espacio.
+   ------------------------------------------- */
+
+/* Login */
+.ratio-superwide .login-card {
+    -fx-min-width: 580px;
+    -fx-max-width: 580px;
+}
+
+.ratio-superwide .login-form-inner {
+    -fx-min-width: 470px;
+    -fx-max-width: 470px;
+}
+
+/* Menú */
+.ratio-superwide .menu-opcion-card {
+    -fx-min-width: 300px;
+    -fx-pref-width: 320px;
+    -fx-max-width: 320px;
+}
+
+.ratio-superwide .menu-opcion-titulo {
+    -fx-font-size: 24px;
+}
+
+/* Facturación */
+.ratio-superwide .tab-button {
+    -fx-padding: 10 40 10 40;
+}
+
+/* Teclado */
+.ratio-superwide .tecla-espacio {
+    -fx-min-width: 400px;
+}
+
+/* Formularios */
+.ratio-superwide .campo-texto-formulario {
+    -fx-padding: 12px 24px;
+}
+
+/* Config */
+.ratio-superwide .config-tile {
+    -fx-pref-width: 220;
+    -fx-min-width: 220;
+    -fx-max-width: 220;
+}
+
+.ratio-superwide .config-columna {
+    -fx-min-width: 220;
+}
+
+/* Notificaciones */
+.ratio-superwide .notificacion {
+    -fx-max-width: 750px;
+}
+
+/* -------------------------------------------
+   ratio-tall — Portrait / tablet vertical (ratio < 1.2)
+   Layout reorganizado para orientación vertical.
+   ------------------------------------------- */
+
+/* Login */
+.ratio-tall .login-card {
+    -fx-min-width: 400px;
+    -fx-max-width: 400px;
+}
+
+.ratio-tall .login-form-inner {
+    -fx-min-width: 320px;
+    -fx-max-width: 320px;
+}
+
+/* Menú */
+.ratio-tall .menu-opcion-card {
+    -fx-min-width: 200px;
+    -fx-pref-width: 220px;
+    -fx-max-width: 220px;
+    -fx-min-height: 140px;
+    -fx-pref-height: 155px;
+    -fx-max-height: 155px;
+}
+
+.ratio-tall .menu-opcion-titulo {
+    -fx-font-size: 20px;
+}
+
+.ratio-tall .menu-opcion-descripcion {
+    -fx-font-size: 11px;
+}
+
+/* Teclado virtual — teclas más pequeñas en vertical */
+.ratio-tall .tecla-letra,
+.ratio-tall .tecla-numero,
+.ratio-tall .tecla-simbolo,
+.ratio-tall .tecla-especial,
+.ratio-tall .tecla-espacio,
+.ratio-tall .tecla-aceptar,
+.ratio-tall .tecla-cerrar {
+    -fx-min-width: 44px;
+    -fx-min-height: 44px;
+    -fx-pref-width: 44px;
+    -fx-pref-height: 44px;
+}
+
+.ratio-tall .tecla-espacio {
+    -fx-min-width: 240px;
+}
+
+/* Tablas — reducir para caber horizontalmente */
+.ratio-tall .table-header-text {
+    -fx-font-size: 9px;
+}
+
+.ratio-tall .btn-accion {
+    -fx-font-size: 10px;
+}
+
+/* Formularios — ancho completo */
+.ratio-tall .campo-texto-formulario {
+    -fx-padding: 8px 10px;
+}
+
+/* Config tile compactas */
+.ratio-tall .config-tile {
+    -fx-pref-width: 160;
+    -fx-min-width: 160;
+    -fx-max-width: 160;
+}
+
+.ratio-tall .config-columna {
+    -fx-min-width: 160;
+}
+
+/* Notificaciones */
+.ratio-tall .notificacion {
+    -fx-max-width: 450px;
+}
+
+/* ===========================================================================
+   CLASES CSS NUEVAS — Reemplazan inline styles de FXMLs (Fase 3)
+   Estilos base para res-fhd. Los overrides por breakpoint están arriba.
+   =========================================================================== */
+
+.pin-display {
+    -fx-font-size: 48px;
+    -fx-font-weight: 700;
+}
+
+.mesa-nueva-label {
+    -fx-font-size: 24px;
+}
+
+.flecha-nav {
+    -fx-font-size: 28px;
+    -fx-text-fill: #d4af37;
+}
+
+.icono-vacio-lg {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+
+.info-titulo-dorado {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #eed600ff;
+}
+
+.info-descripcion {
+    -fx-font-size: 13px;
+    -fx-text-fill: #b0b0b0;
+}
+
+.config-header-titulo {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #d4af37;
+}
+
+/* --- Info hint labels (productos footer) --- */
+.info-hint-titulo {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffefbb7b;
+}
+
+.info-hint-descripcion {
+    -fx-font-size: 13px;
+    -fx-text-fill: #ffefbb;
+    -fx-font-style: italic;
+}
+
+/* --- Splash screen --- */
+.splash-cargando {
+    -fx-font-size: 15px;
+    -fx-text-fill: #b0b0b0;
+}
+
+/* --- Login config panel --- */
+.login-cfg-icono {
+    -fx-font-size: 14px;
+    -fx-text-fill: #d4af37;
+}
+
+.login-cfg-resumen {
+    -fx-font-size: 11px;
+    -fx-text-fill: #666666;
+}
+
+.login-cfg-seccion-titulo {
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #d4af37;
+}
+
+.login-cfg-colapsar {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666;
+    -fx-cursor: hand;
+}
+
+.login-cfg-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: #777;
+}
+
+.login-cfg-input {
+    -fx-background-color: #1a1a1a;
+    -fx-text-fill: #e8e8e8;
+    -fx-border-color: #404040;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-font-size: 11px;
+    -fx-prompt-text-fill: #555;
+    -fx-padding: 3 6;
+}
+
+.login-cfg-btn-conectar {
+    -fx-background-color: #2a2a2a;
+    -fx-text-fill: #d4af37;
+    -fx-border-color: #d4af37;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-font-size: 10px;
+    -fx-cursor: hand;
+}
+
+.login-cfg-resultado {
+    -fx-font-size: 10px;
+    -fx-text-fill: #999;
+}
+
+/* ===========================================================================
+   CLASES CSS PARA UI PROGRAMÁTICA — Reemplazan setStyle() en Java
+   Estilos base (res-fhd). Los overrides por breakpoint están en la sección
+   de overrides responsivos.
+   =========================================================================== */
+
+/* --- Títulos de modales/paneles --- */
+.modal-titulo-dorado {
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #d4af37;
+}
+
+.modal-titulo-lg {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #d4af37;
+}
+
+.modal-subtitulo {
+    -fx-font-size: 12px;
+    -fx-text-fill: #777;
+}
+
+.modal-mensaje {
+    -fx-font-size: 14px;
+    -fx-text-fill: #f5f5f5;
+    -fx-text-alignment: center;
+}
+
+/* --- Secciones dentro de paneles --- */
+.panel-seccion-titulo {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+.panel-seccion-titulo-sm {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #d4af37;
+}
+
+/* --- Texto de estado (colores se aplican via setStyle) --- */
+.estado-texto {
+    -fx-font-size: 12px;
+}
+
+.estado-texto-sm {
+    -fx-font-size: 11px;
+}
+
+.estado-texto-bold {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+/* --- Texto secundario / info --- */
+.texto-secundario {
+    -fx-font-size: 12px;
+    -fx-text-fill: #999;
+}
+
+.texto-secundario-claro {
+    -fx-font-size: 12px;
+    -fx-text-fill: #e8e8e8;
+}
+
+.texto-acento-sm {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #d4af37;
+}
+
+.texto-info {
+    -fx-font-size: 13px;
+    -fx-text-fill: #aaa;
+}
+
+/* --- Texto hint/muted --- */
+.texto-hint {
+    -fx-font-size: 10px;
+    -fx-text-fill: #555;
+}
+
+.texto-hint-sm {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888;
+}
+
+/* --- Labels de datos --- */
+.dato-label {
+    -fx-font-size: 10px;
+    -fx-text-fill: #555;
+}
+
+.dato-valor {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #ccc;
+}
+
+/* --- Badges --- */
+.badge-texto {
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+}
+
+/* --- Iconos de texto --- */
+.icono-texto-md {
+    -fx-font-size: 18px;
+}
+
+.icono-texto-sm {
+    -fx-font-size: 16px;
+}
+
+/* --- Botones en paneles programáticos --- */
+.panel-btn-principal {
+    -fx-font-size: 13px;
+}
+
+.panel-btn-secundario {
+    -fx-font-size: 12px;
+}
+
+.panel-btn-eliminar {
+    -fx-font-size: 12px;
+}
+
+/* --- Cerrar botón (×) en modales/paneles --- */
+.panel-cerrar {
+    -fx-font-size: 16px;
+    -fx-text-fill: #666;
+    -fx-cursor: hand;
+}
+
+.panel-cerrar:hover {
+    -fx-text-fill: #f5f5f5;
+}
+
+/* --- Tutorial Web --- */
+.tutorial-titulo {
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #d4af37;
+}
+
+.tutorial-seccion-titulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #f5f5f5;
+}
+
+.tutorial-texto {
+    -fx-font-size: 13px;
+    -fx-text-fill: #ccc;
+}
+
+.tutorial-nota {
+    -fx-font-size: 12px;
+    -fx-text-fill: #c9a961;
+}
+
+.tutorial-dato {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #d4af37;
+}
+
+.tutorial-paso {
+    -fx-font-size: 12px;
+    -fx-text-fill: #ddd;
+}
+
+.tutorial-aviso {
+    -fx-font-size: 12px;
+    -fx-text-fill: #daa520;
+}
+
+.tutorial-disclaimer {
+    -fx-font-size: 11px;
+    -fx-font-style: italic;
+    -fx-text-fill: #888;
+}
+
+/* --- PanelConexionRed --- */
+.red-titulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #d4af37;
+}
+
+.red-estado {
+    -fx-font-size: 12px;
+    -fx-text-fill: #b0b0b0;
+}
+
+.red-info {
+    -fx-font-size: 11px;
+    -fx-text-fill: #aaa;
+}
+
+.red-ip-titulo {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #d4af37;
+}
+
+.red-ip-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #999;
+}
+
+.red-progreso {
+    -fx-font-size: 10px;
+    -fx-text-fill: #d4af37;
+}
+
+.red-uri-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #999;
+}
+
+.red-uri-hint {
+    -fx-font-size: 10px;
+    -fx-font-style: italic;
+    -fx-text-fill: #555;
+}
+
+/* --- Mesa detalle / POS --- */
+.pos-celda-nombre {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #e8e8e8;
+}
+
+.pos-celda-texto {
+    -fx-font-size: 12px;
+    -fx-text-fill: #d4af37;
+}
+
+.pos-celda-cantidad {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #e8e8e8;
+}
+
+.pos-celda-precio {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #d4af37;
+}
+
+.pos-total-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #d4af37;
+}
+
+.pos-total-valor {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #d4af37;
+}
+
+/* --- Producto listado (cards programáticas) --- */
+.producto-card-nombre {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #f5f5f5;
+}
+
+.producto-card-precio {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-text-fill: #d4af37;
+}
+
+.producto-card-detalle {
+    -fx-font-size: 10px;
+    -fx-text-fill: #888;
+}
+
+.producto-card-stock {
+    -fx-font-size: 10px;
+    -fx-font-weight: 600;
+}
+
+/* --- Inventario control --- */
+.inv-grupo-titulo {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffaa00;
+}
+
+.inv-producto-nombre {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.inv-producto-detalle {
+    -fx-font-size: 11px;
+    -fx-text-fill: #999;
+}
+
+/* --- Logs críticos --- */
+.log-titulo-expandido {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+}
+
+.log-detalle-texto {
+    -fx-font-size: 12px;
+}
+
+.log-detalle-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #888;
+}
+
+/* --- Métodos de pago --- */
+.pago-titulo {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+}
+
+.pago-estado {
+    -fx-font-size: 11px;
+}
+
+/* ===========================================================================
+   OVERRIDES RESPONSIVOS — Clases para UI programática
+   =========================================================================== */
+
+/* --- res-small --- */
+.res-small .info-hint-titulo { -fx-font-size: 9px; }
+.res-small .info-hint-descripcion { -fx-font-size: 11px; }
+.res-small .splash-cargando { -fx-font-size: 12px; }
+.res-small .login-cfg-input { -fx-font-size: 9px; }
+.res-small .login-cfg-label { -fx-font-size: 9px; }
+.res-small .modal-titulo-dorado { -fx-font-size: 12px; }
+.res-small .modal-titulo-lg { -fx-font-size: 16px; }
+.res-small .modal-subtitulo { -fx-font-size: 10px; }
+.res-small .modal-mensaje { -fx-font-size: 12px; }
+.res-small .panel-seccion-titulo { -fx-font-size: 12px; }
+.res-small .panel-seccion-titulo-sm { -fx-font-size: 11px; }
+.res-small .estado-texto { -fx-font-size: 10px; }
+.res-small .estado-texto-sm { -fx-font-size: 9px; }
+.res-small .estado-texto-bold { -fx-font-size: 10px; }
+.res-small .texto-secundario { -fx-font-size: 10px; }
+.res-small .texto-secundario-claro { -fx-font-size: 10px; }
+.res-small .texto-acento-sm { -fx-font-size: 11px; }
+.res-small .texto-info { -fx-font-size: 11px; }
+.res-small .texto-hint { -fx-font-size: 8px; }
+.res-small .texto-hint-sm { -fx-font-size: 9px; }
+.res-small .dato-label { -fx-font-size: 8px; }
+.res-small .dato-valor { -fx-font-size: 10px; }
+.res-small .badge-texto { -fx-font-size: 8px; }
+.res-small .icono-texto-md { -fx-font-size: 14px; }
+.res-small .icono-texto-sm { -fx-font-size: 13px; }
+.res-small .panel-btn-principal { -fx-font-size: 11px; }
+.res-small .panel-btn-secundario { -fx-font-size: 10px; }
+.res-small .panel-btn-eliminar { -fx-font-size: 10px; }
+.res-small .panel-cerrar { -fx-font-size: 13px; }
+.res-small .tutorial-titulo { -fx-font-size: 12px; }
+.res-small .tutorial-seccion-titulo { -fx-font-size: 13px; }
+.res-small .tutorial-texto { -fx-font-size: 11px; }
+.res-small .tutorial-nota { -fx-font-size: 10px; }
+.res-small .tutorial-dato { -fx-font-size: 12px; }
+.res-small .tutorial-paso { -fx-font-size: 10px; }
+.res-small .tutorial-aviso { -fx-font-size: 10px; }
+.res-small .tutorial-disclaimer { -fx-font-size: 9px; }
+.res-small .red-titulo { -fx-font-size: 13px; }
+.res-small .red-estado { -fx-font-size: 10px; }
+.res-small .red-info { -fx-font-size: 9px; }
+.res-small .red-ip-titulo { -fx-font-size: 11px; }
+.res-small .red-ip-label { -fx-font-size: 10px; }
+.res-small .red-progreso { -fx-font-size: 8px; }
+.res-small .red-uri-label { -fx-font-size: 9px; }
+.res-small .red-uri-hint { -fx-font-size: 8px; }
+.res-small .pos-celda-nombre { -fx-font-size: 11px; }
+.res-small .pos-celda-texto { -fx-font-size: 10px; }
+.res-small .pos-celda-cantidad { -fx-font-size: 12px; }
+.res-small .pos-celda-precio { -fx-font-size: 11px; }
+.res-small .pos-total-label { -fx-font-size: 13px; }
+.res-small .pos-total-valor { -fx-font-size: 16px; }
+.res-small .producto-card-nombre { -fx-font-size: 11px; }
+.res-small .producto-card-precio { -fx-font-size: 10px; }
+.res-small .producto-card-detalle { -fx-font-size: 8px; }
+.res-small .producto-card-stock { -fx-font-size: 8px; }
+.res-small .inv-grupo-titulo { -fx-font-size: 14px; }
+.res-small .inv-producto-nombre { -fx-font-size: 12px; }
+.res-small .inv-producto-detalle { -fx-font-size: 9px; }
+.res-small .log-titulo-expandido { -fx-font-size: 12px; }
+.res-small .log-detalle-texto { -fx-font-size: 10px; }
+.res-small .log-detalle-label { -fx-font-size: 9px; }
+.res-small .pago-titulo { -fx-font-size: 12px; }
+.res-small .pago-estado { -fx-font-size: 9px; }
+
+/* --- res-tablet --- */
+.res-tablet .info-hint-titulo { -fx-font-size: 10px; }
+.res-tablet .info-hint-descripcion { -fx-font-size: 12px; }
+.res-tablet .splash-cargando { -fx-font-size: 13px; }
+.res-tablet .login-cfg-input { -fx-font-size: 10px; }
+.res-tablet .login-cfg-label { -fx-font-size: 9px; }
+.res-tablet .modal-titulo-dorado { -fx-font-size: 13px; }
+.res-tablet .modal-titulo-lg { -fx-font-size: 18px; }
+.res-tablet .modal-subtitulo { -fx-font-size: 11px; }
+.res-tablet .modal-mensaje { -fx-font-size: 13px; }
+.res-tablet .panel-seccion-titulo { -fx-font-size: 13px; }
+.res-tablet .panel-seccion-titulo-sm { -fx-font-size: 12px; }
+.res-tablet .estado-texto { -fx-font-size: 11px; }
+.res-tablet .estado-texto-sm { -fx-font-size: 10px; }
+.res-tablet .estado-texto-bold { -fx-font-size: 11px; }
+.res-tablet .texto-secundario { -fx-font-size: 11px; }
+.res-tablet .texto-secundario-claro { -fx-font-size: 11px; }
+.res-tablet .texto-acento-sm { -fx-font-size: 12px; }
+.res-tablet .texto-info { -fx-font-size: 12px; }
+.res-tablet .texto-hint { -fx-font-size: 9px; }
+.res-tablet .texto-hint-sm { -fx-font-size: 10px; }
+.res-tablet .dato-label { -fx-font-size: 9px; }
+.res-tablet .dato-valor { -fx-font-size: 11px; }
+.res-tablet .badge-texto { -fx-font-size: 9px; }
+.res-tablet .icono-texto-md { -fx-font-size: 16px; }
+.res-tablet .icono-texto-sm { -fx-font-size: 14px; }
+.res-tablet .panel-btn-principal { -fx-font-size: 12px; }
+.res-tablet .panel-btn-secundario { -fx-font-size: 11px; }
+.res-tablet .panel-btn-eliminar { -fx-font-size: 11px; }
+.res-tablet .panel-cerrar { -fx-font-size: 14px; }
+.res-tablet .tutorial-titulo { -fx-font-size: 13px; }
+.res-tablet .tutorial-seccion-titulo { -fx-font-size: 14px; }
+.res-tablet .tutorial-texto { -fx-font-size: 12px; }
+.res-tablet .tutorial-nota { -fx-font-size: 11px; }
+.res-tablet .tutorial-dato { -fx-font-size: 13px; }
+.res-tablet .tutorial-paso { -fx-font-size: 11px; }
+.res-tablet .tutorial-aviso { -fx-font-size: 11px; }
+.res-tablet .tutorial-disclaimer { -fx-font-size: 10px; }
+.res-tablet .red-titulo { -fx-font-size: 14px; }
+.res-tablet .red-estado { -fx-font-size: 11px; }
+.res-tablet .red-info { -fx-font-size: 10px; }
+.res-tablet .red-ip-titulo { -fx-font-size: 12px; }
+.res-tablet .red-ip-label { -fx-font-size: 11px; }
+.res-tablet .red-progreso { -fx-font-size: 9px; }
+.res-tablet .red-uri-label { -fx-font-size: 10px; }
+.res-tablet .red-uri-hint { -fx-font-size: 9px; }
+.res-tablet .pos-celda-nombre { -fx-font-size: 12px; }
+.res-tablet .pos-celda-texto { -fx-font-size: 11px; }
+.res-tablet .pos-celda-cantidad { -fx-font-size: 13px; }
+.res-tablet .pos-celda-precio { -fx-font-size: 12px; }
+.res-tablet .pos-total-label { -fx-font-size: 14px; }
+.res-tablet .pos-total-valor { -fx-font-size: 18px; }
+.res-tablet .producto-card-nombre { -fx-font-size: 12px; }
+.res-tablet .producto-card-precio { -fx-font-size: 11px; }
+.res-tablet .producto-card-detalle { -fx-font-size: 9px; }
+.res-tablet .producto-card-stock { -fx-font-size: 9px; }
+.res-tablet .inv-grupo-titulo { -fx-font-size: 16px; }
+.res-tablet .inv-producto-nombre { -fx-font-size: 13px; }
+.res-tablet .inv-producto-detalle { -fx-font-size: 10px; }
+.res-tablet .log-titulo-expandido { -fx-font-size: 13px; }
+.res-tablet .log-detalle-texto { -fx-font-size: 11px; }
+.res-tablet .log-detalle-label { -fx-font-size: 10px; }
+.res-tablet .pago-titulo { -fx-font-size: 13px; }
+.res-tablet .pago-estado { -fx-font-size: 10px; }
+
+/* --- res-hd --- */
+.res-hd .info-hint-titulo { -fx-font-size: 10px; }
+.res-hd .info-hint-descripcion { -fx-font-size: 12px; }
+.res-hd .splash-cargando { -fx-font-size: 14px; }
+.res-hd .login-cfg-input { -fx-font-size: 10px; }
+.res-hd .login-cfg-label { -fx-font-size: 9px; }
+.res-hd .modal-titulo-dorado { -fx-font-size: 14px; }
+.res-hd .modal-titulo-lg { -fx-font-size: 18px; }
+.res-hd .modal-subtitulo { -fx-font-size: 11px; }
+.res-hd .modal-mensaje { -fx-font-size: 13px; }
+.res-hd .panel-seccion-titulo { -fx-font-size: 13px; }
+.res-hd .panel-seccion-titulo-sm { -fx-font-size: 12px; }
+.res-hd .estado-texto { -fx-font-size: 11px; }
+.res-hd .estado-texto-sm { -fx-font-size: 10px; }
+.res-hd .estado-texto-bold { -fx-font-size: 11px; }
+.res-hd .texto-secundario { -fx-font-size: 11px; }
+.res-hd .texto-secundario-claro { -fx-font-size: 11px; }
+.res-hd .texto-acento-sm { -fx-font-size: 12px; }
+.res-hd .texto-info { -fx-font-size: 12px; }
+.res-hd .texto-hint { -fx-font-size: 9px; }
+.res-hd .texto-hint-sm { -fx-font-size: 10px; }
+.res-hd .dato-label { -fx-font-size: 9px; }
+.res-hd .dato-valor { -fx-font-size: 11px; }
+.res-hd .badge-texto { -fx-font-size: 9px; }
+.res-hd .icono-texto-md { -fx-font-size: 16px; }
+.res-hd .icono-texto-sm { -fx-font-size: 14px; }
+.res-hd .panel-btn-principal { -fx-font-size: 12px; }
+.res-hd .panel-btn-secundario { -fx-font-size: 11px; }
+.res-hd .panel-btn-eliminar { -fx-font-size: 11px; }
+.res-hd .panel-cerrar { -fx-font-size: 14px; }
+.res-hd .tutorial-titulo { -fx-font-size: 14px; }
+.res-hd .tutorial-seccion-titulo { -fx-font-size: 15px; }
+.res-hd .tutorial-texto { -fx-font-size: 12px; }
+.res-hd .tutorial-nota { -fx-font-size: 11px; }
+.res-hd .tutorial-dato { -fx-font-size: 13px; }
+.res-hd .tutorial-paso { -fx-font-size: 11px; }
+.res-hd .tutorial-aviso { -fx-font-size: 11px; }
+.res-hd .tutorial-disclaimer { -fx-font-size: 10px; }
+.res-hd .red-titulo { -fx-font-size: 15px; }
+.res-hd .red-estado { -fx-font-size: 11px; }
+.res-hd .red-info { -fx-font-size: 10px; }
+.res-hd .red-ip-titulo { -fx-font-size: 12px; }
+.res-hd .red-ip-label { -fx-font-size: 11px; }
+.res-hd .red-progreso { -fx-font-size: 9px; }
+.res-hd .red-uri-label { -fx-font-size: 10px; }
+.res-hd .red-uri-hint { -fx-font-size: 9px; }
+.res-hd .pos-celda-nombre { -fx-font-size: 12px; }
+.res-hd .pos-celda-texto { -fx-font-size: 11px; }
+.res-hd .pos-celda-cantidad { -fx-font-size: 13px; }
+.res-hd .pos-celda-precio { -fx-font-size: 12px; }
+.res-hd .pos-total-label { -fx-font-size: 15px; }
+.res-hd .pos-total-valor { -fx-font-size: 18px; }
+.res-hd .producto-card-nombre { -fx-font-size: 12px; }
+.res-hd .producto-card-precio { -fx-font-size: 11px; }
+.res-hd .producto-card-detalle { -fx-font-size: 9px; }
+.res-hd .producto-card-stock { -fx-font-size: 9px; }
+.res-hd .inv-grupo-titulo { -fx-font-size: 16px; }
+.res-hd .inv-producto-nombre { -fx-font-size: 13px; }
+.res-hd .inv-producto-detalle { -fx-font-size: 10px; }
+.res-hd .log-titulo-expandido { -fx-font-size: 13px; }
+.res-hd .log-detalle-texto { -fx-font-size: 11px; }
+.res-hd .log-detalle-label { -fx-font-size: 10px; }
+.res-hd .pago-titulo { -fx-font-size: 13px; }
+.res-hd .pago-estado { -fx-font-size: 10px; }
+
+/* --- res-qhd --- */
+.res-qhd .info-hint-titulo { -fx-font-size: 13px; }
+.res-qhd .info-hint-descripcion { -fx-font-size: 15px; }
+.res-qhd .splash-cargando { -fx-font-size: 18px; }
+.res-qhd .login-cfg-input { -fx-font-size: 13px; }
+.res-qhd .login-cfg-label { -fx-font-size: 12px; }
+.res-qhd .modal-titulo-dorado { -fx-font-size: 18px; }
+.res-qhd .modal-titulo-lg { -fx-font-size: 24px; }
+.res-qhd .modal-subtitulo { -fx-font-size: 14px; }
+.res-qhd .modal-mensaje { -fx-font-size: 17px; }
+.res-qhd .panel-seccion-titulo { -fx-font-size: 17px; }
+.res-qhd .panel-seccion-titulo-sm { -fx-font-size: 16px; }
+.res-qhd .estado-texto { -fx-font-size: 14px; }
+.res-qhd .estado-texto-sm { -fx-font-size: 13px; }
+.res-qhd .estado-texto-bold { -fx-font-size: 14px; }
+.res-qhd .texto-secundario { -fx-font-size: 14px; }
+.res-qhd .texto-secundario-claro { -fx-font-size: 14px; }
+.res-qhd .texto-acento-sm { -fx-font-size: 16px; }
+.res-qhd .texto-info { -fx-font-size: 16px; }
+.res-qhd .texto-hint { -fx-font-size: 12px; }
+.res-qhd .texto-hint-sm { -fx-font-size: 13px; }
+.res-qhd .dato-label { -fx-font-size: 12px; }
+.res-qhd .dato-valor { -fx-font-size: 14px; }
+.res-qhd .badge-texto { -fx-font-size: 12px; }
+.res-qhd .icono-texto-md { -fx-font-size: 22px; }
+.res-qhd .icono-texto-sm { -fx-font-size: 20px; }
+.res-qhd .panel-btn-principal { -fx-font-size: 16px; }
+.res-qhd .panel-btn-secundario { -fx-font-size: 14px; }
+.res-qhd .panel-btn-eliminar { -fx-font-size: 14px; }
+.res-qhd .panel-cerrar { -fx-font-size: 20px; }
+.res-qhd .tutorial-titulo { -fx-font-size: 18px; }
+.res-qhd .tutorial-seccion-titulo { -fx-font-size: 20px; }
+.res-qhd .tutorial-texto { -fx-font-size: 16px; }
+.res-qhd .tutorial-nota { -fx-font-size: 14px; }
+.res-qhd .tutorial-dato { -fx-font-size: 17px; }
+.res-qhd .tutorial-paso { -fx-font-size: 14px; }
+.res-qhd .tutorial-aviso { -fx-font-size: 14px; }
+.res-qhd .tutorial-disclaimer { -fx-font-size: 13px; }
+.res-qhd .red-titulo { -fx-font-size: 20px; }
+.res-qhd .red-estado { -fx-font-size: 14px; }
+.res-qhd .red-info { -fx-font-size: 13px; }
+.res-qhd .red-ip-titulo { -fx-font-size: 16px; }
+.res-qhd .red-ip-label { -fx-font-size: 14px; }
+.res-qhd .red-progreso { -fx-font-size: 12px; }
+.res-qhd .red-uri-label { -fx-font-size: 13px; }
+.res-qhd .red-uri-hint { -fx-font-size: 12px; }
+.res-qhd .pos-celda-nombre { -fx-font-size: 16px; }
+.res-qhd .pos-celda-texto { -fx-font-size: 14px; }
+.res-qhd .pos-celda-cantidad { -fx-font-size: 17px; }
+.res-qhd .pos-celda-precio { -fx-font-size: 16px; }
+.res-qhd .pos-total-label { -fx-font-size: 20px; }
+.res-qhd .pos-total-valor { -fx-font-size: 24px; }
+.res-qhd .producto-card-nombre { -fx-font-size: 16px; }
+.res-qhd .producto-card-precio { -fx-font-size: 14px; }
+.res-qhd .producto-card-detalle { -fx-font-size: 12px; }
+.res-qhd .producto-card-stock { -fx-font-size: 12px; }
+.res-qhd .inv-grupo-titulo { -fx-font-size: 22px; }
+.res-qhd .inv-producto-nombre { -fx-font-size: 17px; }
+.res-qhd .inv-producto-detalle { -fx-font-size: 13px; }
+.res-qhd .log-titulo-expandido { -fx-font-size: 17px; }
+.res-qhd .log-detalle-texto { -fx-font-size: 14px; }
+.res-qhd .log-detalle-label { -fx-font-size: 13px; }
+.res-qhd .pago-titulo { -fx-font-size: 17px; }
+.res-qhd .pago-estado { -fx-font-size: 13px; }
+
+/* --- res-4k --- */
+.res-4k .info-hint-titulo { -fx-font-size: 14px; }
+.res-4k .info-hint-descripcion { -fx-font-size: 17px; }
+.res-4k .splash-cargando { -fx-font-size: 20px; }
+.res-4k .login-cfg-input { -fx-font-size: 14px; }
+.res-4k .login-cfg-label { -fx-font-size: 13px; }
+.res-4k .modal-titulo-dorado { -fx-font-size: 20px; }
+.res-4k .modal-titulo-lg { -fx-font-size: 28px; }
+.res-4k .modal-subtitulo { -fx-font-size: 16px; }
+.res-4k .modal-mensaje { -fx-font-size: 19px; }
+.res-4k .panel-seccion-titulo { -fx-font-size: 19px; }
+.res-4k .panel-seccion-titulo-sm { -fx-font-size: 18px; }
+.res-4k .estado-texto { -fx-font-size: 16px; }
+.res-4k .estado-texto-sm { -fx-font-size: 14px; }
+.res-4k .estado-texto-bold { -fx-font-size: 16px; }
+.res-4k .texto-secundario { -fx-font-size: 16px; }
+.res-4k .texto-secundario-claro { -fx-font-size: 16px; }
+.res-4k .texto-acento-sm { -fx-font-size: 18px; }
+.res-4k .texto-info { -fx-font-size: 18px; }
+.res-4k .texto-hint { -fx-font-size: 13px; }
+.res-4k .texto-hint-sm { -fx-font-size: 14px; }
+.res-4k .dato-label { -fx-font-size: 13px; }
+.res-4k .dato-valor { -fx-font-size: 16px; }
+.res-4k .badge-texto { -fx-font-size: 13px; }
+.res-4k .icono-texto-md { -fx-font-size: 24px; }
+.res-4k .icono-texto-sm { -fx-font-size: 22px; }
+.res-4k .panel-btn-principal { -fx-font-size: 18px; }
+.res-4k .panel-btn-secundario { -fx-font-size: 16px; }
+.res-4k .panel-btn-eliminar { -fx-font-size: 16px; }
+.res-4k .panel-cerrar { -fx-font-size: 22px; }
+.res-4k .tutorial-titulo { -fx-font-size: 20px; }
+.res-4k .tutorial-seccion-titulo { -fx-font-size: 22px; }
+.res-4k .tutorial-texto { -fx-font-size: 18px; }
+.res-4k .tutorial-nota { -fx-font-size: 16px; }
+.res-4k .tutorial-dato { -fx-font-size: 19px; }
+.res-4k .tutorial-paso { -fx-font-size: 16px; }
+.res-4k .tutorial-aviso { -fx-font-size: 16px; }
+.res-4k .tutorial-disclaimer { -fx-font-size: 14px; }
+.res-4k .red-titulo { -fx-font-size: 22px; }
+.res-4k .red-estado { -fx-font-size: 16px; }
+.res-4k .red-info { -fx-font-size: 14px; }
+.res-4k .red-ip-titulo { -fx-font-size: 18px; }
+.res-4k .red-ip-label { -fx-font-size: 16px; }
+.res-4k .red-progreso { -fx-font-size: 13px; }
+.res-4k .red-uri-label { -fx-font-size: 14px; }
+.res-4k .red-uri-hint { -fx-font-size: 13px; }
+.res-4k .pos-celda-nombre { -fx-font-size: 18px; }
+.res-4k .pos-celda-texto { -fx-font-size: 16px; }
+.res-4k .pos-celda-cantidad { -fx-font-size: 19px; }
+.res-4k .pos-celda-precio { -fx-font-size: 18px; }
+.res-4k .pos-total-label { -fx-font-size: 22px; }
+.res-4k .pos-total-valor { -fx-font-size: 28px; }
+.res-4k .producto-card-nombre { -fx-font-size: 18px; }
+.res-4k .producto-card-precio { -fx-font-size: 16px; }
+.res-4k .producto-card-detalle { -fx-font-size: 13px; }
+.res-4k .producto-card-stock { -fx-font-size: 13px; }
+.res-4k .inv-grupo-titulo { -fx-font-size: 24px; }
+.res-4k .inv-producto-nombre { -fx-font-size: 19px; }
+.res-4k .inv-producto-detalle { -fx-font-size: 14px; }
+.res-4k .log-titulo-expandido { -fx-font-size: 19px; }
+.res-4k .log-detalle-texto { -fx-font-size: 16px; }
+.res-4k .log-detalle-label { -fx-font-size: 14px; }
+.res-4k .pago-titulo { -fx-font-size: 19px; }
+.res-4k .pago-estado { -fx-font-size: 14px; }
+
+/* ===========================================================================
+   SLIDER DE ESCALA — Estilo para el selector de resolución
+   =========================================================================== */
+
+.slider-escala .track {
+    -fx-background-color: #2a2a2a;
+    -fx-border-color: #404040;
+    -fx-border-width: 1px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-pref-height: 6px;
+}
+
+.slider-escala .thumb {
+    -fx-background-color: linear-gradient(to bottom, #d4af37 0%, #b8984e 100%);
+    -fx-border-color: #c9a961;
+    -fx-border-width: 1px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-cursor: hand;
+}
+
+.slider-escala .thumb:hover {
+    -fx-background-color: linear-gradient(to bottom, #e0c05a 0%, #c9a961 100%);
+}
+
+.slider-escala .colored-track {
+    -fx-background-color: #d4af37;
+    -fx-background-radius: 4px;
+}
+
+.slider-escala .tick-mark {
+    -fx-stroke: #555;
+}
+
+.slider-escala .axis-tick-mark {
+    -fx-stroke: #555;
+}
+
+/* Botón secundario para herramientas (Restaurar, Cancelar) */
+.herramienta-btn-secundario {
+    -fx-background-color: transparent;
+    -fx-text-fill: #999;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 8 16;
+    -fx-border-color: #404040;
+    -fx-border-width: 1px;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.herramienta-btn-secundario:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-text-fill: #f5f5f5;
+    -fx-border-color: #666;
 }

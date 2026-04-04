@@ -295,11 +295,13 @@ public class TecladoVirtualSimple {
         // Esto previene que el campo de texto pierda foco al presionar una tecla
         boton.setFocusTraversable(false);
         
+        // CSS class para font-size responsive (base 15px)
+        boton.getStyleClass().add("tutorial-titulo");
+        
         // Estilo base con efecto metálico premium
         String estiloBase = 
             "-fx-background-radius: 8; " +  // Bordes más redondeados
             "-fx-border-radius: 8; " +
-            "-fx-font-size: 15px; " +
             "-fx-font-weight: 600; " +
             "-fx-cursor: hand; ";
         
@@ -346,12 +348,12 @@ public class TecladoVirtualSimple {
                 "-fx-border-width: 1px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 6, 0.4, 0, 3);"));
         } else if ("tecla-especial".equals(styleClass)) {
+            boton.getStyleClass().add("icono-texto-sm");
             boton.setStyle(estiloBase + 
                 "-fx-background-color: rgba(212, 175, 55, 0.05); " +
                 "-fx-text-fill: #d4af37; " +  // Dorado cristal
                 "-fx-border-color: rgba(212, 175, 55, 0.3); " +  // Borde cristal dorado
                 "-fx-border-width: 1px; " +
-                "-fx-font-size: 16px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.08), 6, 0, 0, 0);");
             
@@ -361,7 +363,6 @@ public class TecladoVirtualSimple {
                 "-fx-text-fill: #e0c455; " +
                 "-fx-border-color: rgba(212, 175, 55, 0.55); " +
                 "-fx-border-width: 1.5px; " +
-                "-fx-font-size: 16px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.18), 8, 0, 0, 0);"));
             
@@ -370,7 +371,6 @@ public class TecladoVirtualSimple {
                 "-fx-text-fill: #d4af37; " +
                 "-fx-border-color: rgba(212, 175, 55, 0.3); " +
                 "-fx-border-width: 1px; " +
-                "-fx-font-size: 16px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.08), 6, 0, 0, 0);"));
             
@@ -379,7 +379,6 @@ public class TecladoVirtualSimple {
                 "-fx-text-fill: #f5e6c8; " +
                 "-fx-border-color: rgba(212, 175, 55, 0.65); " +
                 "-fx-border-width: 1.5px; " +
-                "-fx-font-size: 16px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.25), 4, 0, 0, 0); " +
                 "-fx-translate-y: 2;"));
@@ -389,7 +388,6 @@ public class TecladoVirtualSimple {
                 "-fx-text-fill: #d4af37; " +
                 "-fx-border-color: rgba(212, 175, 55, 0.3); " +
                 "-fx-border-width: 1px; " +
-                "-fx-font-size: 16px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.08), 6, 0, 0, 0);"));
         } else if ("tecla-espacio".equals(styleClass)) {
@@ -411,13 +409,13 @@ public class TecladoVirtualSimple {
                 "-fx-border-width: 1px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 6, 0.4, 0, 3);"));
         } else if ("tecla-aceptar".equals(styleClass)) {
+            boton.getStyleClass().add("icono-texto-md");
             boton.setStyle(estiloBase + 
                 "-fx-background-color: rgba(212, 175, 55, 0.1); " +  // Cristal dorado
                 "-fx-text-fill: #d4af37; " +  // Texto dorado
                 "-fx-border-color: rgba(212, 175, 55, 0.5); " +
                 "-fx-border-width: 1.5px; " +
                 "-fx-font-weight: 700; " +
-                "-fx-font-size: 18px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.15), 8, 0, 0, 0);");
             
             boton.setOnMouseEntered(e -> boton.setStyle(estiloBase + 
@@ -426,7 +424,6 @@ public class TecladoVirtualSimple {
                 "-fx-border-color: rgba(212, 175, 55, 0.75); " +
                 "-fx-border-width: 1.5px; " +
                 "-fx-font-weight: 700; " +
-                "-fx-font-size: 18px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.3), 12, 0, 0, 0); " +
                 "-fx-scale-y: 1.03; -fx-scale-x: 1.03;"));
             
@@ -436,7 +433,6 @@ public class TecladoVirtualSimple {
                 "-fx-border-color: rgba(212, 175, 55, 0.5); " +
                 "-fx-border-width: 1.5px; " +
                 "-fx-font-weight: 700; " +
-                "-fx-font-size: 18px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.15), 8, 0, 0, 0);"));
             
             boton.setOnMousePressed(e -> boton.setStyle(estiloBase + 
@@ -445,7 +441,6 @@ public class TecladoVirtualSimple {
                 "-fx-border-color: #d4af37; " +
                 "-fx-border-width: 2px; " +
                 "-fx-font-weight: 700; " +
-                "-fx-font-size: 18px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.35), 4, 0, 0, 0); " +
                 "-fx-translate-y: 2;"));
             
@@ -455,15 +450,14 @@ public class TecladoVirtualSimple {
                 "-fx-border-color: rgba(212, 175, 55, 0.5); " +
                 "-fx-border-width: 1.5px; " +
                 "-fx-font-weight: 700; " +
-                "-fx-font-size: 18px; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.15), 8, 0, 0, 0);"));
         } else if ("tecla-cerrar".equals(styleClass)) {
+            boton.getStyleClass().add("icono-texto-md");
             boton.setStyle(estiloBase + 
                 "-fx-background-color: rgba(212, 175, 55, 0.05); " +
                 "-fx-text-fill: #d4af37; " +  // Dorado cristal para consistencia
                 "-fx-border-color: rgba(212, 175, 55, 0.3); " +
                 "-fx-border-width: 1px; " +
-                "-fx-font-size: 18px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.08), 6, 0, 0, 0);");
             
@@ -472,7 +466,6 @@ public class TecladoVirtualSimple {
                 "-fx-text-fill: #e0c455; " +
                 "-fx-border-color: rgba(212, 175, 55, 0.55); " +
                 "-fx-border-width: 1.5px; " +
-                "-fx-font-size: 18px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.18), 8, 0, 0, 0);"));
             
@@ -481,7 +474,6 @@ public class TecladoVirtualSimple {
                 "-fx-text-fill: #d4af37; " +
                 "-fx-border-color: rgba(212, 175, 55, 0.3); " +
                 "-fx-border-width: 1px; " +
-                "-fx-font-size: 18px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.08), 6, 0, 0, 0);"));
             
@@ -490,7 +482,6 @@ public class TecladoVirtualSimple {
                 "-fx-text-fill: #f5e6c8; " +
                 "-fx-border-color: rgba(212, 175, 55, 0.65); " +
                 "-fx-border-width: 1.5px; " +
-                "-fx-font-size: 18px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.25), 4, 0, 0, 0); " +
                 "-fx-translate-y: 2;"));
@@ -500,7 +491,6 @@ public class TecladoVirtualSimple {
                 "-fx-text-fill: #d4af37; " +
                 "-fx-border-color: rgba(212, 175, 55, 0.3); " +
                 "-fx-border-width: 1px; " +
-                "-fx-font-size: 18px; " +
                 "-fx-font-weight: 700; " +
                 "-fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.08), 6, 0, 0, 0);"));
         }

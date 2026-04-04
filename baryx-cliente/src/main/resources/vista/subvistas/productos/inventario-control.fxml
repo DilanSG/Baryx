@@ -19,8 +19,7 @@
                 <Insets top="8" right="16" bottom="8" left="16"/>
             </padding>
 
-            <Label text="%inventario.titulo" styleClass="productos-titulo"
-                   style="-fx-font-size: 18px;"/>
+            <Label text="%inventario.titulo" styleClass="productos-titulo"/>
 
             <Region HBox.hgrow="ALWAYS"/>
 
@@ -65,9 +64,8 @@
             <Insets bottom="16" left="30"/>
         </padding>
         <VBox alignment="BOTTOM_LEFT" spacing="2">
-            <Label text="%productos.info" style="-fx-text-fill: #ffefbb7b; -fx-font-weight: bold; -fx-font-size: 11px;"/>
-            <Label text="%inventario.info"
-                   style="-fx-text-fill: #ffefbb; -fx-font-size: 13px; -fx-font-style: italic;"/>
+            <Label text="%productos.info" styleClass="info-hint-titulo"/>
+            <Label text="%inventario.info" styleClass="info-hint-descripcion"/>
         </VBox>
     </HBox>
 

@@ -13,12 +13,11 @@
 -->
 <HBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.baryx.cliente.controlador.UpdateBannerController"
+      fx:controller="com.baryx.cliente.controlador.BannerActualizacionController"
       fx:id="bannerRaiz"
       styleClass="update-banner"
       alignment="CENTER_LEFT"
-      spacing="12"
-      StackPane.alignment="TOP_CENTER">
+      spacing="12">
 
     <padding>
         <Insets top="10" right="16" bottom="10" left="16"/>

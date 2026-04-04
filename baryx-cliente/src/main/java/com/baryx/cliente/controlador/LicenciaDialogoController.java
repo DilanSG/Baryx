@@ -3,7 +3,7 @@
  */
 package com.baryx.cliente.controlador;
 
-import com.baryx.cliente.servicio.LicenseServicio;
+import com.baryx.cliente.servicio.LicenciaServicio;
 import com.baryx.cliente.utilidad.IdiomaUtil;
 import javafx.application.HostServices;
 import javafx.application.Platform;
@@ -30,9 +30,9 @@ import org.slf4j.LoggerFactory;
  *   <li><b>ERROR</b>: error, permite continuar con advertencia.</li>
  * </ul>
  */
-public class LicenseDialogController {
+public class LicenciaDialogoController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LicenseDialogController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LicenciaDialogoController.class);
 
     @FXML private StackPane fondoOscuro;
     @FXML private Region iconoEstado;
@@ -46,7 +46,7 @@ public class LicenseDialogController {
     @FXML private Button btnComprar;
     @FXML private Label lblOfflineInfo;
 
-    private LicenseServicio.EstadoLicencia estado;
+    private LicenciaServicio.EstadoLicencia estado;
     private HostServices hostServices;
     private Runnable onCerrar;
 
@@ -54,7 +54,7 @@ public class LicenseDialogController {
     // Inicialización
     // ------------------------------------------------------------------
 
-    public void inicializar(LicenseServicio.ResultadoValidacion resultado,
+    public void inicializar(LicenciaServicio.ResultadoValidacion resultado,
                             HostServices hostServices,
                             Runnable onCerrar) {
         this.estado = resultado.estado();
@@ -64,7 +64,7 @@ public class LicenseDialogController {
         configurarParaEstado(resultado);
     }
 
-    private void configurarParaEstado(LicenseServicio.ResultadoValidacion resultado) {
+    private void configurarParaEstado(LicenciaServicio.ResultadoValidacion resultado) {
         // Ocultar elementos opcionales por defecto
         ocultarElemento(panelIngresarKey);
         ocultarElemento(btnContinuar);
@@ -157,12 +157,14 @@ public class LicenseDialogController {
     private void abrirTienda() {
         if (hostServices != null) {
             try {
-                hostServices.showDocument(LicenseServicio.getUrlTienda());
+                hostServices.showDocument(LicenciaServicio.getUrlTienda());
             } catch (Exception e) {
                 logger.warn("[License] No se pudo abrir navegador: {}", e.getMessage());
             }
         }
     }
+
+    private volatile boolean activandoEnCurso = false;
 
     private void activarConKey() {
         String key = txtLicenseKey.getText().trim();
@@ -174,16 +176,19 @@ public class LicenseDialogController {
             mostrarErrorKey(IdiomaUtil.obtener("ctrl.licencia.dialog.error_formato"));
             return;
         }
+        if (activandoEnCurso) return;
 
+        activandoEnCurso = true;
         btnAccionPrimaria.setDisable(true);
         btnAccionPrimaria.setText(IdiomaUtil.obtener("ctrl.licencia.dialog.validando"));
 
         // Activar en hilo de fondo (requiere internet)
         new Thread(() -> {
-            var servicio = new LicenseServicio();
+            var servicio = new LicenciaServicio();
             var resultado = servicio.activarLicencia(key);
             Platform.runLater(() -> {
-                if (resultado.estado() == LicenseServicio.EstadoLicencia.VALID) {
+                activandoEnCurso = false;
+                if (resultado.estado() == LicenciaServicio.EstadoLicencia.VALID) {
                     logger.info("[License] Activación exitosa: {}", resultado.estado());
                     cerrar();
                 } else {

@@ -8,7 +8,7 @@ package com.baryx.cliente.controlador.configuracion.herramientas;
 
 import com.baryx.cliente.controlador.configuracion.GestorModales;
 import com.baryx.cliente.controlador.configuracion.ModalHerramienta;
-import com.baryx.cliente.servicio.LicenseServicio;
+import com.baryx.cliente.servicio.LicenciaServicio;
 import com.baryx.cliente.utilidad.IdiomaUtil;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -29,7 +29,7 @@ import java.text.MessageFormat;
 /**
  * Handler del modal de Licencia del sistema.
  *
- * Muestra el estado de licencia real consultando LicenseServicio
+ * Muestra el estado de licencia real consultando LicenciaServicio
  * (tipo, plan, validez, equipo vinculado, días restantes)
  * y el texto completo de la licencia de uso del software Baryx.
  */
@@ -48,7 +48,7 @@ public class LicenciaHandler implements ModalHerramienta {
         logger.info("Abriendo información de Licencia");
 
         // Obtener estado real de la licencia (desde caché, no bloquea)
-        var servicio = new LicenseServicio();
+        var servicio = new LicenciaServicio();
         var resultado = servicio.leerCacheLocal();
 
         VBox modal = new VBox(12);
@@ -67,7 +67,8 @@ public class LicenciaHandler implements ModalHerramienta {
             "-fx-border-color: #2a2a2a; -fx-border-radius: 8;");
 
         Label tEstado = new Label(IdiomaUtil.obtener("ctrl.licencia.estado"));
-        tEstado.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        tEstado.getStyleClass().add("estado-texto-bold");
+        tEstado.setStyle("-fx-font-weight: 700; -fx-text-fill: #d4af37;");
 
         GridPane gridLic = new GridPane();
         gridLic.setHgap(16);
@@ -81,7 +82,8 @@ public class LicenciaHandler implements ModalHerramienta {
         // Estado dinámico con color
         String estadoTexto = obtenerEstadoTexto(resultado);
         Label valEstado = gestor.crearInfoValor(estadoTexto);
-        valEstado.setStyle("-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: "
+        valEstado.getStyleClass().add("texto-secundario-sm");
+        valEstado.setStyle("-fx-font-weight: 600; -fx-text-fill: "
             + obtenerColorEstado(resultado) + ";");
         gridLic.addRow(1, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.licencia.estado_label")), valEstado);
 
@@ -96,8 +98,9 @@ public class LicenciaHandler implements ModalHerramienta {
                     IdiomaUtil.obtener("ctrl.licencia.dias_restantes_valor"),
                     resultado.diasRestantes());
             Label valDias = gestor.crearInfoValor(diasTexto);
-            if (resultado.diasRestantes() <= LicenseServicio.DIAS_AVISO_RENOVACION) {
-                valDias.setStyle("-fx-text-fill: #ff6b6b; -fx-font-size: 12px; -fx-font-weight: 600;");
+            if (resultado.diasRestantes() <= LicenciaServicio.DIAS_AVISO_RENOVACION) {
+                valDias.getStyleClass().add("texto-secundario-sm");
+                valDias.setStyle("-fx-text-fill: #ff6b6b; -fx-font-weight: 600;");
             }
             gridLic.addRow(3, gestor.crearInfoLabel(IdiomaUtil.obtener("ctrl.licencia.dias_restantes")), valDias);
         }
@@ -120,7 +123,8 @@ public class LicenciaHandler implements ModalHerramienta {
         // Nota contextual
         String nota = obtenerNotaContextual(resultado);
         Label notaLic = new Label(nota);
-        notaLic.setStyle("-fx-text-fill: #666; -fx-font-size: 10px; -fx-padding: 4 0 0 0;");
+        notaLic.getStyleClass().add("texto-hint");
+        notaLic.setStyle("-fx-text-fill: #666; -fx-padding: 4 0 0 0;");
         notaLic.setWrapText(true);
 
         cardLicencia.getChildren().addAll(tEstado, gridLic, notaLic);
@@ -130,13 +134,15 @@ public class LicenciaHandler implements ModalHerramienta {
 
         // ─── Texto de la licencia ───
         Label tTexto = new Label(IdiomaUtil.obtener("ctrl.licencia.texto"));
-        tTexto.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #999;");
+        tTexto.getStyleClass().add("estado-texto-bold");
+        tTexto.setStyle("-fx-text-fill: #999;");
 
         TextArea areaLicencia = new TextArea(cargarTextoLicencia());
         areaLicencia.setEditable(false);
         areaLicencia.setWrapText(true);
+        areaLicencia.getStyleClass().add("texto-hint-sm");
         areaLicencia.setStyle("-fx-control-inner-background: #0e0e0e; -fx-text-fill: #b0b0b0; " +
-            "-fx-font-size: 11px; -fx-font-family: 'Roboto Mono', 'Consolas', monospace;");
+            "-fx-font-family: 'Roboto Mono', 'Consolas', monospace;");
         areaLicencia.setPrefHeight(200);
         VBox.setVgrow(areaLicencia, Priority.ALWAYS);
 
@@ -147,39 +153,44 @@ public class LicenciaHandler implements ModalHerramienta {
 
     // ==================== SECCIÓN ACTIVAR KEY ====================
 
-    private VBox crearSeccionActivarKey(LicenseServicio servicio, VBox modal) {
+    private VBox crearSeccionActivarKey(LicenciaServicio servicio, VBox modal) {
         VBox seccion = new VBox(8);
         seccion.setPadding(new Insets(8, 0, 0, 0));
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.licencia.activar.titulo"));
-        titulo.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("estado-texto-bold");
+        titulo.setStyle("-fx-font-weight: 700; -fx-text-fill: #d4af37;");
 
         HBox fila = new HBox(8);
         fila.setAlignment(Pos.CENTER_LEFT);
 
         TextField campoKey = new TextField();
         campoKey.setPromptText(IdiomaUtil.obtener("ctrl.licencia.activar.placeholder"));
+        campoKey.getStyleClass().add("texto-secundario-sm");
         campoKey.setStyle("-fx-background-color: #1a1a1a; -fx-text-fill: #f5f5f5; " +
             "-fx-border-color: #404040; -fx-border-radius: 6; -fx-background-radius: 6; " +
-            "-fx-font-size: 12px; -fx-prompt-text-fill: #666;");
+            "-fx-prompt-text-fill: #666;");
         campoKey.setPrefWidth(380);
         campoKey.setMaxWidth(380);
         HBox.setHgrow(campoKey, Priority.ALWAYS);
 
         Button btnActivar = new Button(IdiomaUtil.obtener("ctrl.licencia.activar.boton"));
+        btnActivar.getStyleClass().add("texto-secundario-sm");
         btnActivar.setStyle("-fx-background-color: linear-gradient(to bottom, #d4af37, #b8984e); " +
-            "-fx-text-fill: #0a0a0a; -fx-font-weight: 700; -fx-font-size: 12px; " +
+            "-fx-text-fill: #0a0a0a; -fx-font-weight: 700; " +
             "-fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 6 16;");
         btnActivar.setMinWidth(90);
 
         Label lblError = new Label();
-        lblError.setStyle("-fx-text-fill: #ff6b6b; -fx-font-size: 11px;");
+        lblError.getStyleClass().add("texto-hint-sm");
+        lblError.setStyle("-fx-text-fill: #ff6b6b;");
         lblError.setWrapText(true);
         lblError.setVisible(false);
         lblError.setManaged(false);
 
         Label lblExito = new Label();
-        lblExito.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 11px;");
+        lblExito.getStyleClass().add("texto-hint-sm");
+        lblExito.setStyle("-fx-text-fill: #a8b991;");
         lblExito.setWrapText(true);
         lblExito.setVisible(false);
         lblExito.setManaged(false);
@@ -208,8 +219,8 @@ public class LicenciaHandler implements ModalHerramienta {
                     btnActivar.setDisable(false);
                     btnActivar.setText(IdiomaUtil.obtener("ctrl.licencia.activar.boton"));
 
-                    if (resultado.estado() == LicenseServicio.EstadoLicencia.VALID
-                            || resultado.estado() == LicenseServicio.EstadoLicencia.TRIAL) {
+                    if (resultado.estado() == LicenciaServicio.EstadoLicencia.VALID
+                            || resultado.estado() == LicenciaServicio.EstadoLicencia.TRIAL) {
                         lblExito.setText(IdiomaUtil.obtener("ctrl.licencia.activar.exito"));
                         lblExito.setVisible(true);
                         lblExito.setManaged(true);
@@ -240,9 +251,9 @@ public class LicenciaHandler implements ModalHerramienta {
 
     // ==================== HELPERS PARA PRESENTACIÓN ====================
 
-    private String obtenerTipoPlan(LicenseServicio.ResultadoValidacion resultado) {
-        if (resultado.estado() == LicenseServicio.EstadoLicencia.TRIAL
-                || resultado.estado() == LicenseServicio.EstadoLicencia.TRIAL_EXPIRED) {
+    private String obtenerTipoPlan(LicenciaServicio.ResultadoValidacion resultado) {
+        if (resultado.estado() == LicenciaServicio.EstadoLicencia.TRIAL
+                || resultado.estado() == LicenciaServicio.EstadoLicencia.TRIAL_EXPIRED) {
             return IdiomaUtil.obtener("ctrl.licencia.tipo.trial");
         }
         if (resultado.plan() != null) {
@@ -256,7 +267,7 @@ public class LicenciaHandler implements ModalHerramienta {
         return IdiomaUtil.obtener("ctrl.licencia.tipo.desconocido");
     }
 
-    private String obtenerEstadoTexto(LicenseServicio.ResultadoValidacion resultado) {
+    private String obtenerEstadoTexto(LicenciaServicio.ResultadoValidacion resultado) {
         return switch (resultado.estado()) {
             case VALID -> "\u25CF " + IdiomaUtil.obtener("ctrl.licencia.estado.activa");
             case TRIAL -> "\u25CF " + IdiomaUtil.obtener("ctrl.licencia.estado.trial_activo");
@@ -268,7 +279,7 @@ public class LicenciaHandler implements ModalHerramienta {
         };
     }
 
-    private String obtenerColorEstado(LicenseServicio.ResultadoValidacion resultado) {
+    private String obtenerColorEstado(LicenciaServicio.ResultadoValidacion resultado) {
         return switch (resultado.estado()) {
             case VALID -> "#a8b991";
             case TRIAL -> "#daa520";
@@ -278,7 +289,7 @@ public class LicenciaHandler implements ModalHerramienta {
         };
     }
 
-    private String obtenerValidaHasta(LicenseServicio.ResultadoValidacion resultado) {
+    private String obtenerValidaHasta(LicenciaServicio.ResultadoValidacion resultado) {
         if (resultado.expira() != null && !resultado.expira().isBlank()) {
             try {
                 // Intentar formatear fecha ISO
@@ -298,7 +309,7 @@ public class LicenciaHandler implements ModalHerramienta {
         return IdiomaUtil.obtener("ctrl.licencia.valida.no_disponible");
     }
 
-    private String obtenerNotaContextual(LicenseServicio.ResultadoValidacion resultado) {
+    private String obtenerNotaContextual(LicenciaServicio.ResultadoValidacion resultado) {
         return switch (resultado.estado()) {
             case TRIAL -> IdiomaUtil.obtener("ctrl.licencia.nota.trial");
             case TRIAL_EXPIRED -> IdiomaUtil.obtener("ctrl.licencia.nota.trial_expirado");

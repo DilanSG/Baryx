@@ -266,7 +266,7 @@ public class MesaDetalleController {
 
         // Actualizar título de la sección de productos
         lblTituloProductos.setText(Constantes.Mensajes.LABEL_PRODUCTOS + categoria.getNombre().toUpperCase());
-        lblTituloProductos.setStyle("-fx-font-size: 18px; -fx-text-fill: #d4af37; -fx-font-weight: 700;");
+        if (!lblTituloProductos.getStyleClass().contains("modal-titulo-lg")) lblTituloProductos.getStyleClass().add("modal-titulo-lg");
 
         productoServicio.listarPorCategoriaAsync(categoria.getIdCategoria())
                 .thenAccept(productos -> {
@@ -334,20 +334,23 @@ public class MesaDetalleController {
 
         // Código de producto arriba, grande y dorado, centrado
         Label lblCodigo = new Label(producto.getCodigo() != null ? producto.getCodigo() : "");
-        lblCodigo.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 16px; -fx-font-weight: 700; -fx-font-family: 'Roboto';");
+        lblCodigo.getStyleClass().add("pos-celda-texto");
+        lblCodigo.setStyle("-fx-text-fill: #d4af37; -fx-font-weight: 700; -fx-font-family: 'Roboto';");
         lblCodigo.setMaxWidth(Double.MAX_VALUE);
         lblCodigo.setAlignment(Pos.CENTER);
 
         // Nombre del producto debajo del código, centrado
         Label lblNombre = new Label(producto.getNombre().toUpperCase());
-        lblNombre.setStyle("-fx-text-fill: #f5f5f5; -fx-font-size: 12px; -fx-font-weight: 600;");
+        lblNombre.getStyleClass().add("pos-celda-nombre");
+        lblNombre.setStyle("-fx-text-fill: #f5f5f5;");
         lblNombre.setMaxWidth(Double.MAX_VALUE);
         lblNombre.setAlignment(Pos.CENTER);
         lblNombre.setWrapText(true);
 
         // Precio centrado en el medio de la card
         Label lblPrecio = new Label(formatearPesosColombianos(producto.getPrecio()));
-        lblPrecio.setStyle("-fx-text-fill: #f5f5f5; -fx-font-size: 16px; -fx-font-weight: 700;");
+        lblPrecio.getStyleClass().add("pos-celda-precio");
+        lblPrecio.setStyle("-fx-text-fill: #f5f5f5;");
         lblPrecio.setMaxWidth(Double.MAX_VALUE);
         lblPrecio.setAlignment(Pos.CENTER);
         VBox.setVgrow(lblPrecio, Priority.ALWAYS);
@@ -380,7 +383,8 @@ public class MesaDetalleController {
      */
     private void mostrarMensajeSinCategorias() {
         Label mensaje = new Label(Constantes.Mensajes.LABEL_NO_HAY_CATEGORIAS);
-        mensaje.setStyle("-fx-font-size: 18px; -fx-text-fill: #b0b0b0;");
+        mensaje.getStyleClass().add("modal-titulo-lg");
+        mensaje.setStyle("-fx-text-fill: #b0b0b0;");
         gridCategorias.add(mensaje, 0, 0);
     }
 
@@ -389,7 +393,8 @@ public class MesaDetalleController {
      */
     private void mostrarMensajeSinProductos() {
         Label mensaje = new Label(Constantes.Mensajes.LABEL_NO_HAY_PRODUCTOS);
-        mensaje.setStyle("-fx-font-size: 16px; -fx-text-fill: #b0b0b0; -fx-font-style: italic;");
+        mensaje.getStyleClass().add("pos-total-label");
+        mensaje.setStyle("-fx-text-fill: #b0b0b0; -fx-font-style: italic;");
         gridProductos.add(mensaje, 0, 0);
     }
 
@@ -743,13 +748,15 @@ public class MesaDetalleController {
         lblNumero.setPrefWidth(35);
         lblNumero.setMinWidth(35);
         lblNumero.setMaxWidth(35);
-        lblNumero.setStyle("-fx-text-fill: #b0b0b0; -fx-font-size: 13px;");
+        lblNumero.getStyleClass().add("pos-celda-nombre");
+        lblNumero.setStyle("-fx-text-fill: #b0b0b0;");
 
         // Columna Producto - se expande
         Label lblNombre = new Label(nombre);
         HBox.setHgrow(lblNombre, javafx.scene.layout.Priority.ALWAYS);
         lblNombre.setMaxWidth(Double.MAX_VALUE);
-        lblNombre.setStyle("-fx-text-fill: #f5f5f5; -fx-font-size: 13px; -fx-text-overrun: ellipsis;");
+        lblNombre.getStyleClass().add("pos-celda-nombre");
+        lblNombre.setStyle("-fx-text-fill: #f5f5f5; -fx-text-overrun: ellipsis;");
 
         // Columna Cantidad - 50px centrado
         Label lblCantidad = new Label(String.valueOf(cantidad));
@@ -757,7 +764,7 @@ public class MesaDetalleController {
         lblCantidad.setMinWidth(50);
         lblCantidad.setMaxWidth(50);
         lblCantidad.setAlignment(Pos.CENTER);
-        lblCantidad.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        lblCantidad.getStyleClass().add("pos-celda-precio");
 
         // Columna Precio - 90px derecha
         Label lblPrecio = new Label(formatearPesosColombianos(precio));
@@ -765,7 +772,7 @@ public class MesaDetalleController {
         lblPrecio.setMinWidth(90);
         lblPrecio.setMaxWidth(90);
         lblPrecio.setAlignment(Pos.CENTER_RIGHT);
-        lblPrecio.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        lblPrecio.getStyleClass().add("pos-celda-precio");
 
         row.getChildren().addAll(lblNumero, lblNombre, lblCantidad, lblPrecio);
 
@@ -953,11 +960,11 @@ public class MesaDetalleController {
         contenido.setAlignment(Pos.CENTER);
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.confirmar.eliminacion"));
-        titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("modal-titulo-lg");
 
         Label mensaje = new Label(IdiomaUtil.obtener("ctrl.confirmar.eliminar_linea"));
         mensaje.setWrapText(true);
-        mensaje.setStyle("-fx-font-size: 14px; -fx-text-fill: #f5f5f5; -fx-text-alignment: center;");
+        mensaje.getStyleClass().add("modal-mensaje");
 
         HBox botones = new HBox(12);
         botones.setAlignment(Pos.CENTER);
@@ -1248,11 +1255,12 @@ public class MesaDetalleController {
         contenido.setAlignment(Pos.CENTER);
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.confirmar.anular_mesa"));
-        titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ffaa00;");
+        titulo.getStyleClass().add("modal-titulo-lg");
+        titulo.setStyle("-fx-text-fill: #ffaa00;");
 
         Label mensaje = new Label(IdiomaUtil.obtener("ctrl.confirmar.anular_mesa.msg"));
         mensaje.setWrapText(true);
-        mensaje.setStyle("-fx-font-size: 14px; -fx-text-fill: #f5f5f5; -fx-text-alignment: center;");
+        mensaje.getStyleClass().add("modal-mensaje");
 
         HBox botones = new HBox(12);
         botones.setAlignment(Pos.CENTER);
@@ -1652,7 +1660,8 @@ public class MesaDetalleController {
         cardOpciones.setPadding(new Insets(40, 50, 40, 50));
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.opciones.titulo"));
-        titulo.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 24px; -fx-font-weight: 700;");
+        titulo.getStyleClass().add("modal-titulo-lg");
+        titulo.setStyle("-fx-text-fill: #d4af37;");
 
         Separator sep = new Separator();
         sep.setMaxWidth(200);
@@ -1727,7 +1736,8 @@ public class MesaDetalleController {
         titleBar.setAlignment(Pos.CENTER_LEFT);
         titleBar.setPadding(new Insets(20, 24, 15, 24));
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.ventas.titulo"));
-        titulo.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 22px; -fx-font-weight: 700;");
+        titulo.getStyleClass().add("modal-titulo-lg");
+        titulo.setStyle("-fx-text-fill: #d4af37;");
         titleBar.getChildren().add(titulo);
 
         Separator sepTitulo = new Separator();
@@ -1750,13 +1760,13 @@ public class MesaDetalleController {
         headerIzq.setStyle("-fx-background-color: #222222; -fx-border-color: transparent transparent rgba(212,175,55,0.3) transparent; -fx-border-width: 0 0 1 0;");
 
         Label colFactura = new Label(IdiomaUtil.obtener("ctrl.ventas.col.num_factura"));
-        colFactura.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        colFactura.getStyleClass().add("pos-celda-precio");
         colFactura.setPrefWidth(80);
         Label colHora = new Label(IdiomaUtil.obtener("ctrl.ventas.col.hora"));
-        colHora.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        colHora.getStyleClass().add("pos-celda-precio");
         colHora.setPrefWidth(80);
         Label colTotal = new Label(IdiomaUtil.obtener("ctrl.ventas.col.total_pagado"));
-        colTotal.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        colTotal.getStyleClass().add("pos-celda-precio");
         colTotal.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(colTotal, Priority.ALWAYS);
         colTotal.setMaxWidth(Double.MAX_VALUE);
@@ -1783,7 +1793,8 @@ public class MesaDetalleController {
         panelDer.setStyle("-fx-background-color: #121212;");
 
         Label tituloProd = new Label(IdiomaUtil.obtener("ctrl.ventas.productos_titulo"));
-        tituloProd.setStyle("-fx-text-fill: #b0b0b0; -fx-font-size: 16px; -fx-font-weight: 600;");
+        tituloProd.getStyleClass().add("pos-total-label");
+        tituloProd.setStyle("-fx-text-fill: #b0b0b0;");
         tituloProd.setPadding(new Insets(10, 20, 10, 20));
 
         contenedorProductosVenta = new VBox(0);
@@ -1863,7 +1874,8 @@ public class MesaDetalleController {
 
         if (ventasCargadas == null || ventasCargadas.isEmpty()) {
             Label sinVentas = new Label(IdiomaUtil.obtener("ctrl.ventas.sin_ventas"));
-            sinVentas.setStyle("-fx-text-fill: #999999; -fx-font-size: 14px;");
+            sinVentas.getStyleClass().add("modal-mensaje");
+            sinVentas.setStyle("-fx-text-fill: #999999;");
             sinVentas.setPadding(new Insets(20));
             listaVentasContenedor.getChildren().add(sinVentas);
             return;
@@ -1887,17 +1899,20 @@ public class MesaDetalleController {
         fila.setStyle(estiloNormal);
 
         Label lblFactura = new Label("#" + venta.getIdVenta());
-        lblFactura.setStyle("-fx-text-fill: #f5f5f5; -fx-font-size: 14px; -fx-font-weight: 600;");
+        lblFactura.getStyleClass().add("modal-mensaje");
+        lblFactura.setStyle("-fx-text-fill: #f5f5f5; -fx-font-weight: 600;");
         lblFactura.setPrefWidth(80);
 
         String hora = venta.getFechaCreacion() != null
             ? venta.getFechaCreacion().format(formatoHora) : "--:--";
         Label lblHora = new Label(hora);
-        lblHora.setStyle("-fx-text-fill: #b0b0b0; -fx-font-size: 14px;");
+        lblHora.getStyleClass().add("modal-mensaje");
+        lblHora.setStyle("-fx-text-fill: #b0b0b0;");
         lblHora.setPrefWidth(80);
 
         Label lblTotal = new Label(formatearPesosColombianos(venta.getTotal()));
-        lblTotal.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 14px; -fx-font-weight: 600;");
+        lblTotal.getStyleClass().add("modal-mensaje");
+        lblTotal.setStyle("-fx-text-fill: #d4af37; -fx-font-weight: 600;");
         lblTotal.setAlignment(Pos.CENTER_RIGHT);
         HBox.setHgrow(lblTotal, Priority.ALWAYS);
         lblTotal.setMaxWidth(Double.MAX_VALUE);
@@ -1928,7 +1943,8 @@ public class MesaDetalleController {
 
         if (venta.getLineas() == null || venta.getLineas().isEmpty()) {
             Label sinProd = new Label(IdiomaUtil.obtener("ctrl.ventas.sin_productos"));
-            sinProd.setStyle("-fx-text-fill: #999999; -fx-font-size: 14px;");
+            sinProd.getStyleClass().add("modal-mensaje");
+            sinProd.setStyle("-fx-text-fill: #999999;");
             sinProd.setPadding(new Insets(20));
             contenedorProductosVenta.getChildren().add(sinProd);
             return;
@@ -1940,19 +1956,19 @@ public class MesaDetalleController {
         header.setStyle("-fx-background-color: #222222; -fx-border-color: transparent transparent rgba(212,175,55,0.3) transparent; -fx-border-width: 0 0 1 0;");
 
         Label hProd = new Label(IdiomaUtil.obtener("ctrl.ventas.col.producto"));
-        hProd.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        hProd.getStyleClass().add("pos-celda-precio");
         HBox.setHgrow(hProd, Priority.ALWAYS);
         hProd.setMaxWidth(Double.MAX_VALUE);
         Label hCant = new Label(IdiomaUtil.obtener("ctrl.ventas.col.cantidad"));
-        hCant.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        hCant.getStyleClass().add("pos-celda-precio");
         hCant.setPrefWidth(60);
         hCant.setAlignment(Pos.CENTER);
         Label hPrecio = new Label(IdiomaUtil.obtener("ctrl.ventas.col.precio_unitario"));
-        hPrecio.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        hPrecio.getStyleClass().add("pos-celda-precio");
         hPrecio.setPrefWidth(110);
         hPrecio.setAlignment(Pos.CENTER_RIGHT);
         Label hSub = new Label(IdiomaUtil.obtener("ctrl.ventas.col.subtotal_linea"));
-        hSub.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        hSub.getStyleClass().add("pos-celda-precio");
         hSub.setPrefWidth(110);
         hSub.setAlignment(Pos.CENTER_RIGHT);
         header.getChildren().addAll(hProd, hCant, hPrecio, hSub);
@@ -1966,23 +1982,27 @@ public class MesaDetalleController {
             row.setStyle("-fx-background-color: " + (alternar ? "#1a1a1a" : "#161616") + ";");
 
             Label prod = new Label(linea.getNombreProducto());
-            prod.setStyle("-fx-text-fill: #f5f5f5; -fx-font-size: 14px;");
+            prod.getStyleClass().add("modal-mensaje");
+            prod.setStyle("-fx-text-fill: #f5f5f5;");
             HBox.setHgrow(prod, Priority.ALWAYS);
             prod.setMaxWidth(Double.MAX_VALUE);
 
             Label cant = new Label(String.valueOf(linea.getCantidad()));
-            cant.setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 14px;");
+            cant.getStyleClass().add("modal-mensaje");
+            cant.setStyle("-fx-text-fill: #e8e8e8;");
             cant.setPrefWidth(60);
             cant.setAlignment(Pos.CENTER);
 
             Label precio = new Label(formatearPesosColombianos(linea.getPrecioUnitario()));
-            precio.setStyle("-fx-text-fill: #b0b0b0; -fx-font-size: 14px;");
+            precio.getStyleClass().add("modal-mensaje");
+            precio.setStyle("-fx-text-fill: #b0b0b0;");
             precio.setPrefWidth(110);
             precio.setAlignment(Pos.CENTER_RIGHT);
 
             BigDecimal subtotalLinea = linea.getPrecioUnitario().multiply(BigDecimal.valueOf(linea.getCantidad()));
             Label sub = new Label(formatearPesosColombianos(subtotalLinea));
-            sub.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 14px; -fx-font-weight: 600;");
+            sub.getStyleClass().add("modal-mensaje");
+            sub.setStyle("-fx-text-fill: #d4af37; -fx-font-weight: 600;");
             sub.setPrefWidth(110);
             sub.setAlignment(Pos.CENTER_RIGHT);
 
@@ -2031,9 +2051,11 @@ public class MesaDetalleController {
         HBox par = new HBox(8);
         par.setAlignment(Pos.CENTER_LEFT);
         Label lbl = new Label(etiqueta + ":");
-        lbl.setStyle("-fx-text-fill: #999999; -fx-font-size: 13px;");
+        lbl.getStyleClass().add("pos-celda-nombre");
+        lbl.setStyle("-fx-text-fill: #999999;");
         Label val = new Label(valor != null ? valor : "-");
-        val.setStyle("-fx-text-fill: #f5f5f5; -fx-font-size: 13px; -fx-font-weight: 600;");
+        val.getStyleClass().add("pos-celda-nombre");
+        val.setStyle("-fx-text-fill: #f5f5f5; -fx-font-weight: 600;");
         par.getChildren().addAll(lbl, val);
         return par;
     }
@@ -2042,9 +2064,11 @@ public class MesaDetalleController {
         HBox par = new HBox(8);
         par.setAlignment(Pos.CENTER_LEFT);
         Label lbl = new Label(etiqueta + ":");
-        lbl.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 14px; -fx-font-weight: 600;");
+        lbl.getStyleClass().add("pos-celda-precio");
+        lbl.setStyle("-fx-text-fill: #d4af37;");
         Label val = new Label(valor != null ? valor : "-");
-        val.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 16px; -fx-font-weight: 700;");
+        val.getStyleClass().add("pos-total-label");
+        val.setStyle("-fx-text-fill: #d4af37;");
         par.getChildren().addAll(lbl, val);
         return par;
     }
@@ -2353,7 +2377,8 @@ public class MesaDetalleController {
         
         // COLUMNA 0: Nombre del método de pago
         Label lblMetodo = new Label(metodoPago);
-        lblMetodo.setStyle("-fx-font-size: 16px; -fx-text-fill: #f5f5f5; -fx-font-weight: 600; -fx-alignment: center;");
+        lblMetodo.getStyleClass().add("pos-total-label");
+        lblMetodo.setStyle("-fx-text-fill: #f5f5f5;");
         lblMetodo.setMaxWidth(Double.MAX_VALUE);
         lblMetodo.setAlignment(javafx.geometry.Pos.CENTER);
         VBox celdaMetodo = new VBox(lblMetodo);
@@ -2431,8 +2456,8 @@ public class MesaDetalleController {
         
         // COLUMNA 5: Botón borrar método de pago
         Button btnBorrar = new Button(IdiomaUtil.obtener("ctrl.btn.borrar"));
-        btnBorrar.setStyle("-fx-font-size: 14px; -fx-font-weight: 600;");
-        btnBorrar.getStyleClass().add("boton-secundario");
+        btnBorrar.getStyleClass().addAll("boton-secundario", "modal-mensaje");
+        btnBorrar.setStyle("-fx-font-weight: 600;");
         btnBorrar.setPrefWidth(140);
         btnBorrar.setPrefHeight(50);
         btnBorrar.setOnAction(event -> eliminarPago(indicePago));
@@ -2617,13 +2642,15 @@ public class MesaDetalleController {
 
             // Código arriba en dorado
             Label lblCodigo = new Label(metodo.getCodigo() != null ? metodo.getCodigo() : "");
-            lblCodigo.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 16px; -fx-font-weight: 700;");
+            lblCodigo.getStyleClass().add("pos-celda-texto");
+            lblCodigo.setStyle("-fx-text-fill: #d4af37; -fx-font-weight: 700;");
             lblCodigo.setMaxWidth(Double.MAX_VALUE);
             lblCodigo.setAlignment(Pos.CENTER);
 
             // Nombre debajo
             Label lblNombre = new Label(metodo.getNombre());
-            lblNombre.setStyle("-fx-text-fill: #f5f5f5; -fx-font-size: 13px; -fx-font-weight: 600;");
+            lblNombre.getStyleClass().add("pos-celda-nombre");
+            lblNombre.setStyle("-fx-text-fill: #f5f5f5;");
             lblNombre.setMaxWidth(Double.MAX_VALUE);
             lblNombre.setAlignment(Pos.CENTER);
 
@@ -2950,7 +2977,8 @@ public class MesaDetalleController {
         contenedor.setAlignment(Pos.CENTER);
         
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.pago.seleccionar_propina"));
-        titulo.setStyle("-fx-font-size: 22px; -fx-text-fill: #d4af37; -fx-font-weight: 700;");
+        titulo.getStyleClass().add("modal-titulo-lg");
+        titulo.setStyle("-fx-text-fill: #d4af37;");
         
         VBox botonesContainer = new VBox(10);
         botonesContainer.setAlignment(Pos.CENTER);

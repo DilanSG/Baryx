@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.baryx</groupId>
         <artifactId>baryx</artifactId>
-        <version>1.0.0</version>
+        <version>0.0.1</version>
     </parent>
     
     <artifactId>baryx-cliente</artifactId>
@@ -154,7 +154,7 @@
     <build>
         <!-- ============================================================
              Resource filtering: reemplaza ${project.version} en
-             app.properties al compilar con mvn package.
+             app.properties e i18n al compilar.
              license.properties se excluye del filtrado para evitar
              que Maven modifique su contenido (solo lo copia tal cual).
              ============================================================ -->
@@ -168,6 +168,9 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>app.properties</include>
+                    <include>i18n/mensajes.properties</include>
+                    <include>i18n/mensajes_en.properties</include>
+                    <include>i18n/mensajes_pt.properties</include>
                 </includes>
             </resource>
         </resources>
@@ -199,8 +202,8 @@
                         <option>-Xmx1024m</option>
                         <option>-XX:+UseG1GC</option>
                         <option>-XX:MaxGCPauseMillis=50</option>
-                        <!-- URL del backend web de Baryx (para dev local) -->
-                        <option>-Dbaryx.api.url=http://localhost:4000</option>
+                        <!-- URL del backend web de Baryx (descomentar para dev local) -->
+                        <!-- <option>-Dbaryx.api.url=http://localhost:4000</option> -->
                     </options>
                 </configuration>
             </plugin>

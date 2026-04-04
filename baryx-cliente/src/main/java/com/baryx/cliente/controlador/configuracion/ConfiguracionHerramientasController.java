@@ -105,6 +105,9 @@ public class ConfiguracionHerramientasController implements com.baryx.cliente.co
     /** Handler: Conexión LAN/Nube */
     private ModalHerramienta conexionRedHandler;
 
+    /** Handler: Pantalla y Resolución */
+    private ModalHerramienta pantallaResolucionHandler;
+
     // ==================== INICIALIZACIÓN ====================
 
     /**
@@ -130,6 +133,7 @@ public class ConfiguracionHerramientasController implements com.baryx.cliente.co
         idiomaHandler = new IdiomaHandler(gestorModales);
         respaldoDatosHandler = new RespaldoDatosHandler(gestorModales);
         conexionRedHandler = new ConexionRedHandler(gestorModales);
+        pantallaResolucionHandler = new PantallaResolucionHandler(gestorModales);
 
         cargarTodasLasTiles();
     }
@@ -155,6 +159,9 @@ public class ConfiguracionHerramientasController implements com.baryx.cliente.co
             crearTile("icono-cfg-graficos", IdiomaUtil.obtener("ctrl.config.tiles.graficos"),
                 IdiomaUtil.obtener("ctrl.config.tiles.graficos_desc"),
                 EstadoTile.DISPONIBLE, graficosHandler::abrir),
+            crearTile("icono-cfg-graficos", IdiomaUtil.obtener("ctrl.resolucion.titulo"),
+                IdiomaUtil.obtener("ctrl.resolucion.tile_desc"),
+                EstadoTile.DISPONIBLE, pantallaResolucionHandler::abrir),
             crearTile("icono-cfg-idioma", IdiomaUtil.obtener("ctrl.config.tiles.idioma"),
                 IdiomaUtil.obtener("ctrl.config.tiles.idioma_desc"),
                 EstadoTile.DISPONIBLE, idiomaHandler::abrir),

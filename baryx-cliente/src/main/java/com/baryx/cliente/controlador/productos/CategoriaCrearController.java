@@ -169,12 +169,12 @@ public class CategoriaCrearController implements com.baryx.cliente.controlador.S
         
         // Estilo diferente para la categoría nueva
         if (categoria == categoriaPrevisualizacion) {
-             card.getStyleClass().add("card-categoria-producto-nueva"); 
+             card.getStyleClass().addAll("card-categoria-producto-nueva", "texto-hint-sm"); 
              // Ajustar tamaño para grid compacto
-             card.setStyle("-fx-pref-width: 160; -fx-pref-height: 60; -fx-font-size: 11px; -fx-cursor: move;");
+             card.setStyle("-fx-pref-width: 160; -fx-pref-height: 60; -fx-cursor: move;");
         } else {
-             card.getStyleClass().add("card-categoria-producto");
-             card.setStyle("-fx-pref-width: 160; -fx-pref-height: 60; -fx-font-size: 11px; -fx-cursor: move;");
+             card.getStyleClass().addAll("card-categoria-producto", "texto-hint-sm");
+             card.setStyle("-fx-pref-width: 160; -fx-pref-height: 60; -fx-cursor: move;");
         }
         
         card.setWrapText(true);

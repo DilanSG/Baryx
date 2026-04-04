@@ -30,7 +30,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/sync")
 @RequiredArgsConstructor
-public class SyncControlador {
+public class SincronizacionController {
 
     private final SincronizacionNubeServicio sincronizacionServicio;
 

@@ -6,9 +6,10 @@ package com.baryx.cliente;
 
 import com.baryx.cliente.configuracion.ConfiguracionCliente;
 import com.baryx.cliente.controlador.ShellController;
-import com.baryx.cliente.servicio.LicenseServicio;
+import com.baryx.cliente.servicio.LicenciaServicio;
 import com.baryx.cliente.servicio.LogCriticoServicio;
-import com.baryx.cliente.servicio.UpdateCheckServicio;
+import com.baryx.cliente.servicio.VerificacionActualizacionServicio;
+import com.baryx.cliente.utilidad.DetectorPantalla;
 import com.baryx.cliente.utilidad.IdiomaUtil;
 import com.baryx.cliente.utilidad.NavegacionUtil;
 import com.baryx.cliente.utilidad.ServidorEmbebido;
@@ -33,6 +34,9 @@ import org.slf4j.LoggerFactory;
 public class BaryxClienteApplication extends Application {
 
     private static final Logger logger = LoggerFactory.getLogger(BaryxClienteApplication.class);
+
+    /** Detector y gestor de resolución de pantalla (disponible para la UI de configuración) */
+    private static DetectorPantalla detectorPantalla;
 
     @Override
     public void start(Stage escenarioPrincipal) throws Exception {
@@ -186,8 +190,8 @@ public class BaryxClienteApplication extends Application {
         // Hilo de fondo separado para no bloquear JavaFX
         Thread bgThread = new Thread(() -> {
             logger.info("[Boot] Verificando licencia...");
-            var licenseServicio = new LicenseServicio();
-            var resultadoLicencia = licenseServicio.cargarYValidar();
+            var licenciaServicio = new LicenciaServicio();
+            var resultadoLicencia = licenciaServicio.cargarYValidar();
             logger.info("[Boot] Estado de licencia: {} | Días restantes: {}",
                     resultadoLicencia.estado(), resultadoLicencia.diasRestantes());
 
@@ -200,9 +204,9 @@ public class BaryxClienteApplication extends Application {
             // Verificar si necesita aviso de renovación (≤10 días)
             boolean necesitaAvisoRenovacion = !licenciaProblematica
                     && resultadoLicencia.diasRestantes() >= 0
-                    && resultadoLicencia.diasRestantes() <= LicenseServicio.DIAS_AVISO_RENOVACION
-                    && (resultadoLicencia.estado() == LicenseServicio.EstadoLicencia.VALID
-                        || resultadoLicencia.estado() == LicenseServicio.EstadoLicencia.TRIAL);
+                    && resultadoLicencia.diasRestantes() <= LicenciaServicio.DIAS_AVISO_RENOVACION
+                    && (resultadoLicencia.estado() == LicenciaServicio.EstadoLicencia.VALID
+                        || resultadoLicencia.estado() == LicenciaServicio.EstadoLicencia.TRIAL);
 
             Platform.runLater(() -> {
                 ShellController shell = ShellController.getInstancia();
@@ -213,14 +217,14 @@ public class BaryxClienteApplication extends Application {
                 } else if (necesitaAvisoRenovacion) {
                     // Mostrar aviso de renovación no-bloqueante
                     shell.mostrarBannerRenovacion(resultadoLicencia.diasRestantes(), getHostServices());
-                } else if (resultadoLicencia.estado() == LicenseServicio.EstadoLicencia.OFFLINE) {
+                } else if (resultadoLicencia.estado() == LicenciaServicio.EstadoLicencia.OFFLINE) {
                     logger.info("[License] Modo offline activo. Razón: {}", resultadoLicencia.mensaje());
                 }
             });
 
             // Verificar actualizaciones (siempre, independiente del estado de licencia)
             logger.info("[Boot] Verificando actualizaciones...");
-            var updateServicio = new UpdateCheckServicio();
+            var updateServicio = new VerificacionActualizacionServicio();
             updateServicio.verificarActualizacion().ifPresent(updateInfo ->
                 Platform.runLater(() -> {
                     ShellController shell = ShellController.getInstancia();
@@ -235,10 +239,6 @@ public class BaryxClienteApplication extends Application {
         bgThread.start();
     }
 
-    // Resolución de diseño base de la aplicación
-    private static final double ANCHO_DISENO = 1920.0;
-    private static final double ALTO_DISENO = 1080.0;
-
     // Carga el shell raíz de la aplicación (una sola Scene para toda la vida de la app)
     // y después carga la vista de login como primera subvista dentro del shell.
     private void cargarLoginPrincipal(Stage escenarioPrincipal) throws Exception {
@@ -246,22 +246,21 @@ public class BaryxClienteApplication extends Application {
         cargador.setResources(IdiomaUtil.obtenerBundle());
         Parent raiz = cargador.load();
 
-        // El shell se renderiza a la resolución de diseño (1920x1080) y se escala
-        // para llenar completamente la pantalla real, adaptando cada eje de forma independiente
-        if (raiz instanceof javafx.scene.layout.StackPane contenedorShell) {
-            contenedorShell.setPrefWidth(ANCHO_DISENO);
-            contenedorShell.setPrefHeight(ALTO_DISENO);
-            contenedorShell.setMinWidth(ANCHO_DISENO);
-            contenedorShell.setMinHeight(ALTO_DISENO);
-            contenedorShell.setMaxWidth(ANCHO_DISENO);
-            contenedorShell.setMaxHeight(ALTO_DISENO);
+        // Detectar pantalla y seleccionar perfil de resolución óptimo
+        detectorPantalla = new DetectorPantalla();
+        detectorPantalla.detectarYSeleccionar();
+
+        // El shell se dimensiona según el perfil detectado (no siempre 1920x1080)
+        javafx.scene.layout.StackPane contenedorShell = null;
+        if (raiz instanceof javafx.scene.layout.StackPane sp) {
+            contenedorShell = sp;
         }
 
         // Group envuelve al shell para que el Scene no interfiera con su layout interno
         javafx.scene.Group grupo = new javafx.scene.Group(raiz);
         javafx.scene.layout.StackPane contenedorEscalado = new javafx.scene.layout.StackPane(grupo);
         contenedorEscalado.setStyle("-fx-background-color: #0a0a0a;");
-        // Centrar el contenido para distribuir barras simétricamente en ratios no-16:9
+        // Centrar el contenido para distribuir barras simétricamente en ratios no nativos
         javafx.scene.layout.StackPane.setAlignment(grupo, javafx.geometry.Pos.CENTER);
 
         Scene escena = new Scene(contenedorEscalado);
@@ -287,83 +286,19 @@ public class BaryxClienteApplication extends Application {
         
         escenarioPrincipal.show();
 
-        // 3. Escalado uniforme: la UI mantiene proporciones y se adapta a cualquier resolución
-        aplicarEscalado(raiz, escena);
-
-        // 4. Clases CSS de resolución: permiten overrides por breakpoint sin tocar estilos base
-        aplicarClaseResolucion(contenedorEscalado, escena);
+        // 3. Aplicar perfil de resolución: dimensiones del shell, escalado, clases CSS, font-size
+        if (contenedorShell != null) {
+            detectorPantalla.aplicar(contenedorShell, contenedorEscalado, escena);
+        }
 
         // Cargar login dentro del shell (reemplaza el splash)
         com.baryx.cliente.controlador.ShellController.getInstancia()
                 .cargarVista("/vista/login-pin.fxml");
     }
 
-    // Tolerancia máxima de estiramiento por eje (8% = imperceptible, evita barras negras grandes)
-    private static final double TOLERANCIA_ESCALADO = 0.08;
-
-    /**
-     * Escala la UI diseñada en 1920x1080 para adaptarse a la pantalla real.
-     * Usa escalado uniforme (mismo factor para ambos ejes) con tolerancia del 8%
-     * para reducir barras negras sin distorsionar elementos visiblemente.
-     * En ratios 16:9 el resultado es idéntico al escalado independiente.
-     */
-    private void aplicarEscalado(Parent raiz, Scene escena) {
-        javafx.scene.transform.Scale escala = new javafx.scene.transform.Scale(1, 1);
-        raiz.getTransforms().add(escala);
-
-        Runnable recalcularEscala = () -> {
-            double anchoReal = escena.getWidth();
-            double altoReal = escena.getHeight();
-            if (anchoReal <= 0 || altoReal <= 0) return;
-
-            double factorX = anchoReal / ANCHO_DISENO;
-            double factorY = altoReal / ALTO_DISENO;
-            double factorBase = Math.min(factorX, factorY);
-
-            // Permitir leve stretch (hasta TOLERANCIA_ESCALADO) para reducir barras negras
-            escala.setX(Math.min(factorX, factorBase * (1 + TOLERANCIA_ESCALADO)));
-            escala.setY(Math.min(factorY, factorBase * (1 + TOLERANCIA_ESCALADO)));
-        };
-
-        escena.widthProperty().addListener((obs, old, nuevo) -> recalcularEscala.run());
-        escena.heightProperty().addListener((obs, old, nuevo) -> recalcularEscala.run());
-
-        // Aplicar escalado inicial
-        Platform.runLater(recalcularEscala);
-    }
-
-    /**
-     * Agrega clases CSS al contenedor según la resolución real de la pantalla.
-     * Permite overrides CSS por breakpoint sin modificar los estilos base.
-     * Clases de ancho: res-4k, res-qhd, res-fhd, res-hd, res-tablet, res-small.
-     * Clases de ratio: ratio-wide (16:9+), ratio-standard (16:10), ratio-classic (4:3, 5:4).
-     */
-    private void aplicarClaseResolucion(javafx.scene.layout.StackPane contenedor, Scene escena) {
-        Runnable actualizar = () -> {
-            double ancho = escena.getWidth();
-            double alto = escena.getHeight();
-            if (ancho <= 0 || alto <= 0) return;
-
-            contenedor.getStyleClass().removeIf(c -> c.startsWith("res-") || c.startsWith("ratio-"));
-
-            // Clase por ancho de pantalla
-            if (ancho >= 3840)      contenedor.getStyleClass().add("res-4k");
-            else if (ancho >= 2560) contenedor.getStyleClass().add("res-qhd");
-            else if (ancho >= 1920) contenedor.getStyleClass().add("res-fhd");
-            else if (ancho >= 1366) contenedor.getStyleClass().add("res-hd");
-            else if (ancho >= 1024) contenedor.getStyleClass().add("res-tablet");
-            else                    contenedor.getStyleClass().add("res-small");
-
-            // Clase por ratio de aspecto
-            double ratio = ancho / alto;
-            if (ratio >= 1.7)       contenedor.getStyleClass().add("ratio-wide");
-            else if (ratio >= 1.5)  contenedor.getStyleClass().add("ratio-standard");
-            else                    contenedor.getStyleClass().add("ratio-classic");
-        };
-
-        escena.widthProperty().addListener((obs, old, nuevo) -> actualizar.run());
-        escena.heightProperty().addListener((obs, old, nuevo) -> actualizar.run());
-        Platform.runLater(actualizar);
+    /** Obtiene el detector de pantalla para acceso desde la UI de configuración */
+    public static DetectorPantalla getDetectorPantalla() {
+        return detectorPantalla;
     }
 
     @Override

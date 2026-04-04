@@ -281,7 +281,7 @@ public class MonitorConexion {
 
         // Tooltip con info detallada (incluye ms para referencia al hacer hover)
         Tooltip tooltip = new Tooltip(construirTextoTooltip());
-        tooltip.setStyle("-fx-font-size: 12px;");
+        tooltip.getStyleClass().add("texto-secundario-sm");
         Tooltip.install(circulo, tooltip);
 
         HBox contenedor = new HBox(8);
@@ -290,15 +290,14 @@ public class MonitorConexion {
 
         if (mostrarTexto) {
             Label labelEstado = new Label(textoEstadoProperty.get());
-            labelEstado.setStyle("-fx-text-fill: " + estadoProperty.get().getColor() + 
-                                "; -fx-font-size: 12px;");
+            labelEstado.getStyleClass().add("texto-secundario-sm");
+            labelEstado.setStyle("-fx-text-fill: " + estadoProperty.get().getColor() + ";");
 
             // Bind reactivo: actualizar al cambiar estado
             estadoProperty.addListener((obs, viejo, nuevo) -> {
                 circulo.setStyle("-fx-fill: " + nuevo.getColor() + ";");
                 labelEstado.setText(textoEstadoProperty.get());
-                labelEstado.setStyle("-fx-text-fill: " + nuevo.getColor() + 
-                                    "; -fx-font-size: 12px;");
+                labelEstado.setStyle("-fx-text-fill: " + nuevo.getColor() + ";");
                 tooltip.setText(construirTextoTooltip());
             });
 

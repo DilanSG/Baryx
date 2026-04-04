@@ -696,11 +696,12 @@ public class UsuariosController implements SubvistaController {
         contenido.setAlignment(Pos.CENTER);
         
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.confirmar.eliminacion"));
-        titulo.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #ffaa00;");
+        titulo.getStyleClass().add("icono-texto-md");
+        titulo.setStyle("-fx-font-weight: bold; -fx-text-fill: #ffaa00;");
         
         Label mensaje = new Label(java.text.MessageFormat.format(IdiomaUtil.obtener("ctrl.confirmar.eliminar_usuario"), usuario.getNombreCompleto()));
         mensaje.setWrapText(true);
-        mensaje.setStyle("-fx-font-size: 14px; -fx-text-fill: #f5f5f5; -fx-text-alignment: center;");
+        mensaje.getStyleClass().add("modal-mensaje");
         
         HBox botones = new HBox(12);
         botones.setAlignment(Pos.CENTER);

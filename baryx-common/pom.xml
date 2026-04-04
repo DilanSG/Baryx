@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.baryx</groupId>
         <artifactId>baryx</artifactId>
-        <version>1.0.0</version>
+        <version>0.0.1</version>
     </parent>
     
     <artifactId>baryx-common</artifactId>

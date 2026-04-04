@@ -113,7 +113,8 @@ public class MetodosPagoHandler implements ModalHerramienta {
         // Descripción
         Label descripcion = new Label(
             IdiomaUtil.obtener("ctrl.metodos_pago.descripcion"));
-        descripcion.setStyle("-fx-text-fill: #888; -fx-font-size: 11px;");
+        descripcion.getStyleClass().add("texto-hint-sm");
+        descripcion.setStyle("-fx-text-fill: #888;");
         descripcion.setWrapText(true);
 
         // Sección crear nuevo método
@@ -121,7 +122,8 @@ public class MetodosPagoHandler implements ModalHerramienta {
 
         // Label de sección
         Label lblMetodos = new Label(IdiomaUtil.obtener("ctrl.metodos_pago.actuales"));
-        lblMetodos.setStyle("-fx-font-size: 13px; -fx-text-fill: #999; -fx-font-weight: 700;");
+        lblMetodos.getStyleClass().add("panel-seccion-titulo");
+        lblMetodos.setStyle("-fx-text-fill: #999;");
         VBox.setMargin(lblMetodos, new Insets(4, 0, 0, 0));
 
         // Lista de métodos en scroll
@@ -136,7 +138,8 @@ public class MetodosPagoHandler implements ModalHerramienta {
         // Nota informativa
         Label nota = new Label(
             IdiomaUtil.obtener("ctrl.metodos_pago.nota"));
-        nota.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-padding: 4 0 0 0;");
+        nota.getStyleClass().add("texto-hint");
+        nota.setStyle("-fx-padding: 4 0 0 0;");
         nota.setWrapText(true);
 
         modal.getChildren().addAll(
@@ -161,17 +164,19 @@ public class MetodosPagoHandler implements ModalHerramienta {
         TextField txtNuevo = new TextField();
         txtNuevo.setPromptText(IdiomaUtil.obtener("ctrl.metodos_pago.prompt"));
         txtNuevo.setPrefHeight(40);
+        txtNuevo.getStyleClass().add("panel-btn-principal");
         txtNuevo.setStyle("-fx-background-color: #2a2a2a; -fx-border-color: #404040; -fx-border-width: 1.5px; " +
             "-fx-border-radius: 6px; -fx-background-radius: 6px; -fx-text-fill: #f5f5f5; " +
-            "-fx-font-size: 13px; -fx-prompt-text-fill: #666;");
+            "-fx-prompt-text-fill: #666;");
         HBox.setHgrow(txtNuevo, Priority.ALWAYS);
 
         // Botón crear con "+"
         Button btnCrear = new Button("+");
         btnCrear.setPrefSize(40, 40);
         btnCrear.setMinSize(40, 40);
-        btnCrear.setStyle("-fx-background-color: #d4af37; -fx-text-fill: #0a0a0a; -fx-font-size: 18px; " +
+        btnCrear.setStyle("-fx-background-color: #d4af37; -fx-text-fill: #0a0a0a; " +
             "-fx-font-weight: 700; -fx-background-radius: 6; -fx-cursor: hand;");
+        btnCrear.getStyleClass().add("icono-texto-md");
 
         btnCrear.setOnAction(e -> crearMetodo(txtNuevo));
         txtNuevo.setOnAction(e -> btnCrear.fire());
@@ -189,7 +194,8 @@ public class MetodosPagoHandler implements ModalHerramienta {
         // Indicador de carga
         listaMetodosContenedor.getChildren().clear();
         Label cargando = new Label(IdiomaUtil.obtener("ctrl.metodos_pago.cargando"));
-        cargando.setStyle("-fx-text-fill: #888; -fx-font-size: 12px;");
+        cargando.getStyleClass().add("estado-texto");
+        cargando.setStyle("-fx-text-fill: #888;");
         listaMetodosContenedor.getChildren().add(cargando);
 
         servicio.listarMetodosPagoAsync()
@@ -201,7 +207,8 @@ public class MetodosPagoHandler implements ModalHerramienta {
                 Platform.runLater(() -> {
                     listaMetodosContenedor.getChildren().clear();
                     Label errorLbl = new Label(java.text.MessageFormat.format(IdiomaUtil.obtener("ctrl.metodos_pago.error_cargar"), error.getCause().getMessage()));
-                    errorLbl.setStyle("-fx-text-fill: #ff6b6b; -fx-font-size: 12px;");
+                    errorLbl.getStyleClass().add("estado-texto");
+                    errorLbl.setStyle("-fx-text-fill: #ff6b6b;");
                     errorLbl.setWrapText(true);
                     listaMetodosContenedor.getChildren().add(errorLbl);
                 });
@@ -269,10 +276,11 @@ public class MetodosPagoHandler implements ModalHerramienta {
             "-fx-background-radius: 12px;");
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.metodos_pago.eliminar_titulo"));
-        titulo.setStyle("-fx-font-size: 16px; -fx-text-fill: #ff6b6b; -fx-font-weight: 700;");
+        titulo.getStyleClass().add("modal-titulo-lg");
+        titulo.setStyle("-fx-text-fill: #ff6b6b;");
 
         Label mensaje = new Label(java.text.MessageFormat.format(IdiomaUtil.obtener("ctrl.metodos_pago.eliminar_msg"), metodo.getNombre(), metodo.getCodigo()));
-        mensaje.setStyle("-fx-font-size: 13px; -fx-text-fill: #f5f5f5;");
+        mensaje.getStyleClass().add("modal-mensaje");
         mensaje.setWrapText(true);
 
         HBox botones = new HBox(12);
@@ -280,13 +288,15 @@ public class MetodosPagoHandler implements ModalHerramienta {
 
         Button btnSi = new Button(IdiomaUtil.obtener("ctrl.btn.eliminar"));
         btnSi.setPrefSize(120, 38);
+        btnSi.getStyleClass().add("panel-btn-secundario");
         btnSi.setStyle("-fx-background-color: #8b0000; -fx-text-fill: #f5f5f5; -fx-font-weight: 600; " +
-            "-fx-font-size: 12px; -fx-background-radius: 6; -fx-cursor: hand;");
+            "-fx-background-radius: 6; -fx-cursor: hand;");
 
         Button btnNo = new Button(IdiomaUtil.obtener("ctrl.btn.cancelar"));
         btnNo.setPrefSize(120, 38);
+        btnNo.getStyleClass().add("panel-btn-secundario");
         btnNo.setStyle("-fx-background-color: transparent; -fx-text-fill: #999; -fx-font-weight: 600; " +
-            "-fx-font-size: 12px; -fx-border-color: #404040; -fx-border-width: 1px; " +
+            "-fx-border-color: #404040; -fx-border-width: 1px; " +
             "-fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand;");
 
         btnNo.setOnAction(e -> overlay.getScene().getRoot().getClass()); // no-op, overlay removed below
@@ -345,27 +355,32 @@ public class MetodosPagoHandler implements ModalHerramienta {
             "-fx-background-radius: 12px;");
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.metodos_pago.editar_titulo"));
-        titulo.setStyle("-fx-font-size: 16px; -fx-text-fill: #d4af37; -fx-font-weight: 700;");
+        titulo.getStyleClass().add("modal-titulo-lg");
+        titulo.setStyle("-fx-text-fill: #d4af37;");
 
         // Campo nombre
         Label lblNombre = new Label(IdiomaUtil.obtener("ctrl.metodos_pago.nombre"));
-        lblNombre.setStyle("-fx-text-fill: #999; -fx-font-size: 11px;");
+        lblNombre.getStyleClass().add("texto-hint-sm");
+        lblNombre.setStyle("-fx-text-fill: #999;");
 
         TextField txtNombre = new TextField(metodo.getNombre());
         txtNombre.setPrefHeight(38);
+        txtNombre.getStyleClass().add("panel-btn-principal");
         txtNombre.setStyle("-fx-background-color: #2a2a2a; -fx-border-color: #404040; -fx-border-width: 1.5px; " +
-            "-fx-border-radius: 6px; -fx-background-radius: 6px; -fx-text-fill: #f5f5f5; -fx-font-size: 13px;");
+            "-fx-border-radius: 6px; -fx-background-radius: 6px; -fx-text-fill: #f5f5f5;");
 
         // Campo código
         Label lblCodigo = new Label(IdiomaUtil.obtener("ctrl.metodos_pago.codigo"));
-        lblCodigo.setStyle("-fx-text-fill: #999; -fx-font-size: 11px;");
+        lblCodigo.getStyleClass().add("texto-hint-sm");
+        lblCodigo.setStyle("-fx-text-fill: #999;");
 
         TextField txtCodigo = new TextField(metodo.getCodigo() != null ? metodo.getCodigo() : "");
         txtCodigo.setPrefHeight(38);
         txtCodigo.setPrefWidth(80);
         txtCodigo.setMaxWidth(80);
+        txtCodigo.getStyleClass().add("panel-btn-principal");
         txtCodigo.setStyle("-fx-background-color: #2a2a2a; -fx-border-color: #404040; -fx-border-width: 1.5px; " +
-            "-fx-border-radius: 6px; -fx-background-radius: 6px; -fx-text-fill: #f5f5f5; -fx-font-size: 13px; " +
+            "-fx-border-radius: 6px; -fx-background-radius: 6px; -fx-text-fill: #f5f5f5; " +
             "-fx-alignment: center;");
 
         // Limitar a 2 dígitos numéricos
@@ -378,7 +393,8 @@ public class MetodosPagoHandler implements ModalHerramienta {
 
         // Info de código actual de otro método si hay conflicto
         Label lblConflicto = new Label();
-        lblConflicto.setStyle("-fx-text-fill: #daa520; -fx-font-size: 10px;");
+        lblConflicto.getStyleClass().add("texto-hint");
+        lblConflicto.setStyle("-fx-text-fill: #daa520;");
         lblConflicto.setWrapText(true);
         lblConflicto.setVisible(false);
         lblConflicto.setManaged(false);
@@ -412,13 +428,15 @@ public class MetodosPagoHandler implements ModalHerramienta {
 
         Button btnGuardar = new Button(IdiomaUtil.obtener("ctrl.btn.guardar"));
         btnGuardar.setPrefSize(130, 38);
+        btnGuardar.getStyleClass().add("panel-btn-secundario");
         btnGuardar.setStyle("-fx-background-color: #d4af37; -fx-text-fill: #0a0a0a; -fx-font-weight: 700; " +
-            "-fx-font-size: 12px; -fx-background-radius: 6; -fx-cursor: hand;");
+            "-fx-background-radius: 6; -fx-cursor: hand;");
 
         Button btnCancelar = new Button(IdiomaUtil.obtener("ctrl.btn.cancelar"));
         btnCancelar.setPrefSize(130, 38);
+        btnCancelar.getStyleClass().add("panel-btn-secundario");
         btnCancelar.setStyle("-fx-background-color: transparent; -fx-text-fill: #999; -fx-font-weight: 600; " +
-            "-fx-font-size: 12px; -fx-border-color: #404040; -fx-border-width: 1px; " +
+            "-fx-border-color: #404040; -fx-border-width: 1px; " +
             "-fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand;");
 
         btnCancelar.setOnAction(e -> gestor.cerrarOverlayInterno(overlay));
@@ -490,14 +508,16 @@ public class MetodosPagoHandler implements ModalHerramienta {
             "-fx-background-radius: 12px;");
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.metodos_pago.swap_titulo"));
-        titulo.setStyle("-fx-font-size: 15px; -fx-text-fill: #daa520; -fx-font-weight: 700;");
+        titulo.getStyleClass().add("modal-titulo-lg");
+        titulo.setStyle("-fx-text-fill: #daa520;");
 
         Label msg = new Label(
             java.text.MessageFormat.format(IdiomaUtil.obtener("ctrl.metodos_pago.swap_msg"),
                 conflicto.getNombre(), nuevoCodigo,
                 nuevoNombre.toUpperCase(), nuevoCodigo,
                 conflicto.getNombre(), metodo.getCodigo() != null ? metodo.getCodigo() : "??"));
-        msg.setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 12px;");
+        msg.getStyleClass().add("estado-texto");
+        msg.setStyle("-fx-text-fill: #e8e8e8;");
         msg.setWrapText(true);
 
         HBox botones = new HBox(12);
@@ -505,13 +525,15 @@ public class MetodosPagoHandler implements ModalHerramienta {
 
         Button btnSi = new Button(IdiomaUtil.obtener("ctrl.metodos_pago.btn.intercambiar"));
         btnSi.setPrefSize(140, 36);
+        btnSi.getStyleClass().add("panel-btn-secundario");
         btnSi.setStyle("-fx-background-color: #d4af37; -fx-text-fill: #0a0a0a; -fx-font-weight: 700; " +
-            "-fx-font-size: 12px; -fx-background-radius: 6; -fx-cursor: hand;");
+            "-fx-background-radius: 6; -fx-cursor: hand;");
 
         Button btnNo = new Button(IdiomaUtil.obtener("ctrl.btn.cancelar"));
         btnNo.setPrefSize(110, 36);
+        btnNo.getStyleClass().add("panel-btn-secundario");
         btnNo.setStyle("-fx-background-color: transparent; -fx-text-fill: #999; -fx-font-weight: 600; " +
-            "-fx-font-size: 12px; -fx-border-color: #404040; -fx-border-width: 1px; " +
+            "-fx-border-color: #404040; -fx-border-width: 1px; " +
             "-fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand;");
 
         // Reemplazar overlay de edición por overlay de confirmación
@@ -573,7 +595,8 @@ public class MetodosPagoHandler implements ModalHerramienta {
 
         if (metodosCargados.isEmpty()) {
             Label vacio = new Label(IdiomaUtil.obtener("ctrl.metodos_pago.vacio"));
-            vacio.setStyle("-fx-text-fill: #888; -fx-font-size: 12px;");
+            vacio.getStyleClass().add("estado-texto");
+            vacio.setStyle("-fx-text-fill: #888;");
             listaMetodosContenedor.getChildren().add(vacio);
             return;
         }
@@ -603,13 +626,15 @@ public class MetodosPagoHandler implements ModalHerramienta {
         lblCodigo.setMinWidth(36);
         lblCodigo.setMaxWidth(36);
         lblCodigo.setAlignment(Pos.CENTER);
-        lblCodigo.setStyle("-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #d4af37; " +
+        lblCodigo.setStyle("-fx-font-weight: 700; -fx-text-fill: #d4af37; " +
             "-fx-background-color: rgba(212,175,55,0.1); -fx-padding: 4 8; " +
             "-fx-background-radius: 4;");
+        lblCodigo.getStyleClass().add("panel-seccion-titulo");
 
         // Nombre del método
         Label lblNombre = new Label(metodo.getNombre());
-        lblNombre.setStyle("-fx-font-size: 14px; -fx-text-fill: #f5f5f5; -fx-font-weight: 600;");
+        lblNombre.getStyleClass().add("panel-seccion-titulo");
+        lblNombre.setStyle("-fx-text-fill: #f5f5f5;");
         lblNombre.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(lblNombre, Priority.ALWAYS);
 
@@ -618,7 +643,8 @@ public class MetodosPagoHandler implements ModalHerramienta {
         if (Boolean.TRUE.equals(metodo.getEsPredeterminado())) {
             // Badge predeterminado - no editable ni eliminable
             Label badge = new Label(IdiomaUtil.obtener("ctrl.metodos_pago.predeterminado"));
-            badge.setStyle("-fx-font-size: 10px; -fx-text-fill: #d4af37; -fx-font-weight: 700; " +
+            badge.getStyleClass().add("badge-texto");
+            badge.setStyle("-fx-text-fill: #d4af37; " +
                 "-fx-background-color: rgba(212,175,55,0.12); -fx-padding: 3 8; " +
                 "-fx-border-color: rgba(212,175,55,0.3); -fx-border-width: 1px; " +
                 "-fx-border-radius: 10px; -fx-background-radius: 10px;");
@@ -631,15 +657,17 @@ public class MetodosPagoHandler implements ModalHerramienta {
             Button btnEditar = new Button("✎");
             btnEditar.setMinSize(32, 32);
             btnEditar.setPrefSize(32, 32);
+            btnEditar.getStyleClass().add("panel-seccion-titulo");
             btnEditar.setStyle("-fx-background-color: rgba(212,175,55,0.15); -fx-text-fill: #d4af37; " +
-                "-fx-font-size: 14px; -fx-background-radius: 6; -fx-cursor: hand;");
+                "-fx-background-radius: 6; -fx-cursor: hand;");
             btnEditar.setOnAction(e -> editarMetodo(metodo));
 
             Button btnEliminar = new Button("✕");
             btnEliminar.setMinSize(32, 32);
             btnEliminar.setPrefSize(32, 32);
+            btnEliminar.getStyleClass().add("panel-seccion-titulo");
             btnEliminar.setStyle("-fx-background-color: rgba(139,0,0,0.15); -fx-text-fill: #ff6b6b; " +
-                "-fx-font-size: 14px; -fx-background-radius: 6; -fx-cursor: hand;");
+                "-fx-background-radius: 6; -fx-cursor: hand;");
             btnEliminar.setOnAction(e -> eliminarMetodo(metodo));
 
             acciones.getChildren().addAll(btnEditar, btnEliminar);

@@ -27,7 +27,7 @@
                     minWidth="20" minHeight="20"
                     maxWidth="20" maxHeight="20"/>
             <Label text="%config.titulo.herramientas_principal" 
-                   style="-fx-font-size: 18px; -fx-font-weight: 700; -fx-text-fill: #d4af37;"/>
+                   styleClass="config-header-titulo"/>
         </HBox>
 
         <!-- Contenedor de columnas con scroll horizontal -->

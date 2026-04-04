@@ -135,7 +135,8 @@ public class LogsCriticosHandler implements ModalHerramienta {
 
         // ── Estado de carga inicial ──
         Label cargando = new Label(IdiomaUtil.obtener("ctrl.logs.cargando"));
-        cargando.setStyle("-fx-text-fill: #999; -fx-font-size: 13px;");
+        cargando.getStyleClass().add("texto-info");
+        cargando.setStyle("-fx-text-fill: #999;");
         contenedorLogs.setAlignment(Pos.CENTER);
         contenedorLogs.getChildren().add(cargando);
 
@@ -149,21 +150,23 @@ public class LogsCriticosHandler implements ModalHerramienta {
     // ── Crea el header del modal con título y botón cerrar ──
     private HBox crearHeader() {
         Label icono = new Label("\u26a0");
-        icono.setStyle("-fx-font-size: 18px; -fx-text-fill: #d4af37;");
+        icono.getStyleClass().add("icono-texto-md");
+        icono.setStyle("-fx-text-fill: #d4af37;");
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.logs.titulo"));
-        titulo.setStyle("-fx-font-size: 16px; -fx-font-weight: 700; -fx-text-fill: #f5f5f5;");
+        titulo.getStyleClass().add("tutorial-seccion-titulo");
 
         Region espacio = new Region();
         HBox.setHgrow(espacio, Priority.ALWAYS);
 
         Label cerrar = new Label("\u2715");
-        cerrar.setStyle("-fx-font-size: 15px; -fx-text-fill: #666; -fx-cursor: hand;");
+        cerrar.getStyleClass().add("tutorial-titulo");
+        cerrar.setStyle("-fx-text-fill: #666; -fx-cursor: hand;");
         cerrar.setOnMouseClicked(e -> gestor.cerrarModalActual());
         cerrar.setOnMouseEntered(e ->
-                cerrar.setStyle("-fx-font-size: 15px; -fx-text-fill: #f5f5f5; -fx-cursor: hand;"));
+                cerrar.setStyle("-fx-text-fill: #f5f5f5; -fx-cursor: hand;"));
         cerrar.setOnMouseExited(e ->
-                cerrar.setStyle("-fx-font-size: 15px; -fx-text-fill: #666; -fx-cursor: hand;"));
+                cerrar.setStyle("-fx-text-fill: #666; -fx-cursor: hand;"));
 
         HBox header = new HBox(10, icono, titulo, espacio, cerrar);
         header.setAlignment(Pos.CENTER_LEFT);
@@ -173,19 +176,25 @@ public class LogsCriticosHandler implements ModalHerramienta {
     // ── Barra de filtros: Todos / Errores / En Revisión / Resueltos + Recargar ──
     private HBox crearBarraFiltros() {
         String estiloActivo = "-fx-background-color: #d4af37; -fx-text-fill: #0a0a0a; " +
-                "-fx-font-size: 11px; -fx-font-weight: 700; -fx-padding: 5 12; " +
+                "-fx-font-weight: 700; -fx-padding: 5 12; " +
                 "-fx-background-radius: 4; -fx-cursor: hand;";
         String estiloInactivo = "-fx-background-color: #2a2a2a; -fx-text-fill: #999; " +
-                "-fx-font-size: 11px; -fx-font-weight: 600; -fx-padding: 5 12; " +
+                "-fx-font-weight: 600; -fx-padding: 5 12; " +
                 "-fx-background-radius: 4; -fx-border-color: #404040; -fx-border-radius: 4; -fx-cursor: hand;";
         String estiloRecargar = "-fx-background-color: transparent; -fx-text-fill: #d4af37; " +
-                "-fx-font-size: 11px; -fx-font-weight: 600; -fx-padding: 5 12; -fx-cursor: hand;";
+                "-fx-font-weight: 600; -fx-padding: 5 12; -fx-cursor: hand;";
 
         btnFiltroTodos = new Button(IdiomaUtil.obtener("ctrl.logs.filtro.todos"));
         btnFiltroErrores = new Button(IdiomaUtil.obtener("ctrl.logs.filtro.errores"));
         btnFiltroRevision = new Button(IdiomaUtil.obtener("ctrl.logs.filtro.en_revision"));
         btnFiltroResueltos = new Button(IdiomaUtil.obtener("ctrl.logs.filtro.resueltos"));
         Button btnRecargar = new Button(IdiomaUtil.obtener("ctrl.logs.recargar"));
+
+        btnFiltroTodos.getStyleClass().add("texto-hint-sm");
+        btnFiltroErrores.getStyleClass().add("texto-hint-sm");
+        btnFiltroRevision.getStyleClass().add("texto-hint-sm");
+        btnFiltroResueltos.getStyleClass().add("texto-hint-sm");
+        btnRecargar.getStyleClass().add("texto-hint-sm");
 
         btnFiltroTodos.setStyle(estiloActivo);
         btnFiltroErrores.setStyle(estiloInactivo);
@@ -224,7 +233,8 @@ public class LogsCriticosHandler implements ModalHerramienta {
         contenedorLogs.getChildren().clear();
         contenedorLogs.setAlignment(Pos.CENTER);
         Label cargando = new Label(IdiomaUtil.obtener("ctrl.logs.cargando"));
-        cargando.setStyle("-fx-text-fill: #999; -fx-font-size: 13px;");
+        cargando.getStyleClass().add("texto-info");
+        cargando.setStyle("-fx-text-fill: #999;");
         contenedorLogs.getChildren().add(cargando);
 
         // Siempre cargamos todos y filtramos en el cliente para simplicidad
@@ -235,7 +245,8 @@ public class LogsCriticosHandler implements ModalHerramienta {
                         contenedorLogs.getChildren().clear();
                         Label error = new Label(MessageFormat.format(
                                 IdiomaUtil.obtener("ctrl.logs.error_cargar"), ex.getMessage()));
-                        error.setStyle("-fx-text-fill: #8b0000; -fx-font-size: 12px;");
+                        error.getStyleClass().add("texto-secundario-sm");
+                        error.setStyle("-fx-text-fill: #8b0000;");
                         error.setWrapText(true);
                         contenedorLogs.getChildren().add(error);
                     });
@@ -268,7 +279,8 @@ public class LogsCriticosHandler implements ModalHerramienta {
             Label msg = new Label(filtroActual != null
                     ? IdiomaUtil.obtener("ctrl.logs.vacio_pendientes")
                     : IdiomaUtil.obtener("ctrl.logs.vacio_todos"));
-            msg.setStyle("-fx-text-fill: #999; -fx-font-size: 13px;");
+            msg.getStyleClass().add("texto-info");
+            msg.setStyle("-fx-text-fill: #999;");
 
             vacio.getChildren().addAll(iconoCheck, msg);
             contenedorLogs.getChildren().add(vacio);
@@ -298,13 +310,15 @@ public class LogsCriticosHandler implements ModalHerramienta {
         indicador.setFill(esCritico ? Color.web("#8b0000") : Color.web("#daa520"));
 
         Label nivel = new Label(log.getNivel());
-        nivel.setStyle("-fx-font-size: 10px; -fx-font-weight: 700; -fx-text-fill: " +
+        nivel.getStyleClass().add("texto-hint");
+        nivel.setStyle("-fx-font-weight: 700; -fx-text-fill: " +
                 (esCritico ? "#ff4444" : "#daa520") + "; -fx-padding: 1 6; " +
                 "-fx-background-color: " + (esCritico ? "#2a0a0a" : "#2a2206") + "; " +
                 "-fx-background-radius: 3;");
 
         Label origen = new Label(log.getOrigen());
-        origen.setStyle("-fx-font-size: 11px; -fx-text-fill: #b0b0b0; -fx-font-weight: 600;");
+        origen.getStyleClass().add("texto-hint-sm");
+        origen.setStyle("-fx-text-fill: #b0b0b0; -fx-font-weight: 600;");
 
         // Badge de estado con color
         Label badgeEstado = crearBadgeEstado(log.getEstado());
@@ -314,14 +328,16 @@ public class LogsCriticosHandler implements ModalHerramienta {
 
         Label fecha = new Label(log.getFechaCreacion() != null
                 ? log.getFechaCreacion().format(FORMATO_FECHA) : "\u2014");
-        fecha.setStyle("-fx-font-size: 10px; -fx-text-fill: #666;");
+        fecha.getStyleClass().add("texto-hint");
+        fecha.setStyle("-fx-text-fill: #666;");
 
         HBox filaTop = new HBox(6, indicador, nivel, origen, badgeEstado, espacio, fecha);
         filaTop.setAlignment(Pos.CENTER_LEFT);
 
         // ── Mensaje ──
         Label mensaje = new Label(log.getMensaje());
-        mensaje.setStyle("-fx-font-size: 12px; -fx-text-fill: #e8e8e8; -fx-font-weight: 400;");
+        mensaje.getStyleClass().add("texto-secundario-sm");
+        mensaje.setStyle("-fx-text-fill: #e8e8e8; -fx-font-weight: 400;");
         mensaje.setWrapText(true);
 
         card.getChildren().addAll(filaTop, mensaje);
@@ -332,7 +348,8 @@ public class LogsCriticosHandler implements ModalHerramienta {
                     ? log.getDetalle().substring(0, 200) + "..."
                     : log.getDetalle();
             Label detalle = new Label(resumen);
-            detalle.setStyle("-fx-font-size: 10px; -fx-text-fill: #777; -fx-font-family: monospace;");
+            detalle.getStyleClass().add("texto-hint");
+            detalle.setStyle("-fx-text-fill: #777; -fx-font-family: monospace;");
             detalle.setWrapText(true);
             card.getChildren().add(detalle);
         }
@@ -344,12 +361,14 @@ public class LogsCriticosHandler implements ModalHerramienta {
 
         if (log.getNombreCliente() != null) {
             Label cliente = new Label("\ud83d\udccd " + log.getNombreCliente());
-            cliente.setStyle("-fx-font-size: 10px; -fx-text-fill: #666;");
+            cliente.getStyleClass().add("texto-hint");
+            cliente.setStyle("-fx-text-fill: #666;");
             filaBottom.getChildren().add(cliente);
         }
         if (log.getUsuario() != null) {
             Label user = new Label("\ud83d\udc64 " + log.getUsuario());
-            user.setStyle("-fx-font-size: 10px; -fx-text-fill: #666;");
+            user.getStyleClass().add("texto-hint");
+            user.setStyle("-fx-text-fill: #666;");
             filaBottom.getChildren().add(user);
         }
 
@@ -412,8 +431,9 @@ public class LogsCriticosHandler implements ModalHerramienta {
         if (ESTADO_ERROR.equals(estado)) {
             // Error → En Revisión
             Button btn = new Button(IdiomaUtil.obtener("ctrl.logs.boton.en_revision"));
+            btn.getStyleClass().add("texto-hint");
             btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #daa520; " +
-                    "-fx-font-size: 10px; -fx-cursor: hand; -fx-padding: 2 8; " +
+                    "-fx-cursor: hand; -fx-padding: 2 8; " +
                     "-fx-border-color: #daa520; -fx-border-radius: 3; -fx-background-radius: 3;");
             btn.setOnAction(e -> {
                 e.consume();
@@ -423,8 +443,9 @@ public class LogsCriticosHandler implements ModalHerramienta {
         } else if (ESTADO_EN_REVISION.equals(estado)) {
             // En Revisión → Resuelto
             Button btn = new Button(IdiomaUtil.obtener("ctrl.logs.boton.resolver"));
+            btn.getStyleClass().add("texto-hint");
             btn.setStyle("-fx-background-color: transparent; -fx-text-fill: #a8b991; " +
-                    "-fx-font-size: 10px; -fx-cursor: hand; -fx-padding: 2 8; " +
+                    "-fx-cursor: hand; -fx-padding: 2 8; " +
                     "-fx-border-color: #a8b991; -fx-border-radius: 3; -fx-background-radius: 3;");
             btn.setOnAction(e -> {
                 e.consume();
@@ -434,7 +455,8 @@ public class LogsCriticosHandler implements ModalHerramienta {
         } else {
             // Resuelto — mostrar label
             Label resueltoLabel = new Label(IdiomaUtil.obtener("ctrl.logs.resuelto"));
-            resueltoLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #a8b991; -fx-font-weight: 600;");
+            resueltoLabel.getStyleClass().add("texto-hint");
+            resueltoLabel.setStyle("-fx-text-fill: #a8b991; -fx-font-weight: 600;");
             filaBottom.getChildren().add(resueltoLabel);
         }
     }
@@ -482,28 +504,30 @@ public class LogsCriticosHandler implements ModalHerramienta {
 
         // ── Header del detalle ──
         Label iconoDetalle = new Label("\ud83d\udcdd");
-        iconoDetalle.setStyle("-fx-font-size: 16px;");
+        iconoDetalle.getStyleClass().add("icono-texto-sm");
 
         Label tituloDetalle = new Label(IdiomaUtil.obtener("ctrl.logs.detalle_titulo"));
-        tituloDetalle.setStyle("-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        tituloDetalle.getStyleClass().add("modal-titulo-dorado");
 
         Region espHeader = new Region();
         HBox.setHgrow(espHeader, Priority.ALWAYS);
 
         // Botón copiar
         Button btnCopiar = new Button(IdiomaUtil.obtener("ctrl.logs.copiar"));
+        btnCopiar.getStyleClass().add("texto-hint-sm");
         btnCopiar.setStyle("-fx-background-color: #2a2a2a; -fx-text-fill: #d4af37; " +
-                "-fx-font-size: 11px; -fx-cursor: hand; -fx-padding: 4 12; " +
+                "-fx-cursor: hand; -fx-padding: 4 12; " +
                 "-fx-border-color: #d4af37; -fx-border-radius: 4; -fx-background-radius: 4;");
         btnCopiar.setOnAction(e -> copiarLogAlPortapapeles(log, btnCopiar));
 
         // Botón cerrar
         Label cerrarDetalle = new Label("\u2715");
-        cerrarDetalle.setStyle("-fx-font-size: 14px; -fx-text-fill: #666; -fx-cursor: hand;");
+        cerrarDetalle.getStyleClass().add("panel-seccion-titulo");
+        cerrarDetalle.setStyle("-fx-text-fill: #666; -fx-cursor: hand;");
         cerrarDetalle.setOnMouseEntered(e ->
-                cerrarDetalle.setStyle("-fx-font-size: 14px; -fx-text-fill: #f5f5f5; -fx-cursor: hand;"));
+                cerrarDetalle.setStyle("-fx-text-fill: #f5f5f5; -fx-cursor: hand;"));
         cerrarDetalle.setOnMouseExited(e ->
-                cerrarDetalle.setStyle("-fx-font-size: 14px; -fx-text-fill: #666; -fx-cursor: hand;"));
+                cerrarDetalle.setStyle("-fx-text-fill: #666; -fx-cursor: hand;"));
 
         HBox headerDetalle = new HBox(8, iconoDetalle, tituloDetalle, espHeader, btnCopiar, cerrarDetalle);
         headerDetalle.setAlignment(Pos.CENTER_LEFT);
@@ -536,10 +560,12 @@ public class LogsCriticosHandler implements ModalHerramienta {
         if (log.getDetalle() != null && !log.getDetalle().isBlank()) {
             VBox seccionDetalle = new VBox(4);
             Label labelDetalle = new Label(IdiomaUtil.obtener("ctrl.logs.campo.detalle"));
-            labelDetalle.setStyle("-fx-font-size: 10px; -fx-text-fill: #d4af37; -fx-font-weight: 600;");
+            labelDetalle.getStyleClass().add("texto-hint");
+            labelDetalle.setStyle("-fx-text-fill: #d4af37; -fx-font-weight: 600;");
 
             Label valorDetalle = new Label(log.getDetalle());
-            valorDetalle.setStyle("-fx-font-size: 11px; -fx-text-fill: #ccc; -fx-font-family: monospace; " +
+            valorDetalle.getStyleClass().add("texto-hint-sm");
+            valorDetalle.setStyle("-fx-text-fill: #ccc; -fx-font-family: monospace; " +
                     "-fx-background-color: #0a0a0a; -fx-padding: 8; -fx-background-radius: 4;");
             valorDetalle.setWrapText(true);
 
@@ -598,10 +624,12 @@ public class LogsCriticosHandler implements ModalHerramienta {
     private VBox crearCampoDetalle(String etiqueta, String valor) {
         VBox campo = new VBox(2);
         Label lbl = new Label(etiqueta);
-        lbl.setStyle("-fx-font-size: 10px; -fx-text-fill: #d4af37; -fx-font-weight: 600;");
+        lbl.getStyleClass().add("texto-hint");
+        lbl.setStyle("-fx-text-fill: #d4af37; -fx-font-weight: 600;");
 
         Label val = new Label(valor != null ? valor : "\u2014");
-        val.setStyle("-fx-font-size: 12px; -fx-text-fill: #e8e8e8;");
+        val.getStyleClass().add("texto-secundario-sm");
+        val.setStyle("-fx-text-fill: #e8e8e8;");
         val.setWrapText(true);
 
         campo.getChildren().addAll(lbl, val);
@@ -653,7 +681,7 @@ public class LogsCriticosHandler implements ModalHerramienta {
         String textoOriginal = btnCopiar.getText();
         btnCopiar.setText(IdiomaUtil.obtener("ctrl.logs.copiado"));
         btnCopiar.setStyle("-fx-background-color: #1a2a1a; -fx-text-fill: #a8b991; " +
-                "-fx-font-size: 11px; -fx-padding: 4 12; " +
+                "-fx-padding: 4 12; " +
                 "-fx-border-color: #a8b991; -fx-border-radius: 4; -fx-background-radius: 4;");
 
         // Restaurar después de 2 segundos
@@ -662,7 +690,7 @@ public class LogsCriticosHandler implements ModalHerramienta {
         pausa.setOnFinished(e -> {
             btnCopiar.setText(textoOriginal);
             btnCopiar.setStyle("-fx-background-color: #2a2a2a; -fx-text-fill: #d4af37; " +
-                    "-fx-font-size: 11px; -fx-cursor: hand; -fx-padding: 4 12; " +
+                    "-fx-cursor: hand; -fx-padding: 4 12; " +
                     "-fx-border-color: #d4af37; -fx-border-radius: 4; -fx-background-radius: 4;");
         });
         pausa.play();

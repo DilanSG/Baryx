@@ -591,15 +591,17 @@ public class InventarioControlController implements com.baryx.cliente.controlado
         
         // Título
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.inventario.ajuste_titulo"));
-        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("modal-titulo-lg");
+        titulo.setStyle("-fx-text-fill: #d4af37;");
         
         // Nombre del producto
         Label nombreProducto = new Label(producto.getNombre());
-        nombreProducto.setStyle("-fx-font-size: 16px; -fx-text-fill: #f5f5f5; -fx-font-weight: 600;");
+        nombreProducto.getStyleClass().add("tutorial-seccion-titulo");
         
         // Stock actual
         Label stockInfo = new Label(java.text.MessageFormat.format(IdiomaUtil.obtener("ctrl.inventario.stock_actual"), producto.getStockActual()));
-        stockInfo.setStyle("-fx-font-size: 14px; -fx-text-fill: #b0b0b0;");
+        stockInfo.getStyleClass().add("modal-mensaje");
+        stockInfo.setStyle("-fx-text-fill: #b0b0b0;");
         
         // Obtener movimientos actuales
         int[] movimientos = movimientosProducto.getOrDefault(
@@ -630,7 +632,8 @@ public class InventarioControlController implements com.baryx.cliente.controlado
         // Preview del inventario resultante
         int stockBase = producto.getStockActual() != null ? producto.getStockActual() : 0;
         Label previewLabel = new Label();
-        previewLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold;");
+        previewLabel.getStyleClass().add("tutorial-titulo");
+        previewLabel.setStyle("-fx-font-weight: bold;");
         actualizarPreview(previewLabel, stockBase, spinnerEntrada, spinnerSalida, spinnerBaja, spinnerCortesia);
         
         // Listeners para actualizar preview en tiempo real
@@ -717,7 +720,8 @@ public class InventarioControlController implements com.baryx.cliente.controlado
         fila.setAlignment(Pos.CENTER_LEFT);
         
         Label label = new Label(etiqueta);
-        label.setStyle("-fx-font-size: 14px; -fx-text-fill: " + color + "; -fx-font-weight: 600; " +
+        label.getStyleClass().add("panel-seccion-titulo");
+        label.setStyle("-fx-text-fill: " + color + "; " +
                        "-fx-min-width: 140px; -fx-pref-width: 140px;");
         
         Spinner<Integer> spinner = new Spinner<>(0, 99999, valorInicial);
@@ -755,11 +759,11 @@ public class InventarioControlController implements com.baryx.cliente.controlado
         previewLabel.setText(java.text.MessageFormat.format(IdiomaUtil.obtener("ctrl.inventario.preview"), resultado));
         
         if (resultado < 0) {
-            previewLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #ff4444;");
+            previewLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #ff4444;");
         } else if (resultado == 0) {
-            previewLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #daa520;");
+            previewLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #daa520;");
         } else {
-            previewLabel.setStyle("-fx-font-size: 15px; -fx-font-weight: bold; -fx-text-fill: #a8b991;");
+            previewLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #a8b991;");
         }
     }
     
@@ -780,7 +784,8 @@ public class InventarioControlController implements com.baryx.cliente.controlado
         spinner.setStyle("-fx-progress-color: #d4af37;");
         
         Label texto = new Label(IdiomaUtil.obtener("ctrl.inventario.cargando"));
-        texto.setStyle("-fx-text-fill: #b0b0b0; -fx-font-size: 14px;");
+        texto.getStyleClass().add("modal-mensaje");
+        texto.setStyle("-fx-text-fill: #b0b0b0;");
         
         indicador.getChildren().addAll(spinner, texto);
         contenedorInventario.getChildren().add(indicador);
@@ -804,7 +809,8 @@ public class InventarioControlController implements com.baryx.cliente.controlado
         icono.setMaxSize(40, 40);
         
         Label texto = new Label(mensaje);
-        texto.setStyle("-fx-text-fill: #888; -fx-font-size: 15px; -fx-font-style: italic;");
+        texto.getStyleClass().add("tutorial-titulo");
+        texto.setStyle("-fx-text-fill: #888; -fx-font-style: italic;");
         texto.setWrapText(true);
         
         contenedor.getChildren().addAll(icono, texto);
@@ -828,7 +834,8 @@ public class InventarioControlController implements com.baryx.cliente.controlado
         icono.setMaxSize(48, 48);
         
         Label texto = new Label(mensaje);
-        texto.setStyle("-fx-text-fill: #ff6b6b; -fx-font-size: 15px;");
+        texto.getStyleClass().add("tutorial-titulo");
+        texto.setStyle("-fx-text-fill: #ff6b6b;");
         texto.setWrapText(true);
         
         Button btnReintentar = new Button(IdiomaUtil.obtener("ctrl.btn.reintentar"));

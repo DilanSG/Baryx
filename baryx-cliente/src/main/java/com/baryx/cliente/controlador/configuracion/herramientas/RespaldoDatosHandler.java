@@ -73,12 +73,13 @@ public class RespaldoDatosHandler implements ModalHerramienta {
         // ─── Card: Estado de conexión nube (con botón sync integrado) ───
         Circle indNube = new Circle(4, Color.web("#666"));
         Label estadoNube = new Label(IdiomaUtil.obtener("ctrl.respaldo.verificando"));
-        estadoNube.setStyle("-fx-text-fill: #888; -fx-font-size: 12px;");
+        estadoNube.getStyleClass().add("texto-secundario-sm");
+        estadoNube.setStyle("-fx-text-fill: #888;");
 
         Button btnRespaldar = new Button(IdiomaUtil.obtener("ctrl.respaldo.boton"));
-        btnRespaldar.getStyleClass().add("btn-metodo-pago");
+        btnRespaldar.getStyleClass().addAll("btn-metodo-pago", "texto-hint");
         btnRespaldar.setPrefHeight(30);
-        btnRespaldar.setStyle("-fx-font-size: 10px; -fx-padding: 4 16;");
+        btnRespaldar.setStyle("-fx-padding: 4 16;");
         btnRespaldar.setVisible(false);
         btnRespaldar.setManaged(false);
 
@@ -119,14 +120,16 @@ public class RespaldoDatosHandler implements ModalHerramienta {
                 "-fx-border-color: #2a2a2a; -fx-border-radius: 8;");
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.respaldo.titulo_estado"));
-        titulo.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("texto-secundario-sm");
+        titulo.setStyle("-fx-font-weight: 700; -fx-text-fill: #d4af37;");
 
         HBox filaEstado = new HBox(6, indNube, estadoNube, new Region(), btnRespaldar);
         filaEstado.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(filaEstado.getChildren().get(2), Priority.ALWAYS);
 
         Label desc = new Label(IdiomaUtil.obtener("ctrl.respaldo.descripcion"));
-        desc.setStyle("-fx-text-fill: #b0b0b0; -fx-font-size: 11px; -fx-wrap-text: true;");
+        desc.getStyleClass().add("texto-hint-sm");
+        desc.setStyle("-fx-text-fill: #b0b0b0; -fx-wrap-text: true;");
         desc.setWrapText(true);
         desc.setMaxWidth(460);
 
@@ -179,7 +182,7 @@ public class RespaldoDatosHandler implements ModalHerramienta {
             if (estado == null) {
                 indNube.setFill(Color.web("#cc4444"));
                 estadoNube.setText(IdiomaUtil.obtener("ctrl.respaldo.nube_no_disponible"));
-                estadoNube.setStyle("-fx-text-fill: #cc4444; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #cc4444;");
                 btnRespaldar.setVisible(false);
                 btnRespaldar.setManaged(false);
                 return;
@@ -199,22 +202,22 @@ public class RespaldoDatosHandler implements ModalHerramienta {
                     indNube.setFill(Color.web("#daa520"));
                     estadoNube.setText(MessageFormat.format(
                             IdiomaUtil.obtener("ctrl.respaldo.pendientes"), pendientes));
-                    estadoNube.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+                    estadoNube.setStyle("-fx-text-fill: #daa520;");
                 } else {
                     indNube.setFill(Color.web("#a8b991"));
                     estadoNube.setText(IdiomaUtil.obtener("ctrl.respaldo.todo_subido"));
-                    estadoNube.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px;");
+                    estadoNube.setStyle("-fx-text-fill: #a8b991;");
                 }
             } else if (habilitado) {
                 indNube.setFill(Color.web("#daa520"));
                 estadoNube.setText(IdiomaUtil.obtener("ctrl.respaldo.nube_sin_conexion"));
-                estadoNube.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #daa520;");
                 btnRespaldar.setVisible(false);
                 btnRespaldar.setManaged(false);
             } else {
                 indNube.setFill(Color.web("#555"));
                 estadoNube.setText(IdiomaUtil.obtener("ctrl.respaldo.nube_deshabilitada"));
-                estadoNube.setStyle("-fx-text-fill: #555; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #555;");
                 btnRespaldar.setVisible(false);
                 btnRespaldar.setManaged(false);
             }
@@ -233,7 +236,7 @@ public class RespaldoDatosHandler implements ModalHerramienta {
         Platform.runLater(() -> {
             indNube.setFill(Color.web("#daa520"));
             estadoNube.setText(IdiomaUtil.obtener("ctrl.respaldo.en_progreso"));
-            estadoNube.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+            estadoNube.setStyle("-fx-text-fill: #daa520;");
         });
 
         CompletableFuture.supplyAsync(() -> {
@@ -287,7 +290,7 @@ public class RespaldoDatosHandler implements ModalHerramienta {
             if (resultado == null) {
                 indNube.setFill(Color.web("#cc4444"));
                 estadoNube.setText(IdiomaUtil.obtener("ctrl.respaldo.error_servidor"));
-                estadoNube.setStyle("-fx-text-fill: #cc4444; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #cc4444;");
                 btnRespaldar.setDisable(false);
                 return;
             }
@@ -297,7 +300,7 @@ public class RespaldoDatosHandler implements ModalHerramienta {
             if (exito) {
                 indNube.setFill(Color.web("#a8b991"));
                 estadoNube.setText(IdiomaUtil.obtener("ctrl.respaldo.todo_subido"));
-                estadoNube.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #a8b991;");
                 btnRespaldar.setVisible(false);
                 btnRespaldar.setManaged(false);
                 mostrarResultado(cardResultado, resultado);
@@ -306,7 +309,7 @@ public class RespaldoDatosHandler implements ModalHerramienta {
                 indNube.setFill(Color.web("#cc4444"));
                 estadoNube.setText(MessageFormat.format(
                         IdiomaUtil.obtener("ctrl.respaldo.error_respaldo"), error));
-                estadoNube.setStyle("-fx-text-fill: #cc4444; -fx-font-size: 12px;");
+                estadoNube.setStyle("-fx-text-fill: #cc4444;");
                 btnRespaldar.setDisable(false);
             }
         }));
@@ -320,7 +323,8 @@ public class RespaldoDatosHandler implements ModalHerramienta {
         cardResultado.getChildren().clear();
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.respaldo.titulo_resultado"));
-        titulo.setStyle("-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("texto-secundario-sm");
+        titulo.setStyle("-fx-font-weight: 700; -fx-text-fill: #d4af37;");
 
         GridPane grid = new GridPane();
         grid.setHgap(16);
@@ -345,7 +349,8 @@ public class RespaldoDatosHandler implements ModalHerramienta {
             Map<String, Object> detalle = (Map<String, Object>) detalleObj;
 
             Label tituloDetalle = new Label(IdiomaUtil.obtener("ctrl.respaldo.detalle_tablas"));
-            tituloDetalle.setStyle("-fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: #c9a961;");
+            tituloDetalle.getStyleClass().add("texto-hint-sm");
+            tituloDetalle.setStyle("-fx-font-weight: 600; -fx-text-fill: #c9a961;");
             detalleBox.getChildren().add(tituloDetalle);
 
             for (Map.Entry<String, Object> entry : detalle.entrySet()) {
@@ -354,8 +359,9 @@ public class RespaldoDatosHandler implements ModalHerramienta {
                 boolean esError = valor.startsWith("ERROR");
 
                 Label lblTabla = new Label("  " + tabla + ": " + valor);
-                lblTabla.setStyle("-fx-text-fill: " + (esError ? "#cc4444" : "#a8b991") +
-                        "; -fx-font-size: 11px;");
+                lblTabla.getStyleClass().add("texto-hint-sm");
+                lblTabla.setStyle("-fx-text-fill: " + (esError ? "#cc4444" : "#a8b991")
+                        + ";");
                 detalleBox.getChildren().add(lblTabla);
             }
         }
@@ -366,7 +372,7 @@ public class RespaldoDatosHandler implements ModalHerramienta {
     }
 
     /** Estilo CSS premium para RadioButtons con puntos dorados. */
-    private static final String ESTILO_RADIO = "-fx-text-fill: #e8e8e8; -fx-font-size: 12px; " +
+    private static final String ESTILO_RADIO = "-fx-text-fill: #e8e8e8; " +
             "-fx-mark-color: #d4af37; -fx-color: #2a2a2a; " +
             "-fx-focus-color: rgba(212,175,55,0.5); -fx-faint-focus-color: transparent;";
 
@@ -384,7 +390,8 @@ public class RespaldoDatosHandler implements ModalHerramienta {
                 "-fx-border-color: #2a2a2a; -fx-border-radius: 8;");
 
         Label titulo = new Label(IdiomaUtil.obtener("ctrl.respaldo.titulo_intervalo"));
-        titulo.setStyle("-fx-font-size: 13px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("texto-info");
+        titulo.setStyle("-fx-font-weight: 700; -fx-text-fill: #d4af37;");
 
         // Leer intervalo actual del .env
         final int intervaloActual = leerIntervaloActual();
@@ -412,7 +419,8 @@ public class RespaldoDatosHandler implements ModalHerramienta {
         slider.setStyle("-fx-control-inner-background: #2a2a2a; -fx-accent: #d4af37;");
 
         Label lblSliderValor = new Label(formatearMinutos((int) slider.getValue()));
-        lblSliderValor.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 700;");
+        lblSliderValor.getStyleClass().add("texto-info");
+        lblSliderValor.setStyle("-fx-text-fill: #d4af37; -fx-font-weight: 700;");
         lblSliderValor.setMinWidth(100);
 
         HBox filaSlider = new HBox(10, slider, lblSliderValor);
@@ -436,7 +444,8 @@ public class RespaldoDatosHandler implements ModalHerramienta {
         filaBtnGuardar.setManaged(false);
 
         Label lblNota = new Label(IdiomaUtil.obtener("ctrl.respaldo.intervalo.nota"));
-        lblNota.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-wrap-text: true;");
+        lblNota.getStyleClass().add("texto-hint");
+        lblNota.setStyle("-fx-text-fill: #555; -fx-wrap-text: true;");
         lblNota.setWrapText(true);
         lblNota.setMaxWidth(460);
 
@@ -510,6 +519,7 @@ public class RespaldoDatosHandler implements ModalHerramienta {
     private RadioButton crearRadioDorado(String texto, ToggleGroup grupo) {
         RadioButton rb = new RadioButton(texto);
         rb.setToggleGroup(grupo);
+        rb.getStyleClass().add("texto-secundario-sm");
         rb.setStyle(ESTILO_RADIO);
         rb.selectedProperty().addListener((obs, viejo, nuevo) ->
                 rb.setStyle(nuevo ? ESTILO_RADIO_SELECTED : ESTILO_RADIO));

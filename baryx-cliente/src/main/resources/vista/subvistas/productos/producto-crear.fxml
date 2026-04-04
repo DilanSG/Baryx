@@ -64,10 +64,10 @@
             <padding>
                 <Insets top="16" right="16" bottom="16" left="16"/>
             </padding>
-            <Label text="%productos.crear.info.titulo" style="-fx-font-size: 14px; -fx-font-weight: 600; -fx-text-fill: #eed600ff;"/>
+            <Label text="%productos.crear.info.titulo" styleClass="info-titulo-dorado"/>
             <Label text="%productos.crear.info.desc"
                    wrapText="true"
-                   style="-fx-font-size: 13px; -fx-text-fill: #b0b0b0;"/>
+                   styleClass="info-descripcion"/>
         </VBox>
         
     </VBox>

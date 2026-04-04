@@ -111,7 +111,8 @@ public class CategoriaListadoController implements com.baryx.cliente.controlador
         card.setMaxWidth(250); // Forzar ancho
         
         Label nombre = new Label(categoria.getNombre().toUpperCase());
-        nombre.setStyle("-fx-font-weight: bold; -fx-font-size: 16px; -fx-text-fill: #d4af37;");
+        nombre.getStyleClass().add("tutorial-seccion-titulo");
+        nombre.setStyle("-fx-font-weight: bold; -fx-text-fill: #d4af37;");
         nombre.setWrapText(true);
         nombre.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         
@@ -128,16 +129,16 @@ public class CategoriaListadoController implements com.baryx.cliente.controlador
             Region iconoEditar = new Region();
             iconoEditar.getStyleClass().addAll("icono-svg-pequeno", "icono-editar");
             btnEditar.setGraphic(iconoEditar);
-            btnEditar.getStyleClass().add("boton-accion-mini");
-            btnEditar.setStyle("-fx-font-size: 13px; -fx-padding: 8 15;");
+            btnEditar.getStyleClass().addAll("boton-accion-mini", "texto-info");
+            btnEditar.setStyle("-fx-padding: 8 15;");
             btnEditar.setOnAction(e -> { e.consume(); mostrarFormularioEdicion(categoria); });
             
             Button btnEliminar = new Button(IdiomaUtil.obtener("ctrl.btn.eliminar"));
             Region iconoEliminar = new Region();
             iconoEliminar.getStyleClass().addAll("icono-svg-pequeno", "icono-eliminar");
             btnEliminar.setGraphic(iconoEliminar);
-            btnEliminar.getStyleClass().add("boton-accion-mini-rojo");
-            btnEliminar.setStyle("-fx-font-size: 13px; -fx-padding: 8 15;");
+            btnEliminar.getStyleClass().addAll("boton-accion-mini-rojo", "texto-info");
+            btnEliminar.setStyle("-fx-padding: 8 15;");
             btnEliminar.setOnAction(e -> { e.consume(); confirmarEliminacion(categoria); });
             
             acciones.getChildren().addAll(btnEditar, btnEliminar);

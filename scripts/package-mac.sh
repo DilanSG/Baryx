@@ -169,7 +169,7 @@ empaquetar_cliente_instalador() {
     print_step "Empaquetando cliente como instalador .${TIPO}..."
 
     MODULOS_CLIENTE="java.base,java.desktop,java.logging,java.naming,java.sql,java.xml,java.xml.crypto,java.management,java.net.http,java.prefs,java.scripting,java.security.jgss,java.security.sasl,jdk.unsupported,jdk.crypto.ec,jdk.accessibility"
-    local BARYX_API_URL_VAL="${BARYX_API_URL:-https://api.baryx.app}"
+    local BARYX_API_URL_VAL="${BARYX_API_URL:-https://baryxweb.onrender.com}"
     ICON=$(_icon_param)
 
     # shellcheck disable=SC2086

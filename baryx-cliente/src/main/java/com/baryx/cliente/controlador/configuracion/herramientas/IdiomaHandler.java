@@ -78,7 +78,8 @@ public class IdiomaHandler implements ModalHerramienta {
 
         // ─── Descripción ───
         Label descripcion = new Label(IdiomaUtil.obtener("idioma.descripcion"));
-        descripcion.setStyle("-fx-text-fill: #888; -fx-font-size: 11px;");
+        descripcion.getStyleClass().add("texto-hint-sm");
+        descripcion.setStyle("-fx-text-fill: #888;");
         descripcion.setWrapText(true);
 
         // ─── Card: Selector de idioma ───
@@ -105,14 +106,15 @@ public class IdiomaHandler implements ModalHerramienta {
 
         // Título de sección
         Label titulo = new Label(IdiomaUtil.obtener("idioma.selector"));
-        titulo.setStyle("-fx-font-size: 13px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("panel-seccion-titulo-sm");
 
         // ComboBox con idiomas disponibles
         ComboBox<IdiomaDisponible> comboIdioma = new ComboBox<>();
         comboIdioma.getItems().addAll(IdiomaUtil.getIdiomasDisponibles());
+        comboIdioma.getStyleClass().add("texto-info");
         comboIdioma.setStyle(
                 "-fx-background-color: #2a2a2a; -fx-text-fill: #e8e8e8; " +
-                "-fx-font-size: 13px; -fx-pref-width: 280; -fx-pref-height: 38; " +
+                "-fx-pref-width: 280; -fx-pref-height: 38; " +
                 "-fx-background-radius: 6; -fx-border-color: #404040; -fx-border-radius: 6;");
 
         // Renderizar cada opción con nombre del idioma
@@ -125,7 +127,8 @@ public class IdiomaHandler implements ModalHerramienta {
                 } else {
                     setText(item.getNombre());
                 }
-                setStyle("-fx-text-fill: #e8e8e8; -fx-background-color: #2a2a2a; -fx-font-size: 13px;");
+                setStyle("-fx-text-fill: #e8e8e8; -fx-background-color: #2a2a2a;");
+                getStyleClass().add("texto-info");
             }
         });
         comboIdioma.setButtonCell(new ListCell<>() {
@@ -133,7 +136,8 @@ public class IdiomaHandler implements ModalHerramienta {
             protected void updateItem(IdiomaDisponible item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(empty || item == null ? null : item.getNombre());
-                setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 13px;");
+                setStyle("-fx-text-fill: #e8e8e8;");
+                getStyleClass().add("texto-info");
             }
         });
 
@@ -148,7 +152,8 @@ public class IdiomaHandler implements ModalHerramienta {
 
         // Estado actual
         Label estadoActual = new Label("● " + obtenerNombreIdiomaActual());
-        estadoActual.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 11px; -fx-font-weight: 600;");
+        estadoActual.getStyleClass().add("texto-hint-sm");
+        estadoActual.setStyle("-fx-text-fill: #a8b991; -fx-font-weight: 600;");
 
         // Listener al cambiar idioma
         comboIdioma.setOnAction(e -> {

@@ -593,7 +593,8 @@ public class LoginPinController {
     private void mostrarResultadoConexion(String mensaje, String color) {
         if (labelResultadoConexion != null) {
             labelResultadoConexion.setText(mensaje);
-            labelResultadoConexion.setStyle("-fx-font-size: 11px; -fx-text-fill: " + color + ";");
+            if (!labelResultadoConexion.getStyleClass().contains("login-cfg-resultado")) labelResultadoConexion.getStyleClass().add("login-cfg-resultado");
+            labelResultadoConexion.setStyle("-fx-text-fill: " + color + ";");
         }
     }
 

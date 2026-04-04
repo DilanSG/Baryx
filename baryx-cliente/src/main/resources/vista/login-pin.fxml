@@ -34,7 +34,7 @@
                 </image>
             </ImageView>
 
-            <VBox spacing="32" alignment="CENTER" styleClass="login-card" maxWidth="520">
+            <VBox spacing="32" alignment="CENTER" styleClass="login-card">
                 <padding>
                     <Insets top="48" right="48" bottom="48" left="48"/>
                 </padding>
@@ -50,22 +50,20 @@
                     <Text text="%login.titulo.ingrese_pin" styleClass="login-description"/>
                 </VBox>
 
-                <VBox fx:id="formularioCodigo" spacing="24" maxWidth="420" minWidth="420">
+                <VBox fx:id="formularioCodigo" spacing="24" styleClass="login-form-inner">
                     <TextField fx:id="campoCodigo"
-                               styleClass="login-input, login-input-codigo, sin-teclado-virtual"
+                               styleClass="login-input, login-input-codigo, sin-teclado-virtual, pin-display"
                                prefHeight="72" alignment="CENTER"
-                               focusTraversable="false"
-                               style="-fx-font-size: 48px; -fx-font-weight: 700;"/>
+                               focusTraversable="false"/>
                     <Region prefHeight="24"/>
                 </VBox>
 
-                <VBox fx:id="formularioPin" spacing="24" maxWidth="420" minWidth="420"
+                <VBox fx:id="formularioPin" spacing="24" styleClass="login-form-inner"
                       visible="false" managed="false">
                     <PasswordField fx:id="campoPin"
-                                   styleClass="login-input, login-input-pin, sin-teclado-virtual"
+                                   styleClass="login-input, login-input-pin, sin-teclado-virtual, pin-display"
                                    prefHeight="72" alignment="CENTER"
-                                   focusTraversable="false"
-                                   style="-fx-font-size: 48px; -fx-font-weight: 700;"/>
+                                   focusTraversable="false"/>
                     <Region prefHeight="24"/>
                     <Button text="%login.btn.volver" onAction="#volverACodigo"
                             styleClass="login-button-secondary"
@@ -114,7 +112,7 @@
                 </image>
             </ImageView>
 
-            <VBox spacing="32" alignment="CENTER" styleClass="login-card" maxWidth="520">
+            <VBox spacing="32" alignment="CENTER" styleClass="login-card">
                 <padding>
                     <Insets top="48" right="48" bottom="48" left="48"/>
                 </padding>
@@ -124,7 +122,7 @@
                     <Text text="%login.admin.descripcion" styleClass="login-description"/>
                 </VBox>
 
-                <VBox spacing="24" maxWidth="420" minWidth="420">
+                <VBox spacing="24" styleClass="login-form-inner">
 
                     <VBox spacing="10">
                         <Label text="%login.admin.label.usuario" styleClass="login-label"/>
@@ -221,9 +219,9 @@
               visible="false" managed="false"
               style="-fx-cursor: hand; -fx-padding: 6 10;"
               onMouseClicked="#togglePanelConfig">
-            <Label text="⚙" style="-fx-text-fill: #d4af37; -fx-font-size: 14px;"/>
+            <Label text="⚙" styleClass="login-cfg-icono"/>
             <Label fx:id="labelConfigResumen" text="%login.config.titulo"
-                   style="-fx-text-fill: #666666; -fx-font-size: 11px;"/>
+                   styleClass="login-cfg-resumen"/>
         </HBox>
 
         <VBox fx:id="panelConfigServidor" spacing="8" visible="false" managed="false"
@@ -235,63 +233,50 @@
             </padding>
 
             <HBox spacing="6" alignment="CENTER_LEFT">
-                <Label text="%login.config.conexion" style="-fx-text-fill: #d4af37; -fx-font-size: 10px;
-                       -fx-font-weight: bold;"/>
+                <Label text="%login.config.conexion" styleClass="login-cfg-seccion-titulo"/>
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label text="▾" style="-fx-text-fill: #666; -fx-font-size: 12px; -fx-cursor: hand;"
+                <Label text="▾" styleClass="login-cfg-colapsar"
                        onMouseClicked="#colapsarPanelConfig"/>
             </HBox>
 
             <HBox spacing="6" alignment="CENTER_LEFT">
-                <Label text="%login.config.ip" style="-fx-text-fill: #777; -fx-font-size: 10px;"
+                <Label text="%login.config.ip" styleClass="login-cfg-label"
                        minWidth="42" prefWidth="42"/>
                 <TextField fx:id="campoIpServidor" promptText="192.168.1.100"
                            prefWidth="155" prefHeight="26" maxWidth="155"
-                           style="-fx-background-color: #1a1a1a; -fx-text-fill: #e8e8e8;
-                                  -fx-border-color: #404040; -fx-border-radius: 4;
-                                  -fx-background-radius: 4; -fx-font-size: 11px;
-                                  -fx-prompt-text-fill: #555; -fx-padding: 3 6;"/>
+                           styleClass="login-cfg-input"/>
             </HBox>
 
             <HBox spacing="6" alignment="CENTER_LEFT">
-                <Label text="%login.config.puerto" style="-fx-text-fill: #777; -fx-font-size: 10px;"
+                <Label text="%login.config.puerto" styleClass="login-cfg-label"
                        minWidth="42" prefWidth="42"/>
                 <TextField fx:id="campoPuertoServidor" text="8080"
                            prefWidth="155" prefHeight="26" maxWidth="155"
-                           style="-fx-background-color: #1a1a1a; -fx-text-fill: #e8e8e8;
-                                  -fx-border-color: #404040; -fx-border-radius: 4;
-                                  -fx-background-radius: 4; -fx-font-size: 11px;
-                                  -fx-prompt-text-fill: #555; -fx-padding: 3 6;"/>
+                           styleClass="login-cfg-input"/>
             </HBox>
 
             <HBox spacing="6" alignment="CENTER_LEFT">
-                <Label text="%login.config.equipo" style="-fx-text-fill: #777; -fx-font-size: 10px;"
+                <Label text="%login.config.equipo" styleClass="login-cfg-label"
                        minWidth="42" prefWidth="42"/>
                 <TextField fx:id="campoNombreCliente" promptText="Caja 1"
                            prefWidth="155" prefHeight="26" maxWidth="155"
-                           style="-fx-background-color: #1a1a1a; -fx-text-fill: #e8e8e8;
-                                  -fx-border-color: #404040; -fx-border-radius: 4;
-                                  -fx-background-radius: 4; -fx-font-size: 11px;
-                                  -fx-prompt-text-fill: #555; -fx-padding: 3 6;"/>
+                           styleClass="login-cfg-input"/>
             </HBox>
 
             <HBox spacing="6" alignment="CENTER_LEFT">
                 <Button fx:id="botonProbarConexion" text="%login.config.conectar"
                         onAction="#probarConexionServidor"
                         prefHeight="26" prefWidth="75"
-                        style="-fx-background-color: #2a2a2a; -fx-text-fill: #d4af37;
-                               -fx-border-color: #d4af37; -fx-border-radius: 4;
-                               -fx-background-radius: 4; -fx-font-size: 10px;
-                               -fx-cursor: hand;"/>
+                        styleClass="login-cfg-btn-conectar"/>
                 <Label fx:id="labelResultadoConexion" text=""
-                       style="-fx-font-size: 10px; -fx-text-fill: #999;"/>
+                       styleClass="login-cfg-resultado"/>
             </HBox>
         </VBox>
 
         <HBox alignment="CENTER_LEFT" spacing="10">
             <ToggleSwitch fx:id="toggleHostMode"/>
             <Label fx:id="labelHostMode" text="%login.config.modo_host"
-                   style="-fx-text-fill: #666666; -fx-font-size: 12px;"/>
+                   styleClass="login-cfg-resumen"/>
         </HBox>
     </VBox>
 

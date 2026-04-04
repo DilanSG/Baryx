@@ -4,7 +4,7 @@
  * Queda prohibido el uso, copia o distribución sin autorización expresa del titular.*/
 package com.baryx.cliente.controlador;
 
-import com.baryx.cliente.servicio.LicenseServicio;
+import com.baryx.cliente.servicio.LicenciaServicio;
 import com.baryx.cliente.utilidad.IdiomaUtil;
 import javafx.application.HostServices;
 import javafx.fxml.FXML;
@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
 import java.text.MessageFormat;
 
 // Controlador del banner de renovación de licencia. Muestra un aviso no-bloqueante cuando faltan pocos días para la expiración.
-public class RenewalBannerController {
+public class BannerRenovacionController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RenewalBannerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(BannerRenovacionController.class);
 
     @FXML private HBox root;
     @FXML private Label labelTexto;
@@ -40,7 +40,7 @@ public class RenewalBannerController {
     private void abrirTienda() {
         if (hostServices != null) {
             try {
-                hostServices.showDocument(LicenseServicio.getUrlTienda());
+                hostServices.showDocument(LicenciaServicio.getUrlTienda());
             } catch (Exception ex) {
                 logger.warn("[License] No se pudo abrir navegador");
             }

@@ -102,8 +102,10 @@ baryx-cliente/baryx-cliente.properties
 *.bak
 backup/
 
-# Dependencias de Node (si usas herramientas frontend)
+# Dependencias de Node (residuales, este es un proyecto Java/Maven)
 node_modules/
+package.json
+package-lock.json
 npm-debug.log
 yarn-error.log
 

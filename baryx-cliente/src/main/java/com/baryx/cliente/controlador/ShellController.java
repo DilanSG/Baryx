@@ -6,8 +6,8 @@ package com.baryx.cliente.controlador;
 
 import com.baryx.cliente.utilidad.IdiomaUtil;
 import com.baryx.cliente.utilidad.NavegacionUtil;
-import com.baryx.cliente.servicio.LicenseServicio;
-import com.baryx.cliente.servicio.UpdateCheckServicio;
+import com.baryx.cliente.servicio.LicenciaServicio;
+import com.baryx.cliente.servicio.VerificacionActualizacionServicio;
 import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -94,18 +94,18 @@ public class ShellController {
      * @param info         Información de la actualización disponible
      * @param hostServices Para abrir el navegador (del sistema)
      */
-    public void mostrarBannerActualizacion(UpdateCheckServicio.UpdateInfo info, HostServices hostServices) {
+    public void mostrarBannerActualizacion(VerificacionActualizacionServicio.UpdateInfo info, HostServices hostServices) {
         try {
             // Remover banner anterior si existe (evitar duplicados)
             if (bannerActualizacionActual != null) {
                 contenedorRaiz.getChildren().remove(bannerActualizacionActual);
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/update-banner.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/banner-actualizacion.fxml"));
             javafx.scene.layout.HBox banner = loader.load();
 
-            UpdateBannerController ctrl = loader.getController();
-            ctrl.inicializar(info.versionRemota(), info.versionLocal(), info.urlDescarga(), hostServices);
+            BannerActualizacionController ctrl = loader.getController();
+            ctrl.inicializar(info.versionRemota(), info.versionLocal(), hostServices);
 
             // Anclar al top del StackPane raíz, encima de todo el contenido
             StackPane.setAlignment(banner, javafx.geometry.Pos.TOP_CENTER);
@@ -114,7 +114,7 @@ public class ShellController {
 
             logger.info("[Update] Banner mostrado — version remota: {}", info.versionRemota());
         } catch (IOException e) {
-            logger.warn("[Update] No se pudo cargar update-banner.fxml: {}", e.getMessage());
+            logger.warn("[Update] No se pudo cargar banner-actualizacion.fxml: {}", e.getMessage());
         }
     }
 
@@ -131,14 +131,14 @@ public class ShellController {
      * @param hostServices Para abrir el navegador
      * @param onCerrar     Callback cuando el usuario cierra el diálogo
      */
-    public void mostrarDialogoLicencia(LicenseServicio.ResultadoValidacion resultado,
+    public void mostrarDialogoLicencia(LicenciaServicio.ResultadoValidacion resultado,
                                        HostServices hostServices,
                                        Runnable onCerrar) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/license-dialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/licencia-dialogo.fxml"));
             javafx.scene.layout.StackPane dialogo = loader.load();
 
-            LicenseDialogController ctrl = loader.getController();
+            LicenciaDialogoController ctrl = loader.getController();
             ctrl.inicializar(resultado, hostServices, onCerrar);
 
             // Overlay encima de todo el contenido existente
@@ -146,7 +146,7 @@ public class ShellController {
 
             logger.info("[License] Diálogo mostrado — estado: {}", resultado.estado());
         } catch (IOException e) {
-            logger.warn("[License] No se pudo cargar license-dialog.fxml: {}", e.getMessage());
+            logger.warn("[License] No se pudo cargar licencia-dialogo.fxml: {}", e.getMessage());
             // Si falla el diálogo, ejecutar el callback para no bloquear la app
             if (onCerrar != null) onCerrar.run();
         }
@@ -167,10 +167,10 @@ public class ShellController {
                 contenedorRaiz.getChildren().remove(bannerRenovacionActual);
             }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/renewal-banner.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/vista/banner-renovacion.fxml"));
             javafx.scene.layout.HBox banner = loader.load();
 
-            RenewalBannerController ctrl = loader.getController();
+            BannerRenovacionController ctrl = loader.getController();
             ctrl.inicializar(diasRestantes, hostServices);
 
             StackPane.setAlignment(banner, javafx.geometry.Pos.TOP_CENTER);
@@ -179,7 +179,7 @@ public class ShellController {
 
             logger.info("[License] Banner de renovación mostrado — {} días restantes", diasRestantes);
         } catch (IOException e) {
-            logger.warn("[License] No se pudo cargar renewal-banner.fxml: {}", e.getMessage());
+            logger.warn("[License] No se pudo cargar banner-renovacion.fxml: {}", e.getMessage());
         }
     }
 
@@ -195,8 +195,8 @@ public class ShellController {
      */
     public void mostrarAsistenteBaseDatos(java.util.function.Consumer<Boolean> callbackCompletado) {
         var asistente = new com.baryx.cliente.controlador.configuracion.AsistenteBaseDatos(
-                contenedorRaiz, callbackCompletado);
+                contenedorRaiz, callbackCompletado, true);
         asistente.mostrar();
-        logger.info("[Setup] Asistente de base de datos abierto");
+        logger.info("[Setup] Asistente de base de datos abierto (modo inicial)");
     }
 }

@@ -189,11 +189,10 @@
                         <Label text="%usuarios.modal.codigo" styleClass="label-campo"/>
                         <TextField fx:id="campoCodigo"
                                   promptText="%usuarios.modal.codigo.prompt"
-                                  styleClass="campo-texto-codigo"
+                                  styleClass="campo-texto-codigo, icono-vacio-lg"
                                   prefHeight="72"
                                   maxWidth="200"
-                                  alignment="CENTER"
-                                  style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
+                                  alignment="CENTER"/>
                         <Label text="%usuarios.modal.codigo.info"
                               styleClass="hint-campo"/>
                     </VBox>
@@ -202,11 +201,10 @@
                         <Label text="%usuarios.modal.pin" styleClass="label-campo"/>
                         <PasswordField fx:id="campoPin"
                                       promptText="%usuarios.modal.pin.prompt"
-                                      styleClass="campo-texto-pin"
+                                      styleClass="campo-texto-pin, icono-vacio-lg"
                                       prefHeight="72"
                                       maxWidth="250"
-                                      alignment="CENTER"
-                                      style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
+                                      alignment="CENTER"/>
                         <Label text="%usuarios.modal.pin.info"
                               styleClass="hint-campo"/>
                     </VBox>

@@ -55,35 +55,36 @@ public class AsistenteBaseDatos {
 
     private static final String ESTILO_CAMPO =
             "-fx-background-color: #0f0f0f; -fx-text-fill: #f5f5f5; -fx-border-color: #333; " +
-            "-fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px; " +
+            "-fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 14; " +
             "-fx-prompt-text-fill: #555;";
     private static final String ESTILO_CAMPO_FOCUS =
             "-fx-background-color: #0f0f0f; -fx-text-fill: #f5f5f5; -fx-border-color: #d4af37; " +
-            "-fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px; " +
+            "-fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 14; " +
             "-fx-prompt-text-fill: #555;";
     private static final String ESTILO_CAMPO_ERROR =
             "-fx-background-color: #0f0f0f; -fx-text-fill: #f5f5f5; -fx-border-color: #8b0000; " +
-            "-fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 14; -fx-font-size: 13px;";
+            "-fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 10 14;";
     private static final String ESTILO_BOTON_PRINCIPAL =
             "-fx-background-color: linear-gradient(to bottom, #d4af37, #b8984e); -fx-text-fill: #0a0a0a; " +
-            "-fx-font-weight: 700; -fx-font-size: 14px; -fx-padding: 12 28; -fx-cursor: hand; " +
+            "-fx-font-weight: 700; -fx-padding: 12 28; -fx-cursor: hand; " +
             "-fx-background-radius: 8; -fx-border-radius: 8; -fx-effect: dropshadow(gaussian, rgba(212,175,55,0.25), 8, 0, 0, 2);";
     private static final String ESTILO_BOTON_SECUNDARIO =
             "-fx-background-color: transparent; -fx-text-fill: #d4af37; -fx-border-color: #d4af37; " +
-            "-fx-font-weight: 600; -fx-font-size: 13px; -fx-padding: 10 22; -fx-cursor: hand; " +
+            "-fx-font-weight: 600; -fx-padding: 10 22; -fx-cursor: hand; " +
             "-fx-background-radius: 8; -fx-border-radius: 8;";
     private static final String ESTILO_BOTON_TERCIARIO =
             "-fx-background-color: rgba(255,255,255,0.06); -fx-text-fill: #b0b0b0; -fx-border-color: #333; " +
-            "-fx-font-size: 12px; -fx-padding: 8 16; -fx-cursor: hand; " +
+            "-fx-padding: 8 16; -fx-cursor: hand; " +
             "-fx-background-radius: 6; -fx-border-radius: 6;";
     private static final String ESTILO_CARD =
             "-fx-background-color: #0f0f0f; -fx-background-radius: 10; -fx-padding: 18; " +
             "-fx-border-color: #222; -fx-border-radius: 10; -fx-border-width: 1;";
     private static final String ESTILO_SECCION_TITULO =
-            "-fx-font-size: 13px; -fx-font-weight: 700; -fx-text-fill: #d4af37;";
+            "-fx-font-weight: 700; -fx-text-fill: #d4af37;";
 
     private final StackPane contenedorRaiz;
     private final Consumer<Boolean> callbackCompletado;
+    private final boolean modoInicial;
     private StackPane overlay;
     private VBox panelPrincipal;
 
@@ -110,14 +111,24 @@ public class AsistenteBaseDatos {
     private String ultimoHost, ultimoPuerto, ultimoDbNombre, ultimoDbUsuario, ultimoBusinessId;
 
     /**
+     * Crea el asistente en modo configuración (desde herramientas).
+     * Si hay BDs guardadas muestra la lista completa; si no, inicia el wizard.
+     */
+    public AsistenteBaseDatos(StackPane contenedorRaiz, Consumer<Boolean> callbackCompletado) {
+        this(contenedorRaiz, callbackCompletado, false);
+    }
+
+    /**
      * Crea el asistente de base de datos.
      *
      * @param contenedorRaiz StackPane del shell sobre el cual montar el overlay
      * @param callbackCompletado Se invoca con true si el setup terminó bien, false si se canceló
+     * @param modoInicial true = startup (solo wizard paso a paso), false = herramientas (lista completa)
      */
-    public AsistenteBaseDatos(StackPane contenedorRaiz, Consumer<Boolean> callbackCompletado) {
+    public AsistenteBaseDatos(StackPane contenedorRaiz, Consumer<Boolean> callbackCompletado, boolean modoInicial) {
         this.contenedorRaiz = contenedorRaiz;
         this.callbackCompletado = callbackCompletado;
+        this.modoInicial = modoInicial;
     }
 
     /** Muestra el asistente como overlay bloqueante sobre la aplicación. */
@@ -146,14 +157,15 @@ public class AsistenteBaseDatos {
         circuloIcono.setStroke(Color.web("#d4af37"));
         circuloIcono.setStrokeWidth(1.5);
         Label simboloDb = new Label("\uD83D\uDDC4"); // 🗄 icono base de datos
-        simboloDb.setStyle("-fx-font-size: 18px;");
+        simboloDb.getStyleClass().add("icono-texto-md");
         iconoDb.getChildren().addAll(circuloIcono, simboloDb);
 
         VBox headerTexto = new VBox(2);
         Label titulo = new Label(IdiomaUtil.obtener("asistente.pg.titulo"));
-        titulo.setStyle("-fx-font-size: 20px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("modal-titulo-lg");
         Label subtitulo = new Label(IdiomaUtil.obtener("asistente.pg.subtitulo"));
-        subtitulo.setStyle("-fx-font-size: 12px; -fx-text-fill: #777; -fx-wrap-text: true;");
+        subtitulo.getStyleClass().add("modal-subtitulo");
+        subtitulo.setStyle("-fx-wrap-text: true;");
         subtitulo.setWrapText(true);
         headerTexto.getChildren().addAll(titulo, subtitulo);
         HBox.setHgrow(headerTexto, Priority.ALWAYS);
@@ -191,14 +203,17 @@ public class AsistenteBaseDatos {
         barraEstado.setAlignment(Pos.CENTER_LEFT);
         indicadorEstado = new Circle(4, Color.web("#444"));
         labelEstado = new Label("");
-        labelEstado.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+        labelEstado.getStyleClass().add("estado-texto");
+        labelEstado.setStyle("-fx-text-fill: #666;");
         barraEstado.getChildren().addAll(indicadorEstado, labelEstado);
 
         Button btnCancelar = new Button(IdiomaUtil.obtener("asistente.pg.cancelar"));
+        btnCancelar.getStyleClass().add("texto-info");
         btnCancelar.setStyle(ESTILO_BOTON_SECUNDARIO);
         btnCancelar.setOnAction(e -> cerrar(false));
 
         btnSiguiente = new Button(IdiomaUtil.obtener("asistente.pg.siguiente"));
+        btnSiguiente.getStyleClass().add("panel-seccion-titulo");
         btnSiguiente.setStyle(ESTILO_BOTON_PRINCIPAL);
         btnSiguiente.setOnAction(e -> avanzarPaso());
 
@@ -210,12 +225,17 @@ public class AsistenteBaseDatos {
         overlay.getChildren().add(panelPrincipal);
         contenedorRaiz.getChildren().add(overlay);
 
-        // Si hay BDs guardadas, mostrar la lista; si no, iniciar asistente
-        List<ConfiguracionBd> guardadas = ConfiguracionBd.cargarTodas();
-        if (guardadas.isEmpty()) {
+        // En modo inicial (startup): siempre wizard paso a paso
+        // En modo herramientas: lista completa si hay BDs, wizard si no
+        if (modoInicial) {
             mostrarPaso(0);
         } else {
-            mostrarListaBds();
+            List<ConfiguracionBd> guardadas = ConfiguracionBd.cargarTodas();
+            if (guardadas.isEmpty()) {
+                mostrarPaso(0);
+            } else {
+                mostrarListaBds();
+            }
         }
     }
 
@@ -247,13 +267,15 @@ public class AsistenteBaseDatos {
 
             // Número dentro del dot
             Label num = new Label(String.valueOf(i + 1));
-            num.setStyle("-fx-font-size: 9px; -fx-font-weight: 700; -fx-text-fill: " +
+            num.getStyleClass().add("badge-texto");
+            num.setStyle("-fx-font-weight: 700; -fx-text-fill: " +
                     (i == 0 ? "#0a0a0a" : "#555") + ";");
             StackPane dotStack = new StackPane(dot, num);
 
             // Label debajo
             Label lbl = new Label(nombres[i]);
-            lbl.setStyle("-fx-font-size: 10px; -fx-text-fill: " +
+            lbl.getStyleClass().add("dato-label");
+            lbl.setStyle("-fx-text-fill: " +
                     (i == 0 ? "#d4af37" : "#555") + "; -fx-font-weight: " +
                     (i == 0 ? "600" : "400") + ";");
 
@@ -301,9 +323,11 @@ public class AsistenteBaseDatos {
 
             String color = completado ? "#a8b991" : activo ? "#d4af37" : "#555";
             String numColor = (completado || activo) ? "#0a0a0a" : "#555";
-            num.setStyle("-fx-font-size: 9px; -fx-font-weight: 700; -fx-text-fill: " + numColor + ";");
+            num.getStyleClass().add("badge-texto");
+            num.setStyle("-fx-font-weight: 700; -fx-text-fill: " + numColor + ";");
             if (completado) num.setText("✓");
-            lbl.setStyle("-fx-font-size: 10px; -fx-text-fill: " + color +
+            lbl.getStyleClass().add("dato-label");
+            lbl.setStyle("-fx-text-fill: " + color +
                     "; -fx-font-weight: " + ((completado || activo) ? "600" : "400") + ";");
         }
         // Actualizar líneas conectoras
@@ -332,7 +356,8 @@ public class AsistenteBaseDatos {
         btnSiguiente.setDisable(false);
 
         Label info = new Label(IdiomaUtil.obtener("asistente.pg.detectando"));
-        info.setStyle("-fx-text-fill: #aaa; -fx-font-size: 13px; -fx-wrap-text: true;");
+        info.getStyleClass().add("texto-info");
+        info.setStyle("-fx-wrap-text: true;");
         info.setWrapText(true);
 
         // Card de resultados
@@ -340,6 +365,7 @@ public class AsistenteBaseDatos {
         resultados.setStyle(ESTILO_CARD);
 
         Label seccionTitulo = new Label("\uD83D\uDD0D  " + IdiomaUtil.obtener("asistente.pg.paso.detectar"));
+        seccionTitulo.getStyleClass().add("texto-info");
         seccionTitulo.setStyle(ESTILO_SECCION_TITULO);
 
         Region divider = new Region();
@@ -348,13 +374,16 @@ public class AsistenteBaseDatos {
         divider.setStyle("-fx-background-color: #222;");
 
         Label lblPsql = new Label("⏳  " + IdiomaUtil.obtener("asistente.pg.buscando_postgresql"));
-        lblPsql.setStyle("-fx-text-fill: #888; -fx-font-size: 13px;");
+        lblPsql.getStyleClass().add("texto-info");
+        lblPsql.setStyle("-fx-text-fill: #888;");
 
         Label lblServicio = new Label("⏳  " + IdiomaUtil.obtener("asistente.pg.verificando_servicio"));
-        lblServicio.setStyle("-fx-text-fill: #888; -fx-font-size: 13px;");
+        lblServicio.getStyleClass().add("texto-info");
+        lblServicio.setStyle("-fx-text-fill: #888;");
 
         Label lblComando = new Label("");
-        lblComando.setStyle("-fx-text-fill: #888; -fx-font-size: 11px; -fx-font-family: monospace; " +
+        lblComando.getStyleClass().add("texto-hint-sm");
+        lblComando.setStyle("-fx-text-fill: #888; -fx-font-family: monospace; " +
                            "-fx-wrap-text: true; -fx-padding: 10; -fx-background-color: #0a0a0a; " +
                            "-fx-background-radius: 6; -fx-border-color: #222; -fx-border-radius: 6;");
         lblComando.setWrapText(true);
@@ -372,10 +401,10 @@ public class AsistenteBaseDatos {
             Platform.runLater(() -> {
                 if (deteccion.encontrado()) {
                     lblPsql.setText("✓  PostgreSQL: " + deteccion.version());
-                    lblPsql.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 13px;");
+                    lblPsql.setStyle("-fx-text-fill: #a8b991;");
                 } else {
                     lblPsql.setText("✗  " + IdiomaUtil.obtener("asistente.pg.no_encontrado"));
-                    lblPsql.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 13px;");
+                    lblPsql.setStyle("-fx-text-fill: #ef4444;");
                     lblComando.setText(DetectorDependencias.obtenerComandoInstalacion());
                     lblComando.setVisible(true);
                     lblComando.setManaged(true);
@@ -383,12 +412,12 @@ public class AsistenteBaseDatos {
 
                 if (activo) {
                     lblServicio.setText("✓  " + IdiomaUtil.obtener("asistente.pg.servicio_activo"));
-                    lblServicio.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 13px;");
+                    lblServicio.setStyle("-fx-text-fill: #a8b991;");
                     setEstado(IdiomaUtil.obtener("asistente.pg.listo"), "#a8b991");
                     btnSiguiente.setText(IdiomaUtil.obtener("asistente.pg.siguiente"));
                 } else {
                     lblServicio.setText("✗  " + IdiomaUtil.obtener("asistente.pg.servicio_inactivo"));
-                    lblServicio.setStyle("-fx-text-fill: #daa520; -fx-font-size: 13px;");
+                    lblServicio.setStyle("-fx-text-fill: #daa520;");
                     setEstado(IdiomaUtil.obtener("asistente.pg.iniciar_pg"), "#daa520");
                     // Se puede continuar incluso si no se detecta (el usuario puede tener PG remoto)
                     btnSiguiente.setText(IdiomaUtil.obtener("asistente.pg.siguiente"));
@@ -405,7 +434,8 @@ public class AsistenteBaseDatos {
         setEstado("", "#444");
 
         Label info = new Label(IdiomaUtil.obtener("asistente.pg.paso1_info"));
-        info.setStyle("-fx-text-fill: #aaa; -fx-font-size: 13px; -fx-wrap-text: true;");
+        info.getStyleClass().add("texto-info");
+        info.setStyle("-fx-wrap-text: true;");
         info.setWrapText(true);
 
         // Card contenedora
@@ -413,6 +443,7 @@ public class AsistenteBaseDatos {
         card.setStyle(ESTILO_CARD);
 
         Label seccionTitulo = new Label("\uD83D\uDD17  " + IdiomaUtil.obtener("asistente.pg.paso.conectar"));
+        seccionTitulo.getStyleClass().add("texto-info");
         seccionTitulo.setStyle(ESTILO_SECCION_TITULO);
 
         Region divider = new Region();
@@ -427,6 +458,7 @@ public class AsistenteBaseDatos {
         campoPuerto = crearCampo("5432");
         campoSuperUsuario = crearCampo("postgres");
         campoSuperPassword = new PasswordField();
+        campoSuperPassword.getStyleClass().add("texto-info");
         campoSuperPassword.setStyle(ESTILO_CAMPO);
         campoSuperPassword.setPromptText("••••••");
         campoSuperPassword.setPrefWidth(280);
@@ -452,7 +484,8 @@ public class AsistenteBaseDatos {
         grid.add(campoSuperPassword, 1, 3);
 
         Label hint = new Label("ℹ  " + IdiomaUtil.obtener("asistente.pg.hint_superusuario"));
-        hint.setStyle("-fx-text-fill: #555; -fx-font-size: 11px; -fx-wrap-text: true; -fx-padding: 6 0 0 0;");
+        hint.getStyleClass().add("texto-hint-sm");
+        hint.setStyle("-fx-text-fill: #555; -fx-wrap-text: true; -fx-padding: 6 0 0 0;");
         hint.setWrapText(true);
 
         card.getChildren().addAll(seccionTitulo, divider, grid, hint);
@@ -467,7 +500,8 @@ public class AsistenteBaseDatos {
         setEstado("", "#444");
 
         Label info = new Label(IdiomaUtil.obtener("asistente.pg.paso2_info"));
-        info.setStyle("-fx-text-fill: #aaa; -fx-font-size: 13px; -fx-wrap-text: true;");
+        info.getStyleClass().add("texto-info");
+        info.setStyle("-fx-wrap-text: true;");
         info.setWrapText(true);
 
         // Card contenedora
@@ -475,6 +509,7 @@ public class AsistenteBaseDatos {
         card.setStyle(ESTILO_CARD);
 
         Label seccionTitulo = new Label("\uD83D\uDDC3  " + IdiomaUtil.obtener("asistente.pg.paso.crear"));
+        seccionTitulo.getStyleClass().add("texto-info");
         seccionTitulo.setStyle(ESTILO_SECCION_TITULO);
 
         Region divider = new Region();
@@ -488,11 +523,13 @@ public class AsistenteBaseDatos {
         campoDbNombre = crearCampo("baryx_db");
         campoDbUsuario = crearCampo("baryx_admin");
         campoDbPassword = new PasswordField();
+        campoDbPassword.getStyleClass().add("texto-info");
         campoDbPassword.setStyle(ESTILO_CAMPO);
         campoDbPassword.setPrefWidth(280);
         campoDbPassword.setPromptText("••••••");
         agregarFocusStyle(campoDbPassword);
         campoDbPasswordConfirmar = new PasswordField();
+        campoDbPasswordConfirmar.getStyleClass().add("texto-info");
         campoDbPasswordConfirmar.setStyle(ESTILO_CAMPO);
         campoDbPasswordConfirmar.setPrefWidth(280);
         campoDbPasswordConfirmar.setPromptText("••••••");
@@ -519,7 +556,8 @@ public class AsistenteBaseDatos {
         setEstado("", "#444");
 
         Label info = new Label(IdiomaUtil.obtener("asistente.pg.paso3_info"));
-        info.setStyle("-fx-text-fill: #aaa; -fx-font-size: 13px; -fx-wrap-text: true;");
+        info.getStyleClass().add("texto-info");
+        info.setStyle("-fx-wrap-text: true;");
         info.setWrapText(true);
 
         // Card contenedora
@@ -527,6 +565,7 @@ public class AsistenteBaseDatos {
         card.setStyle(ESTILO_CARD);
 
         Label seccionTitulo = new Label("\uD83C\uDFEA  " + IdiomaUtil.obtener("asistente.pg.paso.negocio"));
+        seccionTitulo.getStyleClass().add("texto-info");
         seccionTitulo.setStyle(ESTILO_SECCION_TITULO);
 
         Region divider = new Region();
@@ -537,11 +576,13 @@ public class AsistenteBaseDatos {
         campoBusinessId.setPromptText(IdiomaUtil.obtener("asistente.pg.placeholder_negocio"));
 
         Label notaNube = new Label("ℹ  " + IdiomaUtil.obtener("asistente.pg.nota_nube"));
-        notaNube.setStyle("-fx-text-fill: #666; -fx-font-size: 11px; -fx-wrap-text: true;");
+        notaNube.getStyleClass().add("texto-hint-sm");
+        notaNube.setStyle("-fx-text-fill: #666; -fx-wrap-text: true;");
         notaNube.setWrapText(true);
 
         Label notaUnico = new Label("⚠  " + IdiomaUtil.obtener("asistente.pg.negocio_unico"));
-        notaUnico.setStyle("-fx-text-fill: #daa520; -fx-font-size: 11px; -fx-wrap-text: true;");
+        notaUnico.getStyleClass().add("texto-hint-sm");
+        notaUnico.setStyle("-fx-text-fill: #daa520; -fx-wrap-text: true;");
         notaUnico.setWrapText(true);
 
         HBox labelRow = new HBox(8, crearLabel(IdiomaUtil.obtener("asistente.pg.nombre_negocio")));
@@ -794,9 +835,16 @@ public class AsistenteBaseDatos {
             contenidoPasos.getChildren().clear();
             mostrarResumenFinal();
 
-            btnSiguiente.setText(IdiomaUtil.obtener("asistente.pg.ver_lista"));
-            btnSiguiente.setDisable(false);
-            btnSiguiente.setOnAction(e -> mostrarListaBds());
+            if (modoInicial) {
+                // En modo startup: cerrar directamente tras completar
+                btnSiguiente.setText(IdiomaUtil.obtener("asistente.pg.iniciar_servidor"));
+                btnSiguiente.setDisable(false);
+                btnSiguiente.setOnAction(e -> cerrar(true));
+            } else {
+                btnSiguiente.setText(IdiomaUtil.obtener("asistente.pg.ver_lista"));
+                btnSiguiente.setDisable(false);
+                btnSiguiente.setOnAction(e -> mostrarListaBds());
+            }
         }, Platform::runLater)
         .exceptionally(ex -> {
             Platform.runLater(() -> {
@@ -816,7 +864,8 @@ public class AsistenteBaseDatos {
         card.setStyle(ESTILO_CARD);
 
         Label seccionTitulo = new Label("✓  " + IdiomaUtil.obtener("asistente.pg.resumen_titulo"));
-        seccionTitulo.setStyle("-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #a8b991;");
+        seccionTitulo.getStyleClass().add("panel-seccion-titulo");
+        seccionTitulo.setStyle("-fx-text-fill: #a8b991;");
 
         Region divider = new Region();
         divider.setMinHeight(1); divider.setMaxHeight(1);
@@ -843,11 +892,13 @@ public class AsistenteBaseDatos {
 
         // Botón de exportar
         Button btnExportar = new Button("\uD83D\uDCBE  " + IdiomaUtil.obtener("asistente.pg.guardar_archivo"));
+        btnExportar.getStyleClass().add("texto-secundario-sm");
         btnExportar.setStyle(ESTILO_BOTON_TERCIARIO);
         btnExportar.setOnAction(e -> exportarConfiguracion());
 
         Label hintExportar = new Label(IdiomaUtil.obtener("asistente.pg.guardar_archivo_hint"));
-        hintExportar.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-wrap-text: true;");
+        hintExportar.getStyleClass().add("texto-hint");
+        hintExportar.setStyle("-fx-wrap-text: true;");
         hintExportar.setWrapText(true);
 
         HBox exportRow = new HBox(10, btnExportar, hintExportar);
@@ -909,13 +960,15 @@ public class AsistenteBaseDatos {
 
     private Label crearResumenLabel(String texto) {
         Label l = new Label(texto);
-        l.setStyle("-fx-text-fill: #777; -fx-font-size: 12px; -fx-min-width: 100;");
+        l.getStyleClass().add("texto-secundario");
+        l.setStyle("-fx-text-fill: #777; -fx-min-width: 100;");
         return l;
     }
 
     private Label crearResumenValor(String texto) {
         Label l = new Label(texto);
-        l.setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 12px; -fx-font-weight: 600; " +
+        l.getStyleClass().add("dato-valor");
+        l.setStyle("-fx-text-fill: #e8e8e8; " +
                 "-fx-font-family: 'Monospace';" );
         return l;
     }
@@ -930,11 +983,12 @@ public class AsistenteBaseDatos {
     private void setEstado(String texto, String color) {
         indicadorEstado.setFill(Color.web(color));
         labelEstado.setText(texto);
-        labelEstado.setStyle("-fx-text-fill: " + color + "; -fx-font-size: 12px;");
+        labelEstado.setStyle("-fx-text-fill: " + color + ";");
     }
 
     private TextField crearCampo(String valorDefecto) {
         TextField campo = new TextField(valorDefecto);
+        campo.getStyleClass().add("texto-info");
         campo.setStyle(ESTILO_CAMPO);
         campo.setPrefWidth(280);
         agregarFocusStyle(campo);
@@ -944,7 +998,8 @@ public class AsistenteBaseDatos {
     /** Envuelve un campo con su hint de "(default: ...)" debajo. */
     private VBox crearCampoConDefault(TextField campo, String valorDefault) {
         Label defaultHint = new Label(IdiomaUtil.obtener("asistente.pg.valor_default") + ": " + valorDefault);
-        defaultHint.setStyle("-fx-text-fill: #444; -fx-font-size: 10px; -fx-padding: 1 0 0 2;");
+        defaultHint.getStyleClass().add("texto-hint");
+        defaultHint.setStyle("-fx-padding: 1 0 0 2;");
         VBox group = new VBox(2, campo, defaultHint);
         return group;
     }
@@ -960,7 +1015,8 @@ public class AsistenteBaseDatos {
 
     private Label crearLabel(String texto) {
         Label l = new Label(texto);
-        l.setStyle("-fx-text-fill: #b0b0b0; -fx-font-size: 12px; -fx-font-weight: 600;");
+        l.getStyleClass().add("dato-valor");
+        l.setStyle("-fx-text-fill: #b0b0b0;");
         l.setMinWidth(130);
         return l;
     }
@@ -1004,11 +1060,13 @@ public class AsistenteBaseDatos {
 
         // Título de la sección
         Label titulo = new Label("\uD83D\uDDC4  " + IdiomaUtil.obtener("asistente.pg.lista_titulo"));
-        titulo.setStyle("-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("modal-titulo-dorado");
 
         // Botón "Nueva BD"
         Button btnNueva = new Button("＋  " + IdiomaUtil.obtener("asistente.pg.nueva_bd"));
-        btnNueva.setStyle(ESTILO_BOTON_SECUNDARIO + " -fx-font-size: 12px; -fx-padding: 8 16;");
+        btnNueva.getStyleClass().add("texto-info");
+        btnNueva.setStyle(ESTILO_BOTON_SECUNDARIO + " -fx-padding: 8 16;");
+        btnNueva.getStyleClass().add("panel-btn-secundario");
         btnNueva.setOnAction(e -> mostrarCrearBdSimplificado());
 
         HBox headerLista = new HBox(12, titulo, new Region(), btnNueva);
@@ -1020,18 +1078,24 @@ public class AsistenteBaseDatos {
         // ScrollPane para las tarjetas
         VBox listaCards = new VBox(10);
 
-        // — Card de BD en la nube (MongoDB Atlas) —
-        listaCards.getChildren().add(crearCardNube());
-
-        // — Cards de BDs PostgreSQL guardadas —
+        // Cargar todas las configs una sola vez
         List<ConfiguracionBd> guardadas = ConfiguracionBd.cargarTodas();
-        if (guardadas.isEmpty()) {
+
+        // — Card de BD en la nube (MongoDB Atlas) —
+        listaCards.getChildren().add(crearCardNube(guardadas));
+
+        // — Cards de BDs PostgreSQL guardadas (excluir NUBE, ya tiene su propia card) —
+        List<ConfiguracionBd> postgresGuardadas = guardadas.stream()
+                .filter(c -> c.getTipo() != ConfiguracionBd.TipoBd.NUBE)
+                .toList();
+        if (postgresGuardadas.isEmpty()) {
             Label vacio = new Label(IdiomaUtil.obtener("asistente.pg.sin_bds"));
-            vacio.setStyle("-fx-text-fill: #555; -fx-font-size: 13px; -fx-padding: 16 0 0 0;");
+            vacio.getStyleClass().add("texto-info");
+            vacio.setStyle("-fx-text-fill: #555; -fx-padding: 16 0 0 0;");
             vacio.setAlignment(Pos.CENTER);
             listaCards.getChildren().add(vacio);
         } else {
-            for (ConfiguracionBd bd : guardadas) {
+            for (ConfiguracionBd bd : postgresGuardadas) {
                 listaCards.getChildren().add(crearCardBd(bd));
             }
         }
@@ -1045,13 +1109,13 @@ public class AsistenteBaseDatos {
     }
 
     /** Crea la tarjeta de conexión a la nube (MongoDB Atlas). */
-    private VBox crearCardNube() {
+    private VBox crearCardNube(List<ConfiguracionBd> todasLasConfigs) {
         String atlasUri = ConfiguracionCliente.getAtlasUriEmbebida();
         boolean tieneUri = atlasUri != null && !atlasUri.isBlank();
         String cluster = tieneUri ? extraerClusterSimple(atlasUri) : "";
 
         // Buscar si ya hay una config de tipo NUBE guardada
-        ConfiguracionBd nubeExistente = ConfiguracionBd.cargarTodas().stream()
+        ConfiguracionBd nubeExistente = todasLasConfigs.stream()
                 .filter(c -> c.getTipo() == ConfiguracionBd.TipoBd.NUBE)
                 .findFirst().orElse(null);
         boolean nubeConectada = nubeExistente != null;
@@ -1065,16 +1129,18 @@ public class AsistenteBaseDatos {
         filaTop.setAlignment(Pos.CENTER_LEFT);
 
         Label iconoNube = new Label("☁");
-        iconoNube.setStyle("-fx-font-size: 18px;");
+        iconoNube.getStyleClass().add("icono-texto-md");
         Label lblTitulo = new Label(IdiomaUtil.obtener("asistente.pg.nube_titulo"));
-        lblTitulo.setStyle("-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: " +
+        lblTitulo.getStyleClass().add("panel-seccion-titulo");
+        lblTitulo.setStyle("-fx-text-fill: " +
                 (nubeConectada ? "#6c5ce7" : "#e8e8e8") + ";");
 
         filaTop.getChildren().addAll(iconoNube, lblTitulo);
 
         if (nubeConectada) {
             Label badge = new Label("● " + IdiomaUtil.obtener("asistente.pg.nube_conectada"));
-            badge.setStyle("-fx-text-fill: #6c5ce7; -fx-font-size: 10px; -fx-font-weight: 600; " +
+            badge.getStyleClass().add("badge-texto");
+            badge.setStyle("-fx-text-fill: #6c5ce7; -fx-font-weight: 600; " +
                     "-fx-background-color: rgba(108,92,231,0.15); -fx-padding: 2 8; " +
                     "-fx-background-radius: 10; -fx-border-color: rgba(108,92,231,0.3); -fx-border-radius: 10;");
             filaTop.getChildren().add(badge);
@@ -1085,7 +1151,8 @@ public class AsistenteBaseDatos {
 
         // Badge tipo
         Label tipoLabel = new Label("MongoDB Atlas");
-        tipoLabel.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-font-style: italic;");
+        tipoLabel.getStyleClass().add("texto-hint");
+        tipoLabel.setStyle("-fx-font-style: italic;");
         filaTop.getChildren().addAll(espacioTop, tipoLabel);
 
         // Fila de datos
@@ -1106,7 +1173,8 @@ public class AsistenteBaseDatos {
             Label noUri = new Label(nubeConectada
                     ? "✓  " + IdiomaUtil.obtener("asistente.pg.nube_conectada")
                     : IdiomaUtil.obtener("asistente.pg.nube_click_configurar"));
-            noUri.setStyle("-fx-text-fill: " + (nubeConectada ? "#6c5ce7" : "#999") + "; -fx-font-size: 12px;");
+            noUri.getStyleClass().add("texto-secundario");
+            noUri.setStyle("-fx-text-fill: " + (nubeConectada ? "#6c5ce7" : "#999") + ";");
             filaDatos.getChildren().add(noUri);
             if (nubeConectada) {
                 filaDatos.getChildren().add(crearDatoCard(
@@ -1126,8 +1194,9 @@ public class AsistenteBaseDatos {
             filaAcciones.setAlignment(Pos.CENTER_RIGHT);
 
             Button btnDesconectar = new Button(IdiomaUtil.obtener("asistente.pg.nube_desconectar"));
+            btnDesconectar.getStyleClass().add("texto-hint-sm");
             btnDesconectar.setStyle("-fx-background-color: transparent; -fx-text-fill: #8b0000; " +
-                    "-fx-border-color: #8b0000; -fx-font-size: 11px; -fx-padding: 6 14; " +
+                    "-fx-border-color: #8b0000; -fx-padding: 6 14; " +
                     "-fx-cursor: hand; -fx-background-radius: 6; -fx-border-radius: 6;");
             btnDesconectar.setOnAction(e -> {
                 e.consume();
@@ -1180,13 +1249,15 @@ public class AsistenteBaseDatos {
         campoNegocio.setPromptText(IdiomaUtil.obtener("asistente.pg.placeholder_negocio"));
 
         Label lblError = new Label("");
-        lblError.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 11px;");
+        lblError.getStyleClass().add("texto-hint-sm");
+        lblError.setStyle("-fx-text-fill: #ef4444;");
         lblError.setVisible(false);
         lblError.setManaged(false);
 
         Button btnConectar = new Button(IdiomaUtil.obtener("asistente.pg.nube_conectar"));
+        btnConectar.getStyleClass().add("texto-secundario-sm");
         btnConectar.setStyle("-fx-background-color: linear-gradient(to bottom, #6c5ce7, #5a4bd1); " +
-                "-fx-text-fill: #fff; -fx-font-weight: 700; -fx-font-size: 12px; -fx-padding: 8 18; " +
+                "-fx-text-fill: #fff; -fx-font-weight: 700; -fx-padding: 8 18; " +
                 "-fx-cursor: hand; -fx-background-radius: 6; -fx-border-radius: 6;");
         btnConectar.setOnAction(e -> {
             e.consume();
@@ -1246,16 +1317,18 @@ public class AsistenteBaseDatos {
         ocultarIndicadorPasos();
 
         Label titulo = new Label("＋  " + IdiomaUtil.obtener("asistente.pg.nueva_bd_titulo"));
-        titulo.setStyle("-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #d4af37;");
+        titulo.getStyleClass().add("modal-titulo-dorado");
 
         Label info = new Label(IdiomaUtil.obtener("asistente.pg.nueva_bd_info"));
-        info.setStyle("-fx-text-fill: #aaa; -fx-font-size: 12px; -fx-wrap-text: true;");
+        info.getStyleClass().add("texto-secundario");
+        info.setStyle("-fx-text-fill: #aaa; -fx-wrap-text: true;");
         info.setWrapText(true);
 
         VBox cardForm = new VBox(12);
         cardForm.setStyle(ESTILO_CARD);
 
         Label seccionTitulo = new Label("\uD83D\uDDC3  " + IdiomaUtil.obtener("asistente.pg.paso.crear"));
+        seccionTitulo.getStyleClass().add("texto-info");
         seccionTitulo.setStyle(ESTILO_SECCION_TITULO);
 
         Region divider = new Region();
@@ -1266,18 +1339,21 @@ public class AsistenteBaseDatos {
         campoNombreBd.setPromptText("baryx_db");
 
         PasswordField campoPasswordBd = new PasswordField();
+        campoPasswordBd.getStyleClass().add("texto-info");
         campoPasswordBd.setStyle(ESTILO_CAMPO);
         campoPasswordBd.setPrefWidth(280);
         agregarFocusStyle(campoPasswordBd);
 
         PasswordField campoAdminPassword = new PasswordField();
+        campoAdminPassword.getStyleClass().add("texto-info");
         campoAdminPassword.setStyle(ESTILO_CAMPO);
         campoAdminPassword.setPrefWidth(280);
         campoAdminPassword.setPromptText("••••••");
         agregarFocusStyle(campoAdminPassword);
 
         Label hintAdmin = new Label(IdiomaUtil.obtener("asistente.pg.hint_admin_pg"));
-        hintAdmin.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-wrap-text: true;");
+        hintAdmin.getStyleClass().add("texto-hint");
+        hintAdmin.setStyle("-fx-wrap-text: true;");
         hintAdmin.setWrapText(true);
 
         TextField campoNegocio = crearCampo("");
@@ -1285,20 +1361,24 @@ public class AsistenteBaseDatos {
 
         ToggleSwitch toggleGuardar = new ToggleSwitch();
         Label lblToggle = new Label(IdiomaUtil.obtener("asistente.pg.guardar_passwords"));
-        lblToggle.setStyle("-fx-text-fill: #e8e8e8; -fx-font-size: 12px;");
+        lblToggle.getStyleClass().add("texto-secundario");
+        lblToggle.setStyle("-fx-text-fill: #e8e8e8;");
         HBox toggleRow = new HBox(10, toggleGuardar, lblToggle);
         toggleRow.setAlignment(Pos.CENTER_LEFT);
 
         Label hintToggle = new Label(IdiomaUtil.obtener("asistente.pg.guardar_passwords_hint"));
-        hintToggle.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-wrap-text: true;");
+        hintToggle.getStyleClass().add("texto-hint");
+        hintToggle.setStyle("-fx-wrap-text: true;");
         hintToggle.setWrapText(true);
 
         Label notaUnico = new Label("⚠  " + IdiomaUtil.obtener("asistente.pg.negocio_unico"));
-        notaUnico.setStyle("-fx-text-fill: #daa520; -fx-font-size: 10px; -fx-wrap-text: true;");
+        notaUnico.getStyleClass().add("texto-hint");
+        notaUnico.setStyle("-fx-text-fill: #daa520; -fx-wrap-text: true;");
         notaUnico.setWrapText(true);
 
         Label lblError = new Label("");
-        lblError.setStyle("-fx-text-fill: #ef4444; -fx-font-size: 11px;");
+        lblError.getStyleClass().add("texto-hint-sm");
+        lblError.setStyle("-fx-text-fill: #ef4444;");
         lblError.setVisible(false);
         lblError.setManaged(false);
 
@@ -1320,11 +1400,14 @@ public class AsistenteBaseDatos {
         botones.setAlignment(Pos.CENTER_RIGHT);
 
         Button btnCancelar = new Button(IdiomaUtil.obtener("asistente.pg.cancelar"));
+        btnCancelar.getStyleClass().add("texto-secundario-sm");
         btnCancelar.setStyle(ESTILO_BOTON_TERCIARIO);
         btnCancelar.setOnAction(e -> mostrarListaBds());
 
         Button btnCrear = new Button(IdiomaUtil.obtener("asistente.pg.crear_config"));
-        btnCrear.setStyle(ESTILO_BOTON_PRINCIPAL + " -fx-font-size: 13px; -fx-padding: 10 22;");
+        btnCrear.getStyleClass().add("panel-seccion-titulo");
+        btnCrear.setStyle(ESTILO_BOTON_PRINCIPAL + " -fx-padding: 10 22;");
+        btnCrear.getStyleClass().add("panel-btn-principal");
         btnCrear.setOnAction(e -> {
             String nombre = campoNombreBd.getText().trim();
             String password = campoPasswordBd.getText();
@@ -1534,7 +1617,8 @@ public class AsistenteBaseDatos {
         card.setStyle(ESTILO_CARD);
 
         Label seccionTitulo = new Label("☁  " + IdiomaUtil.obtener("asistente.pg.nube_detalle"));
-        seccionTitulo.setStyle("-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #6c5ce7;");
+        seccionTitulo.getStyleClass().add("panel-seccion-titulo");
+        seccionTitulo.setStyle("-fx-text-fill: #6c5ce7;");
 
         Region divider = new Region();
         divider.setMinHeight(1); divider.setMaxHeight(1);
@@ -1563,6 +1647,7 @@ public class AsistenteBaseDatos {
         grid.add(crearResumenValor(uriMasked), 1, fila);
 
         Button btnVolver = new Button("← " + IdiomaUtil.obtener("asistente.pg.volver_lista"));
+        btnVolver.getStyleClass().add("texto-secundario-sm");
         btnVolver.setStyle(ESTILO_BOTON_TERCIARIO);
         btnVolver.setOnAction(e -> mostrarListaBds());
 
@@ -1578,8 +1663,8 @@ public class AsistenteBaseDatos {
         card.setStyle(ESTILO_CARD);
 
         Label seccionTitulo = new Label("\uD83D\uDDC3  " + bd.getAlias());
-        seccionTitulo.setStyle("-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: " +
-                (bd.isActiva() ? "#d4af37" : "#e8e8e8") + ";");
+        seccionTitulo.getStyleClass().add("panel-seccion-titulo");
+        seccionTitulo.setStyle("-fx-text-fill: " + (bd.isActiva() ? "#d4af37" : "#e8e8e8") + ";");
 
         Region divider = new Region();
         divider.setMinHeight(1); divider.setMaxHeight(1);
@@ -1611,12 +1696,14 @@ public class AsistenteBaseDatos {
         acciones.setAlignment(Pos.CENTER_RIGHT);
 
         Button btnVolver = new Button("← " + IdiomaUtil.obtener("asistente.pg.volver_lista"));
+        btnVolver.getStyleClass().add("texto-secundario-sm");
         btnVolver.setStyle(ESTILO_BOTON_TERCIARIO);
         btnVolver.setOnAction(e -> mostrarListaBds());
 
         if (!bd.isActiva()) {
             Button btnConectar = new Button(IdiomaUtil.obtener("asistente.pg.conectar_bd"));
-            btnConectar.setStyle(ESTILO_BOTON_PRINCIPAL + " -fx-font-size: 12px; -fx-padding: 8 18;");
+            btnConectar.getStyleClass().addAll("panel-btn-principal", "panel-seccion-titulo");
+            btnConectar.setStyle(ESTILO_BOTON_PRINCIPAL + " -fx-padding: 8 18;");
             btnConectar.setOnAction(e -> {
                 activarBd(bd);
                 mostrarDetalleBd(bd);
@@ -1625,8 +1712,9 @@ public class AsistenteBaseDatos {
         }
 
         Button btnEliminar = new Button(IdiomaUtil.obtener("asistente.pg.eliminar_bd"));
+        btnEliminar.getStyleClass().add("panel-btn-eliminar");
         btnEliminar.setStyle("-fx-background-color: transparent; -fx-text-fill: #8b0000; " +
-                "-fx-border-color: #8b0000; -fx-font-size: 12px; -fx-padding: 8 18; " +
+                "-fx-border-color: #8b0000; -fx-padding: 8 18; " +
                 "-fx-cursor: hand; -fx-background-radius: 6; -fx-border-radius: 6;");
         btnEliminar.setOnAction(e -> {
             if (bd.isActiva()) {
@@ -1654,16 +1742,17 @@ public class AsistenteBaseDatos {
         filaTop.setAlignment(Pos.CENTER_LEFT);
 
         Label iconoPg = new Label("\uD83D\uDDC3");
-        iconoPg.setStyle("-fx-font-size: 16px;");
+        iconoPg.getStyleClass().add("icono-texto-sm");
         Label lblAlias = new Label(bd.getAlias());
-        lblAlias.setStyle("-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: " +
-                (bd.isActiva() ? "#d4af37" : "#e8e8e8") + ";");
+        lblAlias.getStyleClass().add("panel-seccion-titulo");
+        lblAlias.setStyle("-fx-text-fill: " + (bd.isActiva() ? "#d4af37" : "#e8e8e8") + ";");
 
         filaTop.getChildren().addAll(iconoPg, lblAlias);
 
         if (bd.isActiva()) {
             Label badge = new Label("● " + IdiomaUtil.obtener("asistente.pg.activa"));
-            badge.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 10px; -fx-font-weight: 600; " +
+            badge.getStyleClass().add("badge-texto");
+            badge.setStyle("-fx-text-fill: #a8b991; " +
                     "-fx-background-color: rgba(168,185,145,0.15); -fx-padding: 2 8; " +
                     "-fx-background-radius: 10; -fx-border-color: rgba(168,185,145,0.3); -fx-border-radius: 10;");
             filaTop.getChildren().add(badge);
@@ -1673,9 +1762,11 @@ public class AsistenteBaseDatos {
         HBox.setHgrow(espacioTop, Priority.ALWAYS);
 
         Label tipoLabel = new Label("PostgreSQL");
-        tipoLabel.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-font-style: italic;");
+        tipoLabel.getStyleClass().add("texto-hint-sm");
+        tipoLabel.setStyle("-fx-text-fill: #555; -fx-font-style: italic;");
         Label lblFecha = new Label(bd.getFechaCreacion());
-        lblFecha.setStyle("-fx-text-fill: #555; -fx-font-size: 10px;");
+        lblFecha.getStyleClass().add("texto-hint-sm");
+        lblFecha.setStyle("-fx-text-fill: #555;");
         VBox metaRight = new VBox(1, tipoLabel, lblFecha);
         metaRight.setAlignment(Pos.CENTER_RIGHT);
         filaTop.getChildren().addAll(espacioTop, metaRight);
@@ -1700,7 +1791,8 @@ public class AsistenteBaseDatos {
 
         if (!bd.isActiva()) {
             Button btnConectar = new Button(IdiomaUtil.obtener("asistente.pg.conectar_bd"));
-            btnConectar.setStyle(ESTILO_BOTON_PRINCIPAL + " -fx-font-size: 11px; -fx-padding: 6 14;");
+            btnConectar.getStyleClass().addAll("panel-btn-principal", "panel-seccion-titulo");
+            btnConectar.setStyle(ESTILO_BOTON_PRINCIPAL + " -fx-padding: 6 14;");
             btnConectar.setOnAction(e -> {
                 e.consume();
                 activarBd(bd);
@@ -1709,8 +1801,9 @@ public class AsistenteBaseDatos {
         }
 
         Button btnEliminar = new Button(IdiomaUtil.obtener("asistente.pg.eliminar_bd"));
+        btnEliminar.getStyleClass().add("panel-btn-eliminar");
         btnEliminar.setStyle("-fx-background-color: transparent; -fx-text-fill: #8b0000; " +
-                "-fx-border-color: #8b0000; -fx-font-size: 11px; -fx-padding: 6 14; " +
+                "-fx-border-color: #8b0000; -fx-padding: 6 14; " +
                 "-fx-cursor: hand; -fx-background-radius: 6; -fx-border-radius: 6;");
         btnEliminar.setOnAction(e -> {
             e.consume();
@@ -1742,9 +1835,11 @@ public class AsistenteBaseDatos {
     /** Crea un par label/valor pequeño para la tarjeta. */
     private VBox crearDatoCard(String label, String valor) {
         Label lbl = new Label(label);
-        lbl.setStyle("-fx-text-fill: #555; -fx-font-size: 10px;");
+        lbl.getStyleClass().add("texto-hint-sm");
+        lbl.setStyle("-fx-text-fill: #555;");
         Label val = new Label(valor);
-        val.setStyle("-fx-text-fill: #ccc; -fx-font-size: 12px; -fx-font-weight: 600;");
+        val.getStyleClass().add("dato-valor");
+        val.setStyle("-fx-text-fill: #ccc;");
         return new VBox(1, lbl, val);
     }
 

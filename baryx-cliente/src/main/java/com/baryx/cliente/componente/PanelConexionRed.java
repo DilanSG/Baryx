@@ -82,7 +82,7 @@ public class PanelConexionRed {
     private boolean datosNubeVisibles = false;
     private FondoAnimado fondoAnimado;
     private Timeline timelineProgreso;
-    private TutorialWeb tutorial;
+    private TutorialNube tutorial;
     private StackPane overlayRef;
     private boolean mostrarTutorialAlAbrir = false;
     private HBox ipClienteBox;
@@ -147,12 +147,12 @@ public class PanelConexionRed {
         cerrar.setMinSize(36, 36);
         cerrar.setPrefSize(36, 36);
         cerrar.setAlignment(Pos.CENTER);
-        cerrar.setStyle("-fx-font-size: 16px; -fx-text-fill: #666; -fx-cursor: hand;");
+        cerrar.getStyleClass().add("panel-cerrar");
         cerrar.setOnMouseEntered(e ->
-            cerrar.setStyle("-fx-font-size: 16px; -fx-text-fill: #f5f5f5; -fx-cursor: hand; " +
+            cerrar.setStyle("-fx-text-fill: #f5f5f5; " +
                 "-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 6;"));
         cerrar.setOnMouseExited(e ->
-            cerrar.setStyle("-fx-font-size: 16px; -fx-text-fill: #666; -fx-cursor: hand;"));
+            cerrar.setStyle("-fx-text-fill: #666;"));
         cerrar.setOnMouseClicked(e -> cerrarPanel(overlay, contenedorRaiz));
 
         HBox barraSuperior = new HBox();
@@ -173,7 +173,8 @@ public class PanelConexionRed {
 
         // Info footer
         Label labelInfo = new Label(IdiomaUtil.obtener("splash.info_host"));
-        labelInfo.setStyle("-fx-text-fill: #555; -fx-font-size: 11px;");
+        labelInfo.getStyleClass().add("red-info");
+        labelInfo.setStyle("-fx-text-fill: #555;");
         labelInfo.setPadding(new Insets(20, 0, 0, 0));
 
         VBox panelCards = new VBox(20);
@@ -201,9 +202,10 @@ public class PanelConexionRed {
         // Botón de tutorial (arriba a la izquierda)
         if (mostrarTutorialAlAbrir) {
             Button botonTutorial = new Button("?  " + IdiomaUtil.obtener("tutorial.boton"));
+            botonTutorial.getStyleClass().add("panel-btn-secundario");
             botonTutorial.setStyle(
                 "-fx-background-color: rgba(212,175,55,0.12); -fx-text-fill: #d4af37; " +
-                "-fx-font-size: 12px; -fx-font-weight: 600; -fx-cursor: hand; " +
+                "-fx-font-weight: 600; -fx-cursor: hand; " +
                 "-fx-border-color: rgba(212,175,55,0.3); -fx-border-radius: 8; " +
                 "-fx-background-radius: 8; -fx-padding: 8 16;");
             botonTutorial.setOnAction(e -> iniciarTutorial());
@@ -244,35 +246,37 @@ public class PanelConexionRed {
         // Título con icono
         indicadorLan = new Circle(7, Color.web("#555"));
         Label titulo = new Label(IdiomaUtil.obtener("splash.lan.titulo"));
-        titulo.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 16px; -fx-font-weight: 700;");
+        titulo.getStyleClass().add("red-titulo");
 
         Region spacerHeader = new Region();
         HBox.setHgrow(spacerHeader, Priority.ALWAYS);
 
         // Botón reiniciar servidor (icono amarillo ↻)
         botonReiniciarLan = new Button("↻");
+        botonReiniciarLan.getStyleClass().add("icono-texto-sm");
         botonReiniciarLan.setStyle(
-            "-fx-background-color: transparent; -fx-text-fill: #daa520; -fx-font-size: 16px; " +
+            "-fx-background-color: transparent; -fx-text-fill: #daa520; " +
             "-fx-cursor: hand; -fx-padding: 2 6; -fx-font-weight: 700;");
         botonReiniciarLan.setOnMouseEntered(e -> botonReiniciarLan.setStyle(
-            "-fx-background-color: rgba(218,165,32,0.15); -fx-text-fill: #daa520; -fx-font-size: 16px; " +
+            "-fx-background-color: rgba(218,165,32,0.15); -fx-text-fill: #daa520; " +
             "-fx-cursor: hand; -fx-padding: 2 6; -fx-font-weight: 700; -fx-background-radius: 6;"));
         botonReiniciarLan.setOnMouseExited(e -> botonReiniciarLan.setStyle(
-            "-fx-background-color: transparent; -fx-text-fill: #daa520; -fx-font-size: 16px; " +
+            "-fx-background-color: transparent; -fx-text-fill: #daa520; " +
             "-fx-cursor: hand; -fx-padding: 2 6; -fx-font-weight: 700;"));
         botonReiniciarLan.setOnAction(e -> ejecutarReinicio());
         Tooltip.install(botonReiniciarLan, new Tooltip(IdiomaUtil.obtener("panel.lan.reiniciar")));
 
         // Botón apagar servidor (icono rojo ⏻)
         botonApagarLan = new Button("⏻");
+        botonApagarLan.getStyleClass().add("icono-texto-sm");
         botonApagarLan.setStyle(
-            "-fx-background-color: transparent; -fx-text-fill: #e74c3c; -fx-font-size: 15px; " +
+            "-fx-background-color: transparent; -fx-text-fill: #e74c3c; " +
             "-fx-cursor: hand; -fx-padding: 2 6;");
         botonApagarLan.setOnMouseEntered(e -> botonApagarLan.setStyle(
-            "-fx-background-color: rgba(231,76,60,0.15); -fx-text-fill: #e74c3c; -fx-font-size: 15px; " +
+            "-fx-background-color: rgba(231,76,60,0.15); -fx-text-fill: #e74c3c; " +
             "-fx-cursor: hand; -fx-padding: 2 6; -fx-background-radius: 6;"));
         botonApagarLan.setOnMouseExited(e -> botonApagarLan.setStyle(
-            "-fx-background-color: transparent; -fx-text-fill: #e74c3c; -fx-font-size: 15px; " +
+            "-fx-background-color: transparent; -fx-text-fill: #e74c3c; " +
             "-fx-cursor: hand; -fx-padding: 2 6;"));
         botonApagarLan.setOnAction(e -> ejecutarApagado());
         Tooltip.install(botonApagarLan, new Tooltip(IdiomaUtil.obtener("panel.lan.apagar")));
@@ -288,11 +292,11 @@ public class PanelConexionRed {
 
         // Estado
         labelEstadoLan = new Label(IdiomaUtil.obtener("splash.lan.preparando"));
-        labelEstadoLan.setStyle("-fx-text-fill: #b0b0b0; -fx-font-size: 12px;");
+        labelEstadoLan.getStyleClass().add("red-estado");
 
         // Info adicional (IP, puerto + PID) — se muestra al conectar
         labelInfoLan = new Label("");
-        labelInfoLan.setStyle("-fx-text-fill: #aaa; -fx-font-size: 11px;");
+        labelInfoLan.getStyleClass().add("red-info");
 
         infoConectadaBox = new HBox(8, labelInfoLan);
         infoConectadaBox.setAlignment(Pos.CENTER_LEFT);
@@ -305,9 +309,9 @@ public class PanelConexionRed {
 
         // IP de conexión para clientes
         labelIpClientes = new Label("");
-        labelIpClientes.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 13px; -fx-font-weight: 600;");
+        labelIpClientes.getStyleClass().add("red-ip-titulo");
         Label labelIpTitulo = new Label(IdiomaUtil.obtener("panel.lan.ip_clientes"));
-        labelIpTitulo.setStyle("-fx-text-fill: #999; -fx-font-size: 12px;");
+        labelIpTitulo.getStyleClass().add("red-ip-label");
         ipClienteBox = new HBox(8, labelIpTitulo, labelIpClientes);
         ipClienteBox.setAlignment(Pos.CENTER_LEFT);
         ipClienteBox.setPadding(new Insets(8, 14, 8, 14));
@@ -326,7 +330,7 @@ public class PanelConexionRed {
         barraProgresoLan.setManaged(false);
 
         labelProgresoLan = new Label("0%");
-        labelProgresoLan.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 10px;");
+        labelProgresoLan.getStyleClass().add("red-progreso");
         labelProgresoLan.setVisible(false);
         labelProgresoLan.setManaged(false);
 
@@ -337,9 +341,10 @@ public class PanelConexionRed {
 
         // Botón conectar (visible solo si el servidor no está activo)
         botonConectarLan = new Button(IdiomaUtil.obtener("panel.lan.conectar"));
+        botonConectarLan.getStyleClass().add("panel-btn-principal");
         botonConectarLan.setStyle(
             "-fx-background-color: linear-gradient(to bottom, #d4af37, #b8984e); " +
-            "-fx-text-fill: #0a0a0a; -fx-font-size: 14px; -fx-font-weight: 700; " +
+            "-fx-text-fill: #0a0a0a; -fx-font-weight: 700; " +
             "-fx-background-radius: 10; -fx-cursor: hand; -fx-padding: 12 32;");
         botonConectarLan.setOnAction(e -> iniciarServidorLan());
         botonConectarLan.setVisible(false);
@@ -365,15 +370,16 @@ public class PanelConexionRed {
         // Título con indicador
         indicadorNube = new Circle(7, Color.web("#555"));
         Label titulo = new Label(IdiomaUtil.obtener("splash.nube.titulo"));
-        titulo.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 16px; -fx-font-weight: 700;");
+        titulo.getStyleClass().add("red-titulo");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         // Botón toggle para mostrar/ocultar datos
         botonToggleDatosNube = new Button(IdiomaUtil.obtener("panel.nube.configurar"));
+        botonToggleDatosNube.getStyleClass().add("texto-hint");
         botonToggleDatosNube.setStyle(
-            "-fx-background-color: transparent; -fx-text-fill: #777; -fx-font-size: 10px; " +
+            "-fx-background-color: transparent; -fx-text-fill: #777; " +
             "-fx-cursor: hand; -fx-border-color: #444; -fx-border-radius: 4; " +
             "-fx-background-radius: 4; -fx-padding: 4 10;");
         botonToggleDatosNube.setOnAction(e -> toggleDatosNube());
@@ -383,10 +389,11 @@ public class PanelConexionRed {
 
         // Estado
         labelEstadoNube = new Label(IdiomaUtil.obtener("splash.nube.esperando"));
-        labelEstadoNube.setStyle("-fx-text-fill: #b0b0b0; -fx-font-size: 12px;");
+        labelEstadoNube.getStyleClass().add("red-estado");
 
         labelInfoNube = new Label("");
-        labelInfoNube.setStyle("-fx-text-fill: #888; -fx-font-size: 11px;");
+        labelInfoNube.getStyleClass().add("red-info");
+        labelInfoNube.setStyle("-fx-text-fill: #888;");
         labelInfoNube.setWrapText(true);
         labelInfoNube.setVisible(false);
         labelInfoNube.setManaged(false);
@@ -408,24 +415,25 @@ public class PanelConexionRed {
 
         // Estado de la URI embebida (solo lectura)
         Label labelUri = new Label(IdiomaUtil.obtener("panel.nube.uri_embebida"));
-        labelUri.setStyle("-fx-text-fill: #999; -fx-font-size: 11px;");
+        labelUri.getStyleClass().add("red-uri-label");
         String uriEmbebida = ConfiguracionCliente.getAtlasUriEmbebida();
         boolean tieneUri = uriEmbebida != null && !uriEmbebida.isBlank();
         labelUriEstado = new Label(tieneUri
                 ? "✓ " + IdiomaUtil.obtener("panel.nube.uri_disponible")
                 : "✗ " + IdiomaUtil.obtener("panel.nube.uri_no_disponible"));
-        labelUriEstado.setStyle("-fx-text-fill: " + (tieneUri ? "#a8b991" : "#e74c3c") +
-                "; -fx-font-size: 12px; -fx-font-weight: 600;");
+        labelUriEstado.getStyleClass().add("estado-texto-bold");
+        labelUriEstado.setStyle("-fx-text-fill: " + (tieneUri ? "#a8b991" : "#e74c3c") + ";");
 
         // Campo manual de URI (solo visible si no hay URI embebida ni en .env)
         Label labelUriManual = new Label(IdiomaUtil.obtener("splash.config.mongo_uri"));
-        labelUriManual.setStyle("-fx-text-fill: #999; -fx-font-size: 11px; -fx-padding: 6 0 0 0;");
+        labelUriManual.getStyleClass().add("red-uri-label");
+        labelUriManual.setStyle("-fx-padding: 6 0 0 0;");
         campoMongoUri = new PasswordField();
         campoMongoUri.setPromptText("mongodb+srv://user:pass@cluster.mongodb.net/");
         campoMongoUri.getStyleClass().add("campo-texto");
         campoMongoUri.setPrefHeight(36);
         Label hintUri = new Label(IdiomaUtil.obtener("panel.nube.uri_hint"));
-        hintUri.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-font-style: italic; -fx-wrap-text: true;");
+        hintUri.getStyleClass().add("red-uri-hint");
         hintUri.setWrapText(true);
         // Ocultar campo URI si ya hay una embebida (producción)
         labelUriManual.setVisible(!tieneUri);
@@ -437,7 +445,8 @@ public class PanelConexionRed {
 
         // Identificador del negocio
         Label labelBusinessId = new Label(IdiomaUtil.obtener("splash.config.business_id"));
-        labelBusinessId.setStyle("-fx-text-fill: #999; -fx-font-size: 11px; -fx-padding: 6 0 0 0;");
+        labelBusinessId.getStyleClass().add("red-uri-label");
+        labelBusinessId.setStyle("-fx-padding: 6 0 0 0;");
         campoBusinessId = new TextField();
         campoBusinessId.setPromptText("mi_negocio_1");
         campoBusinessId.getStyleClass().add("campo-texto");
@@ -445,7 +454,8 @@ public class PanelConexionRed {
 
         // Nombre de la base de datos Atlas (derivado del business ID)
         Label labelDbNombre = new Label(IdiomaUtil.obtener("panel.nube.nombre_db"));
-        labelDbNombre.setStyle("-fx-text-fill: #999; -fx-font-size: 11px; -fx-padding: 6 0 0 0;");
+        labelDbNombre.getStyleClass().add("red-uri-label");
+        labelDbNombre.setStyle("-fx-padding: 6 0 0 0;");
         campoDbNombre = new TextField();
         campoDbNombre.setPromptText("baryx_mi_negocio");
         campoDbNombre.getStyleClass().add("campo-texto");
@@ -459,19 +469,21 @@ public class PanelConexionRed {
         });
 
         Label hintDb = new Label(IdiomaUtil.obtener("panel.nube.nombre_db_hint"));
-        hintDb.setStyle("-fx-text-fill: #555; -fx-font-size: 10px; -fx-font-style: italic; -fx-wrap-text: true;");
+        hintDb.getStyleClass().add("red-uri-hint");
         hintDb.setWrapText(true);
 
         botonGuardarAtlas = new Button(IdiomaUtil.obtener("splash.config.guardar"));
+        botonGuardarAtlas.getStyleClass().add("panel-btn-secundario");
         botonGuardarAtlas.setStyle(
             "-fx-background-color: linear-gradient(to bottom, #d4af37, #b8984e); " +
-            "-fx-text-fill: #0a0a0a; -fx-font-size: 12px; -fx-font-weight: 600; " +
+            "-fx-text-fill: #0a0a0a; -fx-font-weight: 600; " +
             "-fx-background-radius: 6; -fx-cursor: hand; -fx-padding: 8 24;");
         botonGuardarAtlas.setOnAction(e -> guardarConfigAtlas());
 
         botonSoloLan = new Button(IdiomaUtil.obtener("splash.config.solo_lan"));
+        botonSoloLan.getStyleClass().add("panel-btn-secundario");
         botonSoloLan.setStyle(
-            "-fx-background-color: transparent; -fx-text-fill: #777; -fx-font-size: 11px; " +
+            "-fx-background-color: transparent; -fx-text-fill: #777; " +
             "-fx-cursor: hand; -fx-border-color: #555; -fx-border-radius: 6; " +
             "-fx-background-radius: 6; -fx-padding: 8 20;");
         botonSoloLan.setOnAction(e -> continuarSoloLan());
@@ -512,7 +524,7 @@ public class PanelConexionRed {
             if (servidorActivo) {
                 // Servidor ya corriendo → card LAN verde
                 mostrarLanConectada();
-                notificarTutorial(TutorialWeb.Evento.SERVIDOR_YA_ACTIVO);
+                notificarTutorial(TutorialNube.Evento.SERVIDOR_YA_ACTIVO);
             } else {
                 // Servidor no activo → mostrar botón conectar
                 mostrarLanDesconectada();
@@ -527,7 +539,7 @@ public class PanelConexionRed {
         cardLan.setStyle("-fx-background-color: rgba(168,185,145,0.08); -fx-background-radius: 12; " +
                 "-fx-border-color: rgba(168,185,145,0.3); -fx-border-radius: 12; -fx-border-width: 1;");
         labelEstadoLan.setText(IdiomaUtil.obtener("panel.lan.configurada"));
-        labelEstadoLan.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px; -fx-font-weight: 600;");
+        labelEstadoLan.setStyle("-fx-text-fill: #a8b991; -fx-font-weight: 600;");
 
         int puerto = ConfiguracionCliente.getPuertoServidor();
 
@@ -588,7 +600,7 @@ public class PanelConexionRed {
         cardLan.setStyle("-fx-background-color: rgba(231,76,60,0.05); -fx-background-radius: 14; " +
                 "-fx-border-color: rgba(231,76,60,0.25); -fx-border-radius: 14; -fx-border-width: 1;");
         labelEstadoLan.setText(IdiomaUtil.obtener("panel.lan.desconectada"));
-        labelEstadoLan.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 12px;");
+        labelEstadoLan.setStyle("-fx-text-fill: #e74c3c;");
 
         infoConectadaBox.setVisible(false);
         infoConectadaBox.setManaged(false);
@@ -618,7 +630,7 @@ public class PanelConexionRed {
                 botonApagarLan.setDisable(false);
                 botonReiniciarLan.setDisable(false);
                 labelEstadoLan.setText(IdiomaUtil.obtener("ctrl.apagar.error"));
-                labelEstadoLan.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 12px;");
+                labelEstadoLan.setStyle("-fx-text-fill: #e74c3c;");
             }
         }, Platform::runLater);
     }
@@ -631,7 +643,7 @@ public class PanelConexionRed {
         botonApagarLan.setDisable(true);
         botonReiniciarLan.setDisable(true);
         labelEstadoLan.setText(IdiomaUtil.obtener("panel.lan.reiniciando"));
-        labelEstadoLan.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+        labelEstadoLan.setStyle("-fx-text-fill: #daa520;");
 
         ServidorEmbebido.detenerServidor().thenComposeAsync(exitoApagado -> {
             if (!exitoApagado) {
@@ -654,7 +666,7 @@ public class PanelConexionRed {
                 botonReiniciarLan.setDisable(false);
                 String msg = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
                 labelEstadoLan.setText(msg);
-                labelEstadoLan.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 12px;");
+                labelEstadoLan.setStyle("-fx-text-fill: #e74c3c;");
             });
             return null;
         });
@@ -672,7 +684,7 @@ public class PanelConexionRed {
         indicadorLan.setFill(Color.web("#daa520"));
         cardLan.setStyle("-fx-background-color: rgba(218,165,32,0.04); -fx-background-radius: 14; " +
                 "-fx-border-color: rgba(218,165,32,0.2); -fx-border-radius: 14; -fx-border-width: 1;");
-        labelEstadoLan.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+        labelEstadoLan.setStyle("-fx-text-fill: #daa520;");
 
         barraProgresoLan.setVisible(true);
         barraProgresoLan.setManaged(true);
@@ -680,7 +692,7 @@ public class PanelConexionRed {
         labelProgresoLan.setManaged(true);
 
         // Notificar tutorial que el servidor está iniciando
-        notificarTutorial(TutorialWeb.Evento.SERVIDOR_INICIANDO);
+        notificarTutorial(TutorialNube.Evento.SERVIDOR_INICIANDO);
 
         // Simular progreso gradual
         simularProgresoGradual();
@@ -692,11 +704,11 @@ public class PanelConexionRed {
             if (timelineProgreso != null) timelineProgreso.stop();
             // Mostrar conectado de inmediato
             labelEstadoLan.setText(IdiomaUtil.obtener("splash.lan.conectado"));
-            labelEstadoLan.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px; -fx-font-weight: 600;");
+            labelEstadoLan.setStyle("-fx-text-fill: #a8b991; -fx-font-weight: 600;");
             animarProgreso(barraProgresoLan, labelProgresoLan, 1.0, 400, () -> {
                 mostrarLanConectada();
                 // Notificar tutorial que el servidor conectó exitosamente
-                notificarTutorial(TutorialWeb.Evento.SERVIDOR_CONECTADO);
+                notificarTutorial(TutorialNube.Evento.SERVIDOR_CONECTADO);
                 // Reiniciar monitor de conexión
                 MonitorConexion.getInstancia().detener();
                 new Timeline(new KeyFrame(Duration.millis(300),
@@ -712,16 +724,16 @@ public class PanelConexionRed {
                 if (timelineProgreso != null) timelineProgreso.stop();
                 barraProgresoLan.getStyleClass().add("splash-barra-error");
                 indicadorLan.setFill(Color.web("#e74c3c"));
-                labelProgresoLan.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 10px;");
+                labelProgresoLan.setStyle("-fx-text-fill: #e74c3c;");
                 String msg = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
                 labelEstadoLan.setText(msg);
-                labelEstadoLan.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 11px;");
+                labelEstadoLan.setStyle("-fx-text-fill: #e74c3c;");
                 botonConectarLan.setDisable(false);
                 botonConectarLan.setText(IdiomaUtil.obtener("panel.lan.reintentar"));
                 botonConectarLan.setVisible(true);
                 botonConectarLan.setManaged(true);
                 // Notificar tutorial del error
-                notificarTutorial(TutorialWeb.Evento.SERVIDOR_ERROR);
+                notificarTutorial(TutorialNube.Evento.SERVIDOR_ERROR);
             });
             return null;
         });
@@ -776,7 +788,7 @@ public class PanelConexionRed {
             // Sin URI embebida → cloud no disponible en este build
             indicadorNube.setFill(Color.web("#555"));
             labelEstadoNube.setText(IdiomaUtil.obtener("panel.nube.uri_no_disponible"));
-            labelEstadoNube.setStyle("-fx-text-fill: #777; -fx-font-size: 12px;");
+            labelEstadoNube.setStyle("-fx-text-fill: #777;");
             campoBusinessId.setText("negocio1");
             return;
         }
@@ -785,7 +797,7 @@ public class PanelConexionRed {
             // URI embebida pero sin business ID configurado → pendiente de configurar
             indicadorNube.setFill(Color.web("#daa520"));
             labelEstadoNube.setText(IdiomaUtil.obtener("splash.nube.requiere_config"));
-            labelEstadoNube.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+            labelEstadoNube.setStyle("-fx-text-fill: #daa520;");
             campoBusinessId.setText("negocio1");
             return;
         }
@@ -825,13 +837,13 @@ public class PanelConexionRed {
                 cardNube.setStyle("-fx-background-color: rgba(168,185,145,0.05); -fx-background-radius: 12; " +
                         "-fx-border-color: rgba(168,185,145,0.2); -fx-border-radius: 12; -fx-border-width: 1;");
                 labelEstadoNube.setText(IdiomaUtil.obtener("splash.nube.configurada"));
-                labelEstadoNube.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px; -fx-font-weight: 600;");
+                labelEstadoNube.setStyle("-fx-text-fill: #a8b991; -fx-font-weight: 600;");
 
                 String cluster = extraerCluster(atlasUri);
                 String infoTexto = construirTextoInfoNube(cluster, businessId);
                 if (!infoTexto.isBlank()) {
                     labelInfoNube.setText(infoTexto);
-                    labelInfoNube.setStyle("-fx-text-fill: #888; -fx-font-size: 11px;");
+                    labelInfoNube.setStyle("-fx-text-fill: #888;");
                     labelInfoNube.setVisible(true);
                     labelInfoNube.setManaged(true);
                 }
@@ -841,7 +853,7 @@ public class PanelConexionRed {
                 cardNube.setStyle("-fx-background-color: rgba(218,165,32,0.04); -fx-background-radius: 12; " +
                         "-fx-border-color: rgba(218,165,32,0.2); -fx-border-radius: 12; -fx-border-width: 1;");
                 labelEstadoNube.setText(IdiomaUtil.obtener("panel.nube.config_presente_sin_conexion"));
-                labelEstadoNube.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px;");
+                labelEstadoNube.setStyle("-fx-text-fill: #daa520;");
             }
         }, Platform::runLater);
     }
@@ -858,7 +870,7 @@ public class PanelConexionRed {
                 ? IdiomaUtil.obtener("panel.nube.ocultar_config")
                 : IdiomaUtil.obtener("panel.nube.configurar"));
         if (datosNubeVisibles) {
-            notificarTutorial(TutorialWeb.Evento.NUBE_CONFIG_ABIERTA);
+            notificarTutorial(TutorialNube.Evento.NUBE_CONFIG_ABIERTA);
         }
     }
 
@@ -901,21 +913,21 @@ public class PanelConexionRed {
 
         // Actualizar estado de URI
         labelUriEstado.setText("✓ " + IdiomaUtil.obtener("panel.nube.uri_disponible"));
-        labelUriEstado.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px; -fx-font-weight: 600;");
+        labelUriEstado.setStyle("-fx-text-fill: #a8b991; -fx-font-weight: 600;");
 
         // Actualizar visual
         indicadorNube.setFill(Color.web("#a8b991"));
         cardNube.setStyle("-fx-background-color: rgba(168,185,145,0.05); -fx-background-radius: 12; " +
                 "-fx-border-color: rgba(168,185,145,0.2); -fx-border-radius: 12; -fx-border-width: 1;");
         labelEstadoNube.setText(IdiomaUtil.obtener("splash.nube.guardada"));
-        labelEstadoNube.setStyle("-fx-text-fill: #a8b991; -fx-font-size: 12px; -fx-font-weight: 600;");
+        labelEstadoNube.setStyle("-fx-text-fill: #a8b991; -fx-font-weight: 600;");
 
         String atlasUri = ConfiguracionCliente.getAtlasUriEmbebida();
         String cluster = extraerCluster(atlasUri);
         String infoTexto = construirTextoInfoNube(cluster, businessId);
         if (!infoTexto.isBlank()) {
             labelInfoNube.setText(infoTexto + "  ·  \uD83D\uDDC3 " + dbNombre);
-            labelInfoNube.setStyle("-fx-text-fill: #888; -fx-font-size: 11px;");
+            labelInfoNube.setStyle("-fx-text-fill: #888;");
             labelInfoNube.setVisible(true);
             labelInfoNube.setManaged(true);
         }
@@ -927,13 +939,13 @@ public class PanelConexionRed {
         botonToggleDatosNube.setText(IdiomaUtil.obtener("panel.nube.configurar"));
 
         // Notificar tutorial que la nube se configuró
-        notificarTutorial(TutorialWeb.Evento.NUBE_CONFIGURADA);
+        notificarTutorial(TutorialNube.Evento.NUBE_CONFIGURADA);
     }
 
     private void continuarSoloLan() {
         indicadorNube.setFill(Color.web("#555"));
         labelEstadoNube.setText(IdiomaUtil.obtener("splash.nube.omitida"));
-        labelEstadoNube.setStyle("-fx-text-fill: #666; -fx-font-size: 12px;");
+        labelEstadoNube.setStyle("-fx-text-fill: #666;");
 
         contenedorDatosNube.setVisible(false);
         contenedorDatosNube.setManaged(false);
@@ -952,7 +964,7 @@ public class PanelConexionRed {
         }
         if (overlayRef == null) return;
 
-        tutorial = new TutorialWeb();
+        tutorial = new TutorialNube();
         tutorial.registrarNodos(cardLan, cardNube, botonConectarLan,
             ipClienteBox, botonApagarLan, botonToggleDatosNube,
             campoDbNombre, campoBusinessId);
@@ -960,7 +972,7 @@ public class PanelConexionRed {
         tutorial.iniciar(overlayRef);
     }
 
-    private void notificarTutorial(TutorialWeb.Evento evento) {
+    private void notificarTutorial(TutorialNube.Evento evento) {
         if (tutorial != null && tutorial.isActivo()) {
             tutorial.notificarEvento(evento);
         }

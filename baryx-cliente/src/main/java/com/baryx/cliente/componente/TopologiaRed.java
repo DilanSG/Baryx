@@ -565,7 +565,8 @@ public class TopologiaRed {
         long latenciaInicial = monitor.getUltimoTiempoRespuesta();
         String textoMs = latenciaInicial >= 0 ? latenciaInicial + "ms" : "—";
         Label tituloEstado = new Label(textoMs);
-        tituloEstado.setStyle("-fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: " + colorEstado + ";");
+        tituloEstado.getStyleClass().add("texto-hint-sm");
+        tituloEstado.setStyle("-fx-font-weight: 600; -fx-text-fill: " + colorEstado + ";");
         tituloEstado.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(tituloEstado, Priority.ALWAYS);
 
@@ -574,7 +575,7 @@ public class TopologiaRed {
             circuloEstado.setFill(Color.web(nuevo.getColor()));
             long ms = monitor.getUltimoTiempoRespuesta();
             tituloEstado.setText(ms >= 0 ? ms + "ms" : "—");
-            tituloEstado.setStyle("-fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: " + nuevo.getColor() + ";");
+            tituloEstado.setStyle("-fx-font-weight: 600; -fx-text-fill: " + nuevo.getColor() + ";");
         });
         monitor.textoEstadoProperty().addListener((obs, viejo, nuevo) -> {
             long ms = monitor.getUltimoTiempoRespuesta();
@@ -585,12 +586,13 @@ public class TopologiaRed {
         cerrar.setMinSize(24, 24);
         cerrar.setPrefSize(24, 24);
         cerrar.setAlignment(Pos.CENTER);
-        cerrar.setStyle("-fx-font-size: 13px; -fx-text-fill: #666; -fx-cursor: hand;");
+        cerrar.getStyleClass().add("texto-info");
+        cerrar.setStyle("-fx-text-fill: #666; -fx-cursor: hand;");
         cerrar.setOnMouseEntered(e ->
-            cerrar.setStyle("-fx-font-size: 13px; -fx-text-fill: #f5f5f5; -fx-cursor: hand; " +
+            cerrar.setStyle("-fx-text-fill: #f5f5f5; -fx-cursor: hand; " +
                 "-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 4;"));
         cerrar.setOnMouseExited(e ->
-            cerrar.setStyle("-fx-font-size: 13px; -fx-text-fill: #666; -fx-cursor: hand;"));
+            cerrar.setStyle("-fx-text-fill: #666; -fx-cursor: hand;"));
 
         HBox barraTitulo = new HBox(8, circuloEstado, tituloEstado, cerrar);
         barraTitulo.setAlignment(Pos.CENTER_LEFT);

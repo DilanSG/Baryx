@@ -21,15 +21,12 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Tutorial web interactivo para la conexión al servidor y configuración de nube.
- * Card flotante con flechas curvadas que señalan los elementos relevantes del panel.
- */
-public class TutorialWeb {
+/* Tutorial interactivo para la conexión al servidor y configuración de nube.
+ * Card flotante con flechas que señalan los elementos relevantes del panel.*/
+public class TutorialNube {
 
     public enum Evento {
         SERVIDOR_INICIANDO,
@@ -52,8 +49,6 @@ public class TutorialWeb {
     private HBox barraNavegacion;
     private Button botonSiguiente;
     private Button botonVolver;
-
-    // Sistema de flechas curvadas
     private final List<Group> gruposFlechas = new ArrayList<>();
 
     // Nodos objetivo
@@ -65,21 +60,14 @@ public class TutorialWeb {
     private Node nodoBotonConfigurar;
     private Node nodoCampoDbNombre;
     private Node nodoCampoBusinessId;
-
+    private Node nodoOrigenFlecha; // Nodo interno de la card desde donde salen las flechas (tipBox amarillo)
     private static final int TOTAL_PASOS = 7;
     private static final double CARD_ANCHO = 540;
 
     private String ipLocal = "";
 
-    // Nodo interno de la card desde donde salen las flechas (tipBox amarillo)
-    private Node nodoOrigenFlecha;
-
-    /**
-     * Registra los nodos del panel para posicionamiento y flechas.
-     */
-    public void registrarNodos(Node cardLan, Node cardNube, Node botonConectar,
-                                Node ipClientes, Node botonApagar, Node botonConfigurar,
-                                Node campoDbNombre, Node campoBusinessId) {
+    /* Registra los nodos del panel para posicionamiento y flechas.*/
+    public void registrarNodos(Node cardLan, Node cardNube, Node botonConectar, Node ipClientes, Node botonApagar, Node botonConfigurar, Node campoDbNombre, Node campoBusinessId) {
         this.nodoCardLan = cardLan;
         this.nodoCardNube = cardNube;
         this.nodoBotonConectar = botonConectar;
@@ -91,12 +79,9 @@ public class TutorialWeb {
     }
 
     public void setIpLocal(String ip) { this.ipLocal = ip != null ? ip : ""; }
-
     public void setNubeConfigurada(boolean valor) { this.nubeConfigurada = valor; }
 
-    /**
-     * Muestra el tutorial como card flotante dentro del overlay dado.
-     */
+    // Muestra el tutorial como card flotante dentro del overlay dado.
     public void iniciar(StackPane overlay) {
         this.contenedorOverlay = overlay;
         this.activo = true;
@@ -105,13 +90,11 @@ public class TutorialWeb {
         construirCard();
         mostrarPaso(0);
 
-        // Animación de entrada rápida
         cardFlotante.setTranslateY(-12);
         cardFlotante.setOpacity(0);
         MotorAnimaciones.fadeYDeslizar(cardFlotante, 0, 1, -12, 0, 150, null);
     }
 
-    /** Detiene y oculta el tutorial. */
     public void detener() {
         activo = false;
         if (cardFlotante != null && contenedorOverlay != null) {
@@ -124,9 +107,7 @@ public class TutorialWeb {
 
     public boolean isActivo() { return activo; }
 
-    /**
-     * Recibe un evento del panel de conexión y avanza si corresponde.
-     */
+    // Recibe un evento del panel de conexión y avanza si corresponde.
     public void notificarEvento(Evento evento) {
         if (!activo) return;
 
@@ -154,10 +135,6 @@ public class TutorialWeb {
         }
     }
 
-    // ══════════════════════════════════════
-    // CONSTRUCCIÓN DE LA CARD
-    // ══════════════════════════════════════
-
     private void construirCard() {
         cardFlotante = new VBox(0);
         cardFlotante.setMaxWidth(CARD_ANCHO);
@@ -171,7 +148,7 @@ public class TutorialWeb {
 
         // ── Header: título + indicadores + botón cerrar ──
         Label labelTitulo = new Label(IdiomaUtil.obtener("tutorial.titulo"));
-        labelTitulo.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 15px; -fx-font-weight: 700;");
+        labelTitulo.getStyleClass().add("tutorial-titulo");
 
         indicadorProgreso = new HBox(6);
         indicadorProgreso.setAlignment(Pos.CENTER);
@@ -181,13 +158,14 @@ public class TutorialWeb {
         HBox.setHgrow(spacerHeader, Priority.ALWAYS);
 
         Label botonCerrar = new Label(IdiomaUtil.obtener("tutorial.omitir") + "  \u2715");
+        botonCerrar.getStyleClass().add("tutorial-disclaimer");
         botonCerrar.setStyle(
-            "-fx-text-fill: #555; -fx-font-size: 11px; -fx-cursor: hand; -fx-padding: 4 8;");
+            "-fx-text-fill: #555; -fx-cursor: hand; -fx-padding: 4 8;");
         botonCerrar.setOnMouseEntered(e -> botonCerrar.setStyle(
-            "-fx-text-fill: #e8e8e8; -fx-font-size: 11px; -fx-cursor: hand; -fx-padding: 4 8; " +
+            "-fx-text-fill: #e8e8e8; -fx-cursor: hand; -fx-padding: 4 8; " +
             "-fx-background-color: rgba(255,255,255,0.08); -fx-background-radius: 6;"));
         botonCerrar.setOnMouseExited(e -> botonCerrar.setStyle(
-            "-fx-text-fill: #555; -fx-font-size: 11px; -fx-cursor: hand; -fx-padding: 4 8;"));
+            "-fx-text-fill: #555; -fx-cursor: hand; -fx-padding: 4 8;"));
         botonCerrar.setOnMouseClicked(e -> detener());
 
         HBox header = new HBox(8, labelTitulo, indicadorProgreso, spacerHeader, botonCerrar);
@@ -201,6 +179,7 @@ public class TutorialWeb {
 
         // ── Barra de navegación ──
         botonVolver = new Button("\u2190 " + IdiomaUtil.obtener("tutorial.volver"));
+        botonVolver.getStyleClass().add("tutorial-disclaimer");
         botonVolver.setStyle(estiloBotonNav());
         botonVolver.setOnAction(e -> {
             if (pasoActual > 0) avanzarA(pasoActual - 1);
@@ -210,6 +189,7 @@ public class TutorialWeb {
         HBox.setHgrow(spacerNav, Priority.ALWAYS);
 
         botonSiguiente = new Button(IdiomaUtil.obtener("tutorial.siguiente") + " \u2192");
+        botonSiguiente.getStyleClass().add("tutorial-disclaimer");
         botonSiguiente.setStyle(estiloBotonNavPrimario());
 
         barraNavegacion = new HBox(8, botonVolver, spacerNav, botonSiguiente);
@@ -222,10 +202,6 @@ public class TutorialWeb {
         StackPane.setAlignment(cardFlotante, Pos.CENTER);
         contenedorOverlay.getChildren().add(cardFlotante);
     }
-
-    // ══════════════════════════════════════
-    // SISTEMA DE FLECHAS CURVADAS
-    // ══════════════════════════════════════
 
     private void limpiarFlechas() {
         for (Group grupo : gruposFlechas) {
@@ -286,17 +262,13 @@ public class TutorialWeb {
         dibujarFlechaCurvada(startX, startY, endX, endY);
     }
 
-    /**
-     * Dibuja una flecha curvada suave entre dos puntos.
-     * Trazo negro con borde dorado.
-     */
     private void dibujarFlechaCurvada(double sx, double sy, double ex, double ey) {
         double dx = ex - sx;
         double dy = ey - sy;
         double dist = Math.sqrt(dx * dx + dy * dy);
         if (dist < 1) return;
 
-        // Curva suave directa (arco simple, no S)
+        // Curva directa (arco simple)
         double curvaturaOffset = Math.min(dist * 0.18, 35);
         double nx = -dy / dist;
         double ny = dx / dist;
@@ -313,7 +285,7 @@ public class TutorialWeb {
         contorno.setStrokeLineCap(StrokeLineCap.ROUND);
         contorno.setFill(Color.TRANSPARENT);
 
-        // Trazo negro principal (encima)
+        // Trazo negro principal (mas delgado, encima)
         CubicCurve curva = new CubicCurve(sx, sy, cx1, cy1, cx2, cy2, ex, ey);
         curva.setStroke(Color.web("#1a1a1a"));
         curva.setStrokeWidth(2.5);
@@ -344,10 +316,6 @@ public class TutorialWeb {
             contenedorOverlay.getChildren().add(grupo);
         }
     }
-
-    // ══════════════════════════════════════
-    // POSICIONAMIENTO DINÁMICO
-    // ══════════════════════════════════════
 
     private void posicionarCardCentro() {
         StackPane.setAlignment(cardFlotante, Pos.CENTER);
@@ -440,10 +408,6 @@ public class TutorialWeb {
         StackPane.setMargin(cardFlotante, new Insets(cardY, 0, 0, cardX));
     }
 
-    // ══════════════════════════════════════
-    // PASOS DEL TUTORIAL
-    // ══════════════════════════════════════
-
     private void mostrarPaso(int paso) {
         pasoActual = paso;
         actualizarIndicadores();
@@ -467,8 +431,6 @@ public class TutorialWeb {
         });
     }
 
-    // ── Paso 0: Bienvenida — informativo, sin flecha, arriba de las cards ──
-
     private void mostrarBienvenida() {
         nodoOrigenFlecha = null;
 
@@ -483,10 +445,7 @@ public class TutorialWeb {
         posicionarCardArribaDeTodo();
     }
 
-    // ── Paso 1: Conectar — flecha curvada al botón Conectar (esquina) ──
-
     private void mostrarPasoConectar() {
-        // Si el servidor ya está activo, saltar directamente al paso conectado
         if (servidorConectado) {
             mostrarPaso(3);
             return;
@@ -513,8 +472,6 @@ public class TutorialWeb {
         javafx.application.Platform.runLater(() -> dibujarFlechaANodo(boton, 0.9, 0.5));
     }
 
-    // ── Paso 2: Arrancando — informativo, sin flecha ──
-
     private void mostrarPasoArrancando() {
         nodoOrigenFlecha = null;
 
@@ -528,8 +485,6 @@ public class TutorialWeb {
         configurarNavegacion(false, false, true, false);
         posicionarDebajoDeNodo(nodoCardLan);
     }
-
-    // ── Paso 3: Conectado — muestra IP, flechas al IP de clientes y al botón apagar ──
 
     private void mostrarPasoConectado() {
         VBox ipBox = crearIpInfoBox();
@@ -548,19 +503,14 @@ public class TutorialWeb {
         botonSiguiente.setStyle(estiloBotonNavExito());
         botonSiguiente.setOnAction(e -> avanzarA(4));
 
-        // A la derecha de la card LAN, misma altura
         posicionarCercaDe(nodoCardLan);
 
-        // Flecha desde el tipBox al último dígito del puerto en el texto IP clientes
         javafx.application.Platform.runLater(() -> {
             if (nodoIpClientes != null && nodoIpClientes.isVisible()) {
                 dibujarFlechaANodo(nodoIpClientes, 1.0, 0.5);
             }
         });
     }
-
-    // ── Paso 4: Nube — obligatorio clic en "Configurar", no se puede saltar ──
-
     private void mostrarPasoNube() {
         VBox tipNube = crearTipBox(IdiomaUtil.obtener("tutorial.web.nube.tip"));
         nodoOrigenFlecha = tipNube;
@@ -572,14 +522,11 @@ public class TutorialWeb {
             crearIndicadorEspera(IdiomaUtil.obtener("tutorial.web.nube.esperando"))
         );
 
-        // No se puede omitir — solo avanza al hacer clic en "Configurar"
         configurarNavegacion(true, false, true, false);
         botonVolver.setOnAction(e -> avanzarA(3));
 
-        // A la derecha de la card Nube
         posicionarCercaDe(nodoCardNube);
 
-        // Flecha desde el tipBox al borde derecho del botón "Configurar"
         javafx.application.Platform.runLater(() -> {
             if (nodoBotonConfigurar != null && nodoBotonConfigurar.isVisible()) {
                 dibujarFlechaANodo(nodoBotonConfigurar, 1.0, 0.5);
@@ -587,7 +534,6 @@ public class TutorialWeb {
         });
     }
 
-    // ── Paso 5: Configuración nube — MongoDB URI + Business ID con flechas ──
 
     private void mostrarPasoConfigNube() {
         VBox tipConfig = crearTipBox(IdiomaUtil.obtener("tutorial.web.config_nube.tip"));
@@ -707,16 +653,16 @@ public class TutorialWeb {
     }
 
     // ══════════════════════════════════════
-    // COMPONENTES VISUALES
+        // COMPONENTES VISUALES
     // ══════════════════════════════════════
 
     private HBox crearCabeceraConIcono(String emoji, String titulo) {
         Label icono = new Label(emoji);
-        icono.setStyle("-fx-font-size: 22px;");
+        icono.getStyleClass().add("icono-texto-md");
         icono.setMinWidth(30);
 
         Label label = new Label(titulo);
-        label.setStyle("-fx-text-fill: #f5f5f5; -fx-font-size: 16px; -fx-font-weight: 700;");
+        label.getStyleClass().add("tutorial-seccion-titulo");
         label.setWrapText(true);
         HBox.setHgrow(label, Priority.ALWAYS);
 
@@ -728,7 +674,8 @@ public class TutorialWeb {
 
     private Label crearDescripcion(String texto) {
         Label label = new Label(texto);
-        label.setStyle("-fx-text-fill: #ccc; -fx-font-size: 13px; -fx-line-spacing: 4;");
+        label.getStyleClass().add("tutorial-texto");
+        label.setStyle("-fx-line-spacing: 4;");
         label.setWrapText(true);
         label.setMaxWidth(CARD_ANCHO - 50);
         return label;
@@ -736,11 +683,12 @@ public class TutorialWeb {
 
     private VBox crearTipBox(String texto) {
         Label icono = new Label("\uD83D\uDCA1");
-        icono.setStyle("-fx-font-size: 13px;");
+        icono.getStyleClass().add("tutorial-nota");
         icono.setMinWidth(20);
 
         Label label = new Label(texto);
-        label.setStyle("-fx-text-fill: #c9a961; -fx-font-size: 12px; -fx-line-spacing: 3;");
+        label.getStyleClass().add("tutorial-nota");
+        label.setStyle("-fx-line-spacing: 3;");
         label.setWrapText(true);
         label.setMaxWidth(CARD_ANCHO - 80);
 
@@ -759,7 +707,7 @@ public class TutorialWeb {
     private VBox crearIpInfoBox() {
         String ipTexto = ipLocal.isEmpty() ? "127.0.0.1" : ipLocal;
         Label labelIp = new Label("\uD83D\uDDA5  " + IdiomaUtil.obtener("tutorial.web.conectado.ip_info") + " " + ipTexto);
-        labelIp.setStyle("-fx-text-fill: #d4af37; -fx-font-size: 14px; -fx-font-weight: 700;");
+        labelIp.getStyleClass().add("tutorial-dato");
         labelIp.setWrapText(true);
 
         VBox box = new VBox(labelIp);
@@ -772,11 +720,12 @@ public class TutorialWeb {
 
     private HBox crearCampoExplicacion(String emoji, String texto) {
         Label icono = new Label(emoji);
-        icono.setStyle("-fx-font-size: 14px;");
+        icono.getStyleClass().add("tutorial-paso");
         icono.setMinWidth(22);
 
         Label label = new Label(texto);
-        label.setStyle("-fx-text-fill: #ddd; -fx-font-size: 12px; -fx-line-spacing: 3;");
+        label.getStyleClass().add("tutorial-paso");
+        label.setStyle("-fx-line-spacing: 3;");
         label.setWrapText(true);
         HBox.setHgrow(label, Priority.ALWAYS);
 
@@ -791,11 +740,12 @@ public class TutorialWeb {
 
     private VBox crearAdvertenciaBox(String texto) {
         Label icono = new Label("\u26A0");
-        icono.setStyle("-fx-font-size: 13px;");
+        icono.getStyleClass().add("tutorial-aviso");
         icono.setMinWidth(20);
 
         Label label = new Label(texto);
-        label.setStyle("-fx-text-fill: #daa520; -fx-font-size: 12px; -fx-line-spacing: 3;");
+        label.getStyleClass().add("tutorial-aviso");
+        label.setStyle("-fx-line-spacing: 3;");
         label.setWrapText(true);
         label.setMaxWidth(CARD_ANCHO - 80);
 
@@ -814,7 +764,7 @@ public class TutorialWeb {
     private HBox crearIndicadorEspera(String texto) {
         Circle dot = new Circle(4, Color.web("#d4af37"));
         Label label = new Label(texto);
-        label.setStyle("-fx-text-fill: #888; -fx-font-size: 11px; -fx-font-style: italic;");
+        label.getStyleClass().add("tutorial-disclaimer");
         label.setWrapText(true);
         HBox box = new HBox(8, dot, label);
         box.setAlignment(Pos.CENTER_LEFT);
@@ -824,11 +774,13 @@ public class TutorialWeb {
 
     private HBox crearSugerenciaError(String texto) {
         Label check = new Label("\u2192");
-        check.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 12px;");
+        check.getStyleClass().add("tutorial-paso");
+        check.setStyle("-fx-text-fill: #e74c3c;");
         check.setMinWidth(16);
 
         Label label = new Label(texto);
-        label.setStyle("-fx-text-fill: #ddd; -fx-font-size: 12px; -fx-line-spacing: 2;");
+        label.getStyleClass().add("tutorial-paso");
+        label.setStyle("-fx-line-spacing: 2;");
         label.setWrapText(true);
         HBox.setHgrow(label, Priority.ALWAYS);
 
@@ -864,25 +816,25 @@ public class TutorialWeb {
     }
 
     private String estiloBotonNav() {
-        return "-fx-background-color: transparent; -fx-text-fill: #888; -fx-font-size: 11px; " +
+        return "-fx-background-color: transparent; -fx-text-fill: #888; " +
             "-fx-cursor: hand; -fx-padding: 6 14; " +
             "-fx-border-color: #3a3a3a; -fx-border-radius: 6; -fx-background-radius: 6;";
     }
 
     private String estiloBotonNavPrimario() {
-        return "-fx-background-color: rgba(212,175,55,0.15); -fx-text-fill: #d4af37; -fx-font-size: 11px; " +
+        return "-fx-background-color: rgba(212,175,55,0.15); -fx-text-fill: #d4af37; " +
             "-fx-font-weight: 600; -fx-cursor: hand; -fx-padding: 6 16; " +
             "-fx-border-color: rgba(212,175,55,0.4); -fx-border-radius: 6; -fx-background-radius: 6;";
     }
 
     private String estiloBotonNavExito() {
-        return "-fx-background-color: rgba(168,185,145,0.15); -fx-text-fill: #a8b991; -fx-font-size: 11px; " +
+        return "-fx-background-color: rgba(168,185,145,0.15); -fx-text-fill: #a8b991; " +
             "-fx-font-weight: 600; -fx-cursor: hand; -fx-padding: 6 16; " +
             "-fx-border-color: rgba(168,185,145,0.4); -fx-border-radius: 6; -fx-background-radius: 6;";
     }
 
     private String estiloBotonNavDeshabilitado() {
-        return "-fx-background-color: #1a1a1a; -fx-text-fill: #555; -fx-font-size: 11px; " +
+        return "-fx-background-color: #1a1a1a; -fx-text-fill: #555; " +
             "-fx-padding: 6 14; -fx-background-radius: 6;";
     }
 }

@@ -1,9 +1,7 @@
-/*
- * Copyright (c) 2026 Baryx. Todos los derechos reservados.
+/*Copyright (c) 2026 Baryx. los derechos reservados.
  * Licenciado bajo la Licencia de Uso de Software Baryx (basada en Elastic License 2.0).
  * Consulte el archivo LICENSE en la raíz del proyecto para más información.
- * Queda prohibido el uso, copia o distribución sin autorización expresa del titular.
- */
+ * Queda prohibido el uso, copia o distribución sin autorización expresa del titular.*/
 package com.baryx.cliente.configuracion;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
