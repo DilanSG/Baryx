@@ -199,6 +199,13 @@ empaquetar_cliente_instalador() {
     if [ -f "$OUTPUT" ]; then
         local TAMANO
         TAMANO=$(du -sh "$OUTPUT" | cut -f1)
+        # Renombrar al versionado real si jpackage usó una versión inflada
+        if [ "$JPACKAGE_VERSION" != "$APP_VERSION" ]; then
+            local REAL_NAME="$DIST_DIR/Baryx-${APP_VERSION}.${TIPO}"
+            mv "$OUTPUT" "$REAL_NAME"
+            OUTPUT="$REAL_NAME"
+            print_info "Renombrado a $(basename "$REAL_NAME") (jpackage requiere versión >= 1.0.0)"
+        fi
         print_success "Instalador .${TIPO} generado: $(basename "$OUTPUT") ($TAMANO)"
     else
         print_error "No se encontró el instalador generado en $DIST_DIR"

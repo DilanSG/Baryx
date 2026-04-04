@@ -280,6 +280,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Restore annotated tags (checkout dereferences them)
+        run: git fetch --tags --force
+
       - name: Download all dist artifacts
         uses: actions/download-artifact@v4
         with:
@@ -337,50 +340,60 @@ jobs:
           BARYX_API_URL: ${{ secrets.BARYX_API_URL }}
           BARYX_ADMIN_KEY: ${{ secrets.BARYX_ADMIN_KEY }}
           VERSION: ${{ needs.build-linux.outputs.app_version }}
-          LINUX_URL: ${{ steps.gh_release.outputs.assets[0] }}
-          WINDOWS_URL: ${{ steps.gh_release.outputs.assets[1] }}
-          MACOS_URL: ${{ steps.gh_release.outputs.assets[2] }}
           LINUX_HASH: ${{ steps.checksums.outputs.linux_hash }}
           WINDOWS_HASH: ${{ steps.checksums.outputs.windows_hash }}
           MACOS_HASH: ${{ steps.checksums.outputs.macos_hash }}
+          RELEASE_NOTES: ${{ steps.tag_notes.outputs.notes }}
+          CHANGELOG_ENTRIES: ${{ steps.changelog.outputs.entries }}
         run: |
           # Build the download URLs from GitHub Release assets
-          RELEASE_URL="https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}"
+          export RELEASE_URL="https://github.com/${{ github.repository }}/releases/download/${GITHUB_REF_NAME}"
 
-          LINUX_FILE=$(basename "${{ steps.checksums.outputs.linux_file }}")
-          WINDOWS_FILE=$(basename "${{ steps.checksums.outputs.windows_file }}")
-          MACOS_FILE=$(basename "${{ steps.checksums.outputs.macos_file }}")
+          export LINUX_FILE=$(basename "${{ steps.checksums.outputs.linux_file }}")
+          export WINDOWS_FILE=$(basename "${{ steps.checksums.outputs.windows_file }}")
+          export MACOS_FILE=$(basename "${{ steps.checksums.outputs.macos_file }}")
 
-          CHANNEL="stable"
+          export CHANNEL="stable"
           if [[ "${GITHUB_REF_NAME}" == *beta* ]] || [[ "${GITHUB_REF_NAME}" == *rc* ]]; then
-            CHANNEL="beta"
+            export CHANNEL="beta"
           fi
 
-          PAYLOAD=$(python3 -c "
-          import json, os
-          version = os.environ['VERSION']
-          base_url = '${RELEASE_URL}'
-          linux_f = '${LINUX_FILE}'
-          windows_f = '${WINDOWS_FILE}'
-          macos_f = '${MACOS_FILE}'
-          print(json.dumps({
-            'version': version,
-            'channel': '${CHANNEL}',
-            'notes': '''${{ steps.tag_notes.outputs.notes }}''',
-            'changelogEntries': ${{ steps.changelog.outputs.entries }},
-            'assets': {
-              'linux':   f'{base_url}/{linux_f}'   if linux_f   else None,
-              'windows': f'{base_url}/{windows_f}' if windows_f else None,
-              'macos':   f'{base_url}/{macos_f}'   if macos_f   else None,
-            },
-            'checksums': {
-              'linux':   os.environ.get('LINUX_HASH')   or None,
-              'windows': os.environ.get('WINDOWS_HASH') or None,
-              'macos':   os.environ.get('MACOS_HASH')   or None,
-            },
-            'isForced': False,
-          }))
-          ")
+          PAYLOAD=$(python3 << 'PYTHON_EOF'
+import json, os
+
+version = os.environ['VERSION']
+release_url = os.environ.get('RELEASE_URL', '')
+linux_f = os.environ.get('LINUX_FILE', '')
+windows_f = os.environ.get('WINDOWS_FILE', '')
+macos_f = os.environ.get('MACOS_FILE', '')
+channel = os.environ.get('CHANNEL', 'stable')
+notes = os.environ.get('RELEASE_NOTES', '')
+entries_raw = os.environ.get('CHANGELOG_ENTRIES', '[]')
+
+try:
+    entries = json.loads(entries_raw)
+except (json.JSONDecodeError, TypeError):
+    entries = []
+
+print(json.dumps({
+    'version': version,
+    'channel': channel,
+    'notes': notes,
+    'changelogEntries': entries,
+    'assets': {
+        'linux':   f'{release_url}/{linux_f}'   if linux_f   else None,
+        'windows': f'{release_url}/{windows_f}' if windows_f else None,
+        'macos':   f'{release_url}/{macos_f}'   if macos_f   else None,
+    },
+    'checksums': {
+        'linux':   os.environ.get('LINUX_HASH')   or None,
+        'windows': os.environ.get('WINDOWS_HASH') or None,
+        'macos':   os.environ.get('MACOS_HASH')   or None,
+    },
+    'isForced': False,
+}))
+PYTHON_EOF
+          )
 
           curl -sf \
             -X POST "${BARYX_API_URL}/v1/admin/releases" \
