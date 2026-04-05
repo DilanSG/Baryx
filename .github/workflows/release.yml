@@ -358,42 +358,38 @@ jobs:
             export CHANNEL="beta"
           fi
 
-          PAYLOAD=$(python3 << 'PYTHON_EOF'
-import json, os
-
-version = os.environ['VERSION']
-release_url = os.environ.get('RELEASE_URL', '')
-linux_f = os.environ.get('LINUX_FILE', '')
-windows_f = os.environ.get('WINDOWS_FILE', '')
-macos_f = os.environ.get('MACOS_FILE', '')
-channel = os.environ.get('CHANNEL', 'stable')
-notes = os.environ.get('RELEASE_NOTES', '')
-entries_raw = os.environ.get('CHANGELOG_ENTRIES', '[]')
-
-try:
-    entries = json.loads(entries_raw)
-except (json.JSONDecodeError, TypeError):
-    entries = []
-
-print(json.dumps({
-    'version': version,
-    'channel': channel,
-    'notes': notes,
-    'changelogEntries': entries,
-    'assets': {
-        'linux':   f'{release_url}/{linux_f}'   if linux_f   else None,
-        'windows': f'{release_url}/{windows_f}' if windows_f else None,
-        'macos':   f'{release_url}/{macos_f}'   if macos_f   else None,
-    },
-    'checksums': {
-        'linux':   os.environ.get('LINUX_HASH')   or None,
-        'windows': os.environ.get('WINDOWS_HASH') or None,
-        'macos':   os.environ.get('MACOS_HASH')   or None,
-    },
-    'isForced': False,
-}))
-PYTHON_EOF
-          )
+          PAYLOAD=$(python3 -c '
+          import json, os
+          version = os.environ["VERSION"]
+          release_url = os.environ.get("RELEASE_URL", "")
+          linux_f = os.environ.get("LINUX_FILE", "")
+          windows_f = os.environ.get("WINDOWS_FILE", "")
+          macos_f = os.environ.get("MACOS_FILE", "")
+          channel = os.environ.get("CHANNEL", "stable")
+          notes = os.environ.get("RELEASE_NOTES", "")
+          entries_raw = os.environ.get("CHANGELOG_ENTRIES", "[]")
+          try:
+              entries = json.loads(entries_raw)
+          except (json.JSONDecodeError, TypeError):
+              entries = []
+          print(json.dumps({
+              "version": version,
+              "channel": channel,
+              "notes": notes,
+              "changelogEntries": entries,
+              "assets": {
+                  "linux":   f"{release_url}/{linux_f}"   if linux_f   else None,
+                  "windows": f"{release_url}/{windows_f}" if windows_f else None,
+                  "macos":   f"{release_url}/{macos_f}"   if macos_f   else None,
+              },
+              "checksums": {
+                  "linux":   os.environ.get("LINUX_HASH")   or None,
+                  "windows": os.environ.get("WINDOWS_HASH") or None,
+                  "macos":   os.environ.get("MACOS_HASH")   or None,
+              },
+              "isForced": False,
+          }))
+          ')
 
           curl -sf \
             -X POST "${BARYX_API_URL}/v1/admin/releases" \
